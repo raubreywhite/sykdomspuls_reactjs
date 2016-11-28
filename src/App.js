@@ -29,7 +29,7 @@ var LeftSelect = React.createClass ({
 class RightGraph extends Component {
  render() {
     let layout = {                     // all "layout" attributes: #layout
-      title: 'simple example',  // more about "layout.title": #layout-title
+      title: this.props.title,  // more about "layout.title": #layout-title
       xaxis: {                  // all "layout.xaxis" attributes: #layout-xaxis
         title: 'time'         // more about "layout.xaxis.title": #layout-xaxis-title
       },
@@ -142,7 +142,7 @@ var styleSidebar = {
     return(
       <div style={styleWrap}>
       <div style={styleSidebar}><LeftSelect onUpdate={this.onUpdateSelectFylke} list={this.state.namesFylke} /></div>
-      <div style={styleMain}><RightGraph data={this.state.data} /></div>
+      <div style={styleMain}><RightGraph title={this.state.selectedName} data={this.state.data} /></div>
       </div>
     );
   }
