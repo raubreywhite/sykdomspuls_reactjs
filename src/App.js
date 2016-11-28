@@ -1,46 +1,22 @@
 import React, { Component } from 'react';
-import { FormGroup, ControlLabel, FormControl, Grid, Row, Col } from 'react-bootstrap';
+import { FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
 //import { SideNav, Nav } from 'react-sidenav';
 //import { Plotly } from 'react-plotlyjs';
+var format = require( 'string-kit').format;
 const Plotly = require('react-plotlyjs');
 
+var LeftSelect = React.createClass ({
+  handleChange : function(event){
+//    event.stopPropagation()
+    console.log(event.target.value) 
+    this.props.onUpdate(event.target.value)
+  },
 
-
-class LeftSelect2 extends Component {
-  render(){
-    const BUTTONS = ['Default', 'Primary', 'Success', 'Info', 'Warning', 'Danger', 'Link'];
-    var dropdown=2;
-    return(
-     <FormGroup controlId="formControlsSelect">
-      <ControlLabel>Select</ControlLabel>
-      <FormControl componentClass="select" placeholder="select">
-        <option value="select1">select1</option>
-        <option value="select2">select2</option>
-        <option value="select3">select3</option>
-      </FormControl>
-    </FormGroup>
-    );
-  }
-}
-
-class ProperListRender extends Component {
-    render() {
-      return (
-        <ul>
-          {this.props.list.map(function(listValue){
-            return <li>{listValue}</li>;
-          })}
-        </ul>
-      )
-    }
-  };
-
-class LeftSelect extends Component {
-  render() {
+  render : function() {
     return (
       <FormGroup controlId="formControlsSelect">
         <ControlLabel>Select</ControlLabel>
-        <FormControl componentClass="select" placeholder="select">
+        <FormControl componentClass="select" placeholder="select" onChange={this.handleChange}>
           {this.props.list.map(function(listValue){
             return <option>{listValue}</option>;
           })}
@@ -48,7 +24,7 @@ class LeftSelect extends Component {
       </FormGroup>
     )
   }
-};
+});
 
 class RightGraph extends Component {
  render() {
@@ -85,10 +61,11 @@ class App extends Component {
       selectedName: "Norge",
       data : []
     };
+    this.onUpdateSelectFylke = this.onUpdateSelectFylke.bind(this)
   }
 
   GetData(){
-    var request = new Request('http://localhost/prod/api/dataWeeklyFylke?name=Nordland', {
+    var request = new Request(format('http://localhost/prod/api/dataWeeklyFylke?name=%s', this.state.selectedName), {
       method: 'GET', 
       mode: 'cors', 
       redirect: 'follow',
@@ -119,6 +96,16 @@ class App extends Component {
 
   GetResults() {
     this.setState({ namesFylke: [3,4] });
+  }
+
+  onUpdateSelectFylke(val){
+    console.log('parent')
+    console.log(val)
+    this.setState({ selectedName: val }, function(){
+      this.GetData()
+    })
+//    console.log(this.state.selectedName)
+//    this.GetData()
   }
 
   componentDidMount(){
@@ -152,11 +139,9 @@ var styleSidebar = {
     minHeight: '100px'
 };
 
-const BUTTONS = ['Default', 'Primary', 'Success', 'Info', 'Warning', 'Danger', 'Link'];
-var dropdown=2;
     return(
       <div style={styleWrap}>
-      <div style={styleSidebar}><LeftSelect list={this.state.namesFylke} /></div>
+      <div style={styleSidebar}><LeftSelect onUpdate={this.onUpdateSelectFylke} list={this.state.namesFylke} /></div>
       <div style={styleMain}><RightGraph data={this.state.data} /></div>
       </div>
     );
