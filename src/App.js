@@ -51,33 +51,7 @@ class LeftSelect extends Component {
 };
 
 class RightGraph extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      data : []
-    };
-  }
-
-  GetData(){
-    var request = new Request('http://localhost/prod/api/dataWeeklyFylke?name=Nordland', {
-      method: 'GET', 
-      mode: 'cors', 
-      redirect: 'follow',
-      headers: new Headers({
-        'Content-Type': 'text/plain'
-      })
-    });
-    // Now use it!
-    fetch(request)
-      .then((responseText) => responseText.json())
-      .then((response) => this.setState({ data: JSON.parse(response) }));
-  }
-
-  componentDidMount(){
-    this.GetData()
-  }
-  
-  render() {
+ render() {
     let layout = {                     // all "layout" attributes: #layout
       title: 'simple example',  // more about "layout.title": #layout-title
       xaxis: {                  // all "layout.xaxis" attributes: #layout-xaxis
@@ -98,7 +72,7 @@ class RightGraph extends Component {
       displayModeBar: true
     };
     return (
-      <Plotly className="whatever" data={this.state.data} layout={layout} config={config}/>
+      <Plotly className="whatever" data={this.props.data} layout={layout} config={config}/>
     );
   }
 };
@@ -108,30 +82,51 @@ class App extends Component {
     super(props);
     this.state = {
       namesFylke: [1,2],
-      selectedName: "Norge"
+      selectedName: "Norge",
+      data : []
     };
   }
+
+  GetData(){
+    var request = new Request('http://localhost/prod/api/dataWeeklyFylke?name=Nordland', {
+      method: 'GET', 
+      mode: 'cors', 
+      redirect: 'follow',
+      headers: new Headers({
+        'Content-Type': 'text/plain'
+      })
+    });
+    // Now use it!
+    fetch(request)
+      .then((responseText) => responseText.json())
+      .then((response) => this.setState({ data: JSON.parse(response) }));
+  }
+
+  GetNamesFylke(){
+    var request = new Request('http://localhost/prod/api/namesFylke', {
+     method: 'GET', 
+     mode: 'cors', 
+     redirect: 'follow',
+     headers: new Headers({
+       'Content-Type': 'text/plain'
+     })
+    });
+    // Now use it!
+    fetch(request)
+      .then((responseText) => responseText.json())
+      .then((response) => this.setState({ namesFylke: response }));
+  }
+
   GetResults() {
     this.setState({ namesFylke: [3,4] });
   }
+
   componentDidMount(){
-     var request = new Request('http://localhost/prod/api/namesFylke', {
-    method: 'GET', 
-    mode: 'cors', 
-    redirect: 'follow',
-    headers: new Headers({
-      'Content-Type': 'text/plain'
-    })
-  });
-  // Now use it!
-  fetch(request)
-        .then((responseText) => responseText.json())
-        .then((response) => this.setState({ namesFylke: response }));
+    this.GetNamesFylke()
+    this.GetData()
   }
 
   render(){
-
-console.log(2)
 
 var styleWrap = {
     margin: '20px',
@@ -162,7 +157,7 @@ var dropdown=2;
     return(
       <div style={styleWrap}>
       <div style={styleSidebar}><LeftSelect list={this.state.namesFylke} /></div>
-      <div style={styleMain}><RightGraph /></div>
+      <div style={styleMain}><RightGraph data={this.state.data} /></div>
       </div>
     );
   }
