@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
 //import { SideNav, Nav } from 'react-sidenav';
 //import { Plotly } from 'react-plotlyjs';
-var format = require( 'string-kit').format;
+//var format = require( 'string-kit').format;
+
+var sprintf = require("sprintf-js").sprintf
 const Plotly = require('react-plotlyjs');
 
 var LeftSelect = React.createClass ({
@@ -65,7 +67,7 @@ class App extends Component {
   }
 
   GetData(){
-    var request = new Request(format('http://localhost/prod/api/dataWeeklyFylke?name=%s', this.state.selectedName), {
+    var request = new Request(sprintf('http://172.30.39.176/prod/api/dataWeeklyFylke?name=%s', this.state.selectedName), {
       method: 'GET', 
       mode: 'cors', 
       redirect: 'follow',
@@ -80,7 +82,7 @@ class App extends Component {
   }
 
   GetNamesFylke(){
-    var request = new Request('http://localhost/prod/api/namesFylke', {
+    var request = new Request('http://172.30.39.176/prod/api/namesFylke', {
      method: 'GET', 
      mode: 'cors', 
      redirect: 'follow',
