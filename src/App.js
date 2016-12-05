@@ -8,19 +8,28 @@ var sprintf = require("sprintf-js").sprintf
 const Plotly = require('react-plotlyjs');
 
 var LeftSelect = React.createClass ({
-  handleChange : function(event){
+  handleChangeFylke : function(event){
 //    event.stopPropagation()
     console.log(event.target.value) 
-    this.props.onUpdate(event.target.value)
+    this.props.onUpdateFylke(event.target.value)
+  },
+  handleChangeKommune: function(event){
+    this.props.onUpdateKommune(event.target.value)
   },
 
   render : function() {
     return (
       <FormGroup controlId="formControlsSelect">
-        <ControlLabel>Select</ControlLabel>
-        <FormControl componentClass="select" placeholder="select" onChange={this.handleChange}>
-          {this.props.list.map(function(listValue){
-            return <option>{listValue}</option>;
+        <ControlLabel>Fylke</ControlLabel>
+        <FormControl componentClass="select" placeholder="select" onChange={this.handleChangeFylke}>
+          {this.props.listFylke.map(function(listValue){
+            return <option value={listValue["location"]}>{listValue["locationName"]}</option>;
+          })}
+        </FormControl>
+        <ControlLabel>Kommune</ControlLabel>
+        <FormControl componentClass="select" placeholder="select" onChange={this.handleChangeKommune}>
+          {this.props.listKommune.map(function(listValue){
+            return <option value={listValue["location"]}>{listValue["locationName"]}</option>;
           })}
         </FormControl>
       </FormGroup>
@@ -59,11 +68,15 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      type: [{'value':'respiratory','name':'Øvre-luftvei diagnose'},{'value':'gastro','name':'Mage-tarm diagnose'}],
       namesFylke: [1,2],
+      namesKommune: [1,2],
+      selectedFylke: "Norge",
       selectedName: "Norge",
       data : []
     };
     this.onUpdateSelectFylke = this.onUpdateSelectFylke.bind(this)
+    this.onUpdateSelectKommune = this.onUpdateSelectKommune.bind(this)
   }
 
   GetData(){
@@ -93,7 +106,22 @@ class App extends Component {
     // Now use it!
     fetch(request)
       .then((responseText) => responseText.json())
-      .then((response) => this.setState({ namesFylke: response }));
+      .then((response) => this.setState({ namesFylke: JSON.parse(response) }));
+  }
+
+  GetNamesKommune(){
+    var request = new Request(sprintf('http://172.30.39.176/prod/api/namesKommune?name=%s', this.state.selectedFylke), {
+     method: 'GET', 
+     mode: 'cors', 
+     redirect: 'follow',
+     headers: new Headers({
+       'Content-Type': 'text/plain'
+     })
+    });
+    // Now use it!
+    fetch(request)
+      .then((responseText) => responseText.json())
+      .then((response) => this.setState({ namesKommune: JSON.parse(response) }));
   }
 
   GetResults() {
@@ -103,15 +131,23 @@ class App extends Component {
   onUpdateSelectFylke(val){
     console.log('parent')
     console.log(val)
+    this.setState({ selectedName: val, selectedFylke: val }, function(){
+      this.GetNamesKommune()
+      this.GetData()
+    })
+  }
+
+  onUpdateSelectKommune(val){
+    console.log('parent')
+    console.log(val)
     this.setState({ selectedName: val }, function(){
       this.GetData()
     })
-//    console.log(this.state.selectedName)
-//    this.GetData()
   }
 
   componentDidMount(){
     this.GetNamesFylke()
+    this.GetNamesKommune()
     this.GetData()
   }
 
@@ -143,7 +179,7 @@ var styleSidebar = {
 
     return(
       <div style={styleWrap}>
-      <div style={styleSidebar}><LeftSelect onUpdate={this.onUpdateSelectFylke} list={this.state.namesFylke} /></div>
+      <div style={styleSidebar}><LeftSelect onUpdateFylke={this.onUpdateSelectFylke} listFylke={this.state.namesFylke} onUpdateKommune={this.onUpdateSelectKommune} listKommune={this.state.namesKommune}/></div>
       <div style={styleMain}><RightGraph title={this.state.selectedName} data={this.state.data} /></div>
       </div>
     );
