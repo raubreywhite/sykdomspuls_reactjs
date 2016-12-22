@@ -11,6 +11,19 @@ var sprintf = require("sprintf-js").sprintf
 const Plotly = require('react-plotlyjs');
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      tab: 'overview'
+    };
+    this.handleSelect = this.handleSelect.bind(this)
+  }
+
+  handleSelect(event, eventKey){
+    console.log(event);
+    this.setState( { tab: event } );
+  }
+
   render(){
 
     return(
@@ -24,15 +37,16 @@ class App extends Component {
     </Navbar.Header>
     <Navbar.Collapse>
       <Nav>
-        <NavItem eventKey={1} href="#">Oversikt</NavItem>
-        <NavDropdown eventKey={3} title="Terskelen" id="basic-nav-dropdown">
-          <MenuItem eventKey={3.1}>Ukentlig</MenuItem>
-          <MenuItem eventKey={3.2}>Daglig</MenuItem>
+        <NavItem eventKey={"overview"} href="#" onSelect={this.handleSelect}>Oversikt</NavItem>
+        <NavDropdown eventKey={"x"} title="Terskelen" id="basic-nav-dropdown" onSelect={this.handleSelect}>
+          <MenuItem eventKey={"weekly"}>Ukentlig</MenuItem>
+          <MenuItem eventKey={"daily"}>Daglig</MenuItem>
         </NavDropdown>
       </Nav>
     </Navbar.Collapse>
   </Navbar>
-      <Overview/>
+      { this.state.tab == "overview" ? <Overview/> : null }
+      { this.state.tab == "weekly" ? <Weekly/> : null }
 </div>
     );
   }
