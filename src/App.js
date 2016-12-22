@@ -8,8 +8,10 @@ var sprintf = require("sprintf-js").sprintf
 const Plotly = require('react-plotlyjs');
 
 var LeftSelect = React.createClass ({
+  handleChangeType : function(event){
+    this.props.onUpdateType(event.target.value)
+  },
   handleChangeFylke : function(event){
-//    event.stopPropagation()
     console.log(event.target.value) 
     this.props.onUpdateFylke(event.target.value)
   },
@@ -20,6 +22,12 @@ var LeftSelect = React.createClass ({
   render : function() {
     return (
       <FormGroup controlId="formControlsSelect">
+        <ControlLabel>Sykdom/Symptom</ControlLabel>
+        <FormControl componentClass="select" placeholder="select" onChange={this.handleChangeType}>
+          {this.props.listType.map(function(listValue){
+            return <option value={listValue["value"]}>{listValue["name"]}</option>;
+          })}
+        </FormControl>
         <ControlLabel>Fylke</ControlLabel>
         <FormControl componentClass="select" placeholder="select" onChange={this.handleChangeFylke}>
           {this.props.listFylke.map(function(listValue){
@@ -42,7 +50,6 @@ class RightGraph extends Component {
     let layout = {                     // all "layout" attributes: #layout
       title: this.props.title,  // more about "layout.title": #layout-title
       xaxis: {                  // all "layout.xaxis" attributes: #layout-xaxis
-        title: 'time'         // more about "layout.xaxis.title": #layout-xaxis-title
       },
       annotations: [            // all "annotation" attributes: #layout-annotations
         {
@@ -52,7 +59,8 @@ class RightGraph extends Component {
           y: 0,                         // #layout-annotations-y
           yref: 'paper'                 // #layout-annotations-yref
         }
-      ]
+      ],
+      legend: {'orientation':'h'}
     };
     let config = {
       showLink: false,
@@ -68,19 +76,21 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      type: [{'value':'respiratory','name':'Øvre-luftvei diagnose'},{'value':'gastro','name':'Mage-tarm diagnose'}],
+      namesType: [{'value':'respiratory','name':'Øvre-luftvei diagnose'},{'value':'gastro','name':'Mage-tarm diagnose'}],
       namesFylke: [1,2],
       namesKommune: [1,2],
+      selectedType: 'respiratory',
       selectedFylke: "Norge",
       selectedName: "Norge",
       data : []
     };
+    this.onUpdateSelectType = this.onUpdateSelectType.bind(this)
     this.onUpdateSelectFylke = this.onUpdateSelectFylke.bind(this)
     this.onUpdateSelectKommune = this.onUpdateSelectKommune.bind(this)
   }
 
   GetData(){
-    var request = new Request(sprintf('http://172.30.39.176/prod/api/dataWeeklyFylke?name=%s', this.state.selectedName), {
+    var request = new Request(sprintf('http://linux.fhi.no/api/dataWeeklyFylke?name=%s&type=%s', this.state.selectedName, this.state.selectedType), {
       method: 'GET', 
       mode: 'cors', 
       redirect: 'follow',
@@ -95,7 +105,7 @@ class App extends Component {
   }
 
   GetNamesFylke(){
-    var request = new Request('http://172.30.39.176/prod/api/namesFylke', {
+    var request = new Request('http://linux.fhi.no/api/namesFylke', {
      method: 'GET', 
      mode: 'cors', 
      redirect: 'follow',
@@ -110,7 +120,7 @@ class App extends Component {
   }
 
   GetNamesKommune(){
-    var request = new Request(sprintf('http://172.30.39.176/prod/api/namesKommune?name=%s', this.state.selectedFylke), {
+    var request = new Request(sprintf('http://linux.fhi.no/api/namesKommune?name=%s', this.state.selectedFylke), {
      method: 'GET', 
      mode: 'cors', 
      redirect: 'follow',
@@ -126,6 +136,12 @@ class App extends Component {
 
   GetResults() {
     this.setState({ namesFylke: [3,4] });
+  }
+
+  onUpdateSelectType(val){
+    this.setState({selectedType: val}, function(){
+      this.GetData()
+    })
   }
 
   onUpdateSelectFylke(val){
@@ -179,7 +195,7 @@ var styleSidebar = {
 
     return(
       <div style={styleWrap}>
-      <div style={styleSidebar}><LeftSelect onUpdateFylke={this.onUpdateSelectFylke} listFylke={this.state.namesFylke} onUpdateKommune={this.onUpdateSelectKommune} listKommune={this.state.namesKommune}/></div>
+      <div style={styleSidebar}><LeftSelect onUpdateType={this.onUpdateSelectType} listType={this.state.namesType} onUpdateFylke={this.onUpdateSelectFylke} listFylke={this.state.namesFylke} onUpdateKommune={this.onUpdateSelectKommune} listKommune={this.state.namesKommune}/></div>
       <div style={styleMain}><RightGraph title={this.state.selectedName} data={this.state.data} /></div>
       </div>
     );
