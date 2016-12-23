@@ -9,30 +9,36 @@ var Lines = React.createClass({
   render: function () {
     var data = this.props.data
 
-console.log(data)
     var margin = {top: 20, right: 20, bottom: 30, left: 50}
     var width = 396 - margin.left - margin.right
     var height = 350 - margin.top - margin.bottom
     var parseDate = d3.timeParse('%Y-%m-%d')
 
-//    var x = d3.scaleTime()
     var x = d3.scaleLinear()
     .range([0, width])
 
     var y = d3.scaleLinear()
     .range([height, 0])
 
-    var xAxis = d3.axisBottom()
-    .scale(x)
-   // .orient('bottom')
-
-    var yAxis = d3.axisLeft()
-    .scale(y)
-   // .orient('left')
-
     var line = d3.line()
     .x(function (d) { return x(d.x) })
     .y(function (d) { return y(d.n) })
+
+    var areaNormal = d3.area()
+      .x(function (d) { return x(d.x) })
+      .y0(height)
+      .y1(function (d) { return y(d.threshold2) })
+     
+    var areaMedium = d3.area()
+      .x(function (d) { return x(d.x) })
+      .y0(function (d) { return y(d.threshold2) })
+      .y1(function (d) { return y(d.threshold4) })
+     
+    var areaHigh = d3.area()
+      .x(function (d) { return x(d.x) })
+      .y0(function (d) { return y(d.threshold4) })
+      .y1(0) 
+ 
 
     var node = ReactFauxDOM.createElement('svg')
     var svg = d3.select(node)
@@ -41,15 +47,42 @@ console.log(data)
     .append('g')
     .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
 
-    data.forEach(function (d) {
-console.log(d.date)
-//      d.date = parseDate(d.date)
-      d.n = +d.n
-    })
-
     x.domain(d3.extent(data, function (d) { return d.x }))
-    y.domain(d3.extent(data, function (d) { return d.n }))
+    y.domain([0, d3.max(data, function (d) { return d.n })])
 
+    svg.append('path')
+      .data([data])
+      .attr('class', 'area')
+      .attr('d', areaNormal)
+      .attr('fill', 'green')
+
+    svg.append('path')
+      .data([data])
+      .attr('class', 'area')
+      .attr('d', areaMedium)
+      .attr('fill', 'orange')
+
+    svg.append('path')
+      .data([data])
+      .attr('class', 'area')
+      .attr('d', areaHigh)
+      .attr('fill', 'red')
+
+    svg.append('path')
+      .data([data])
+      .attr('class', 'line')
+      .attr('d', line)
+      .attr('stroke', 'black')
+      .attr('fill', 'none')
+
+    svg.append('g')
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
+
+    svg.append('g')
+      .call(d3.axisLeft(y));
+
+/*
     svg.append('g')
     .attr('class', 'x axis')
     .attr('transform', 'translate(0,' + height + ')')
@@ -69,7 +102,7 @@ console.log(d.date)
     .datum(data)
     .attr('class', 'line')
     .attr('d', line)
-
+*/
     return node.toReact()
   }
 })
