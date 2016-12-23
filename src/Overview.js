@@ -4,6 +4,8 @@ import { FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
 //import { Plotly } from 'react-plotlyjs';
 //var format = require( 'string-kit').format;
 
+import Lines from './Lines.js'
+
 var sprintf = require("sprintf-js").sprintf
 const Plotly = require('react-plotlyjs');
 
@@ -193,10 +195,16 @@ var styleSidebar = {
     minHeight: '100px'
 };
 
+var fakeData = [
+{ 'date': '2-May-12', 'close': 582 },
+{ 'date': '1-May-12', 'close': 582 },
+{ 'date': '30-Apr-12', 'close': 500 }
+];
+
     return(
       <div style={styleWrap}>
       <div style={styleSidebar}><LeftSelect onUpdateType={this.onUpdateSelectType} listType={this.state.namesType} onUpdateFylke={this.onUpdateSelectFylke} listFylke={this.state.namesFylke} onUpdateKommune={this.onUpdateSelectKommune} listKommune={this.state.namesKommune}/></div>
-      <div style={styleMain}><RightGraph title={this.state.selectedName} data={this.state.data} /></div>
+      <div style={styleMain}><Lines data={fakeData} /></div>
       </div>
     );
   }
