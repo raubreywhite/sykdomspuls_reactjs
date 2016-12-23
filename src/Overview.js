@@ -92,7 +92,7 @@ class App extends Component {
   }
 
   GetData(){
-    var request = new Request(sprintf('http://linux.fhi.no/api/dataWeeklyFylke?name=%s&type=%s', this.state.selectedName, this.state.selectedType), {
+    var request = new Request(sprintf('http://linux.fhi.no/api/v1_0_DataWeeklyFylke?name=%s&type=%s', this.state.selectedName, this.state.selectedType), {
       method: 'GET', 
       mode: 'cors', 
       redirect: 'follow',
@@ -204,7 +204,7 @@ var fakeData = [
     return(
       <div style={styleWrap}>
       <div style={styleSidebar}><LeftSelect onUpdateType={this.onUpdateSelectType} listType={this.state.namesType} onUpdateFylke={this.onUpdateSelectFylke} listFylke={this.state.namesFylke} onUpdateKommune={this.onUpdateSelectKommune} listKommune={this.state.namesKommune}/></div>
-      <div style={styleMain}><Lines data={fakeData} /></div>
+      <div style={styleMain}><Lines data={this.state.data} /></div>
       </div>
     );
   }

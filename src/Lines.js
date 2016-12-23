@@ -8,13 +8,15 @@ var Lines = React.createClass({
   },
   render: function () {
     var data = this.props.data
+
+console.log(data)
     var margin = {top: 20, right: 20, bottom: 30, left: 50}
     var width = 396 - margin.left - margin.right
     var height = 350 - margin.top - margin.bottom
-console.log(data)
-    var parseDate = d3.timeParse('%d-%b-%y')
-console.log("ok")
-    var x = d3.scaleTime()
+    var parseDate = d3.timeParse('%Y-%m-%d')
+
+//    var x = d3.scaleTime()
+    var x = d3.scaleLinear()
     .range([0, width])
 
     var y = d3.scaleLinear()
@@ -29,8 +31,8 @@ console.log("ok")
    // .orient('left')
 
     var line = d3.line()
-    .x(function (d) { return x(d.date) })
-    .y(function (d) { return y(d.close) })
+    .x(function (d) { return x(d.x) })
+    .y(function (d) { return y(d.n) })
 
     var node = ReactFauxDOM.createElement('svg')
     var svg = d3.select(node)
@@ -40,12 +42,13 @@ console.log("ok")
     .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
 
     data.forEach(function (d) {
-      d.date = parseDate(d.date)
-      d.close = +d.close
+console.log(d.date)
+//      d.date = parseDate(d.date)
+      d.n = +d.n
     })
 
-    x.domain(d3.extent(data, function (d) { return d.date }))
-    y.domain(d3.extent(data, function (d) { return d.close }))
+    x.domain(d3.extent(data, function (d) { return d.x }))
+    y.domain(d3.extent(data, function (d) { return d.n }))
 
     svg.append('g')
     .attr('class', 'x axis')
