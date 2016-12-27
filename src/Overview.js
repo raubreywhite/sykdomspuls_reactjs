@@ -92,7 +92,7 @@ class App extends Component {
   }
 
   GetData(){
-    var request = new Request(sprintf('http://linux.fhi.no/api/v1_0_DataWeeklyFylke?name=%s&type=%s', this.state.selectedName, this.state.selectedType), {
+    var request = new Request(sprintf('http://linux.fhi.no/api/v1_0_DataWeeklyLine?name=%s&type=%s', this.state.selectedName, this.state.selectedType), {
       method: 'GET', 
       mode: 'cors', 
       redirect: 'follow',
