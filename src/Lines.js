@@ -10,7 +10,7 @@ var Lines = React.createClass({
     var data = this.props.data
 
     var margin = {top: 20, right: 20, bottom: 30, left: 50}
-    var width = 396 - margin.left - margin.right
+    var width = 500 - margin.left - margin.right
     var height = 350 - margin.top - margin.bottom
     var parseDate = d3.timeParse('%Y-%m-%d')
 
@@ -19,6 +19,9 @@ var Lines = React.createClass({
 
     var y = d3.scaleLinear()
     .range([height, 0])
+
+    x.domain(d3.extent(data, function (d) { return d.x }))
+    y.domain([0, d3.max(data, function (d) { return Math.max(d.threshold4, d.n) })])
 
     var line = d3.line()
     .x(function (d) { return x(d.x) })
@@ -46,27 +49,27 @@ var Lines = React.createClass({
     .attr('height', height + margin.top + margin.bottom)
     .append('g')
     .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
-
-    x.domain(d3.extent(data, function (d) { return d.x }))
-    y.domain([0, d3.max(data, function (d) { return d.n })])
-
+    
     svg.append('path')
       .data([data])
       .attr('class', 'area')
       .attr('d', areaNormal)
-      .attr('fill', 'green')
+      .attr('fill', '#91cf60')
+      .attr('fill-opacity', 0.75)
 
     svg.append('path')
       .data([data])
       .attr('class', 'area')
       .attr('d', areaMedium)
-      .attr('fill', 'orange')
+      .attr('fill', '#ffffbf')
+      .attr('fill-opacity', 0.75)
 
     svg.append('path')
       .data([data])
       .attr('class', 'area')
       .attr('d', areaHigh)
-      .attr('fill', 'red')
+      .attr('fill', '#fc8d59')
+      .attr('fill-opacity', 0.75)
 
     svg.append('path')
       .data([data])
@@ -74,6 +77,32 @@ var Lines = React.createClass({
       .attr('d', line)
       .attr('stroke', 'black')
       .attr('fill', 'none')
+
+    svg.selectAll('dot')
+      .data(data)
+      .enter().append("circle")
+      .attr('r', 3)
+      .attr('cx', function(d) { return x(d.x); })
+      .attr('cy', function(d) { return y(d.n); })
+      .attr('fill-opacity', function(d) { if(d.n >= d.threshold2){ return 1 } else { return 0 } })
+
+    svg.selectAll('dot')
+      .data(data)
+      .enter().append("circle")
+      .attr('r', 2)
+      .attr('cx', function(d) { return x(d.x); })
+      .attr('cy', function(d) { return y(d.n); })
+      .attr('fill', '#ffffbf')
+      .attr('fill-opacity', function(d) { if(d.n >= d.threshold2 && d.n < d.threshold4){ return 1 } else { return 0 } })
+
+    svg.selectAll('dot')
+      .data(data)
+      .enter().append("circle")
+      .attr('r', 2)
+      .attr('cx', function(d) { return x(d.x); })
+      .attr('cy', function(d) { return y(d.n); })
+      .attr('fill', '#fc8d59')
+      .attr('fill-opacity', function(d) { if(d.n >= d.threshold4){ return 1 } else { return 0 } })
 
     svg.append('g')
       .attr("transform", "translate(0," + height + ")")

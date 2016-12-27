@@ -28,12 +28,12 @@ class App extends Component {
 
     return(
 <div>
-  <Navbar inverse collapseOnSelect>
+  <Navbar fluid>
     <Navbar.Header>
       <Navbar.Brand>
         <a href="#">Sykdomspulsen</a>
       </Navbar.Brand>
-      <Navbar.Toggle />
+    <Navbar.Toggle />
     </Navbar.Header>
     <Navbar.Collapse>
       <Nav>
