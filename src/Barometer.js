@@ -1,19 +1,22 @@
 var d3 = require('d3')
 var React = require('react')
 var ReactFauxDOM = require('react-faux-dom')
+import Measure from 'react-measure';
+import  './reactive.css';
 
 var Barometer = React.createClass({
   propTypes: {
-    data: React.PropTypes.array
+    data: React.PropTypes.array,
+    width: React.PropTypes.number
   },
   render: function () {
     var data = this.props.data
 
     var colourRange = [ 'green', 'yellow', 'red' ]
 
-    var margin = {top: 20, right: 20, bottom: 30, left: 50}
-    var width = 500 - margin.left - margin.right
-    var height = 350 - margin.top - margin.bottom
+    var margin = {top: 20, right: 20, bottom: 50, left: 125}
+    var width = this.props.width - margin.left - margin.right + 150
+    var height = 400 - margin.top - margin.bottom
     var parseDate = d3.timeParse('%Y-%m-%d')
 
     var x_elements = d3.set(data.map(function(item) { return item.xRaw; } )).values();
@@ -80,7 +83,9 @@ var Barometer = React.createClass({
     .attr('class', 'line')
     .attr('d', line)
 */
-    return node.toReact()
+    return (
+        node.toReact()
+    )
   }
 })
 

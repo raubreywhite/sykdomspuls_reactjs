@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
+import Measure from 'react-measure';
 //import { SideNav, Nav } from 'react-sidenav';
 //import { Plotly } from 'react-plotlyjs';
 //var format = require( 'string-kit').format;
@@ -46,7 +47,11 @@ class App extends Component {
       namesFylke: [1,2],
       selectedType: 'respiratory',
       selectedName: "Norge",
-      data : []
+      data : [],
+      dimensions: {
+        width: 800,
+        height: 400
+      }
     };
     this.onUpdateSelectType = this.onUpdateSelectType.bind(this)
     this.onUpdateSelectFylke = this.onUpdateSelectFylke.bind(this)
@@ -136,11 +141,14 @@ var fakeData = [
 { 'date': '1-May-12', 'close': 582 },
 { 'date': '30-Apr-12', 'close': 500 }
 ];
-
     return(
       <div style={styleWrap}>
-      <div style={styleSidebar}><LeftSelect onUpdateType={this.onUpdateSelectType} listType={this.state.namesType} onUpdateFylke={this.onUpdateSelectFylke} listFylke={this.state.namesFylke}/></div>
-      <div style={styleMain}><Barometer data={this.state.data} /></div>
+        <div style={styleSidebar}><LeftSelect onUpdateType={this.onUpdateSelectType} listType={this.state.namesType} onUpdateFylke={this.onUpdateSelectFylke} listFylke={this.state.namesFylke}/></div>
+        <Measure onMeasure={(dimensions) => { this.setState({dimensions})}}>
+          <div style={styleMain}>
+            <Barometer data={this.state.data} width={this.state.dimensions.width}/>
+          </div>
+        </Measure>
       </div>
     );
   }
