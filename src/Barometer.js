@@ -30,7 +30,7 @@ var Barometer = React.createClass({
 
     var colour = d3.scaleOrdinal()
     .range(colourRange)
-    .domain(['Normal', 'Medium', 'High'])
+    .domain([0, 1, 2])
 
     x.domain(d3.extent(data, function(d) { return d.xRaw } ))
     y.domain(y_elements)
@@ -50,7 +50,7 @@ var Barometer = React.createClass({
       .attr('height', cellHeight)
       .attr('x', function(d) { return x(d.xRaw) } )
       .attr('y', function(d) { return y(d.locationName) } )
-      .attr('fill', function(d) { return colour(d.status) } )
+      .attr('fill', function(d) { return colour(d.statusNum) } )
 
     svg.append('g')
       .attr("transform", "translate(0," + height + ")")
