@@ -12,18 +12,19 @@ var Barometer = React.createClass({
   render: function () {
     var data = this.props.data
 
-    var colourRange = [ 'green', 'yellow', 'red' ]
+    var colourRange = [ '#91cf60', '#ffffbf', '#fc8d59' ]
 
     var margin = {top: 20, right: 20, bottom: 50, left: 125}
     var width = this.props.width - margin.left - margin.right + 150
-    var height = 400 - margin.top - margin.bottom
+//    var height = 400 - margin.top - margin.bottom
     var parseDate = d3.timeParse('%Y-%m-%d')
 
     var x_elements = d3.set(data.map(function(item) { return item.xRaw; } )).values();
     var y_elements = d3.set(data.map(function(item) { return item.locationName; } )).values();
 
     var cellWidth = width/x_elements.length
-    var cellHeight = height/y_elements.length
+    var cellHeight = 20 // height/y_elements.length
+    var height = cellHeight*y_elements.length + margin.top + margin.bottom
 
     var x = d3.scaleLinear()
     .range([0, width])
@@ -54,6 +55,7 @@ var Barometer = React.createClass({
       .attr('x', function(d) { return x(d.xRaw) } )
       .attr('y', function(d) { return y(d.locationName) } )
       .attr('fill', function(d) { return colour(d.statusNum) } )
+      .attr('fill-opacity', 0.75)
 
     svg.append('g')
       .attr("transform", "translate(0," + height + ")")
