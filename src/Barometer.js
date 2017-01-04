@@ -5,12 +5,15 @@ import Measure from 'react-measure';
 import  './reactive.css';
 
 var Barometer = React.createClass({
-  propTypes: {
-    data: React.PropTypes.array,
-    width: React.PropTypes.number
-  },
   render: function () {
-    var data = this.props.data
+    if(this.props.data['data'] == null){
+      console.log("BAD")
+      return(<h2>Loading...</h2>)
+    } else {
+      var data = this.props.data['data']
+      var dataBrush = this.props.data['brush']
+      var labs = this.props.data['labs']
+    }
 
     var colourRange = [ '#91cf60', '#ffffbf', '#fc8d59' ]
 
@@ -21,6 +24,9 @@ var Barometer = React.createClass({
 
     var x_elements = d3.set(data.map(function(item) { return item.xRaw; } )).values();
     var y_elements = d3.set(data.map(function(item) { return item.locationName; } )).values();
+
+    var xMin=d3.min(data.map(function(item){ return item.xRaw }))-2
+    var xMax=d3.max(data.map(function(item){ return item.xRaw }))+2
 
     var cellWidth = width/x_elements.length
     var cellHeight = 20 // height/y_elements.length
@@ -36,7 +42,7 @@ var Barometer = React.createClass({
     .range(colourRange)
     .domain([0, 1, 2])
 
-    x.domain(d3.extent(data, function(d) { return d.xRaw } ))
+    x.domain([xMin,xMax])
     y.domain(y_elements)
 
     var node = ReactFauxDOM.createElement('svg')
@@ -52,14 +58,45 @@ var Barometer = React.createClass({
       .attr('class', 'cell')
       .attr('width', cellWidth)
       .attr('height', cellHeight)
-      .attr('x', function(d) { return x(d.xRaw) } )
+      .attr('x', function(d) { return x(d.xRaw-0.4) } )
       .attr('y', function(d) { return y(d.locationName) } )
       .attr('fill', function(d) { return colour(d.statusNum) } )
       .attr('fill-opacity', 0.75)
+    
+    var labTicks = d3.set(labs.map(function(item) {
+      if((item.week%13-1) == 0){
+        return item.xRaw;
+      } else {
+        return -1
+      }
+    })).values().map(Number).filter(function(x){return(x>=xMin & x<=xMax)});
 
     svg.append('g')
       .attr("transform", "translate(0," + height + ")")
-      .call(d3.axisBottom(x));
+      .call(
+        d3.axisBottom(x)
+          .tickValues(labTicks)
+          .tickFormat(function(d,i){
+            return(labs[d-1].week+'/'+labs[d-1].year.slice(-2))
+          })
+      );
+
+    var yearTicks = d3.set(labs.map(function(item) {
+      if(item.week == 1){
+        return item.xRaw;
+      } else {
+        return -1
+      }
+    })).values().map(Number).filter(function(x){return(x>=xMin & x<=xMax)});
+    svg.append('g')
+      .attr("transform", "translate(0," + height + ")")
+      .call(
+        d3.axisBottom(x)
+          .tickValues(yearTicks)
+          .tickFormat("")
+          .tickSizeOuter(-height)
+          .tickSizeInner(-height)
+      );
 
     svg.append('g')
       .call(d3.axisLeft(y));
