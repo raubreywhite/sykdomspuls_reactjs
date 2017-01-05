@@ -3,17 +3,17 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import App2 from './App';
 import './index.css';
-import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap/dist/css/bootstrap-theme.css';
+//import 'bootstrap/dist/css/bootstrap.css';
+//import 'bootstrap/dist/css/bootstrap-theme.css';
 
 ReactDOM.render(
   <App />,
   document.getElementById('root')
 );
-
+/*
 ReactDOM.render(
   <App2 />,
   document.getElementById('root2')
 );
 
-
+*/

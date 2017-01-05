@@ -17,8 +17,8 @@ var Barometer = React.createClass({
 
     var colourRange = [ '#91cf60', '#ffffbf', '#fc8d59' ]
 
-    var margin = {top: 20, right: 20, bottom: 50, left: 125}
-    var width = this.props.width - margin.left - margin.right + 150
+    var mainMargin = {top: 20, right: 20, bottom: 40, left: 125}
+    var width = this.props.width - mainMargin.left - mainMargin.right + 150
 //    var height = 400 - margin.top - margin.bottom
     var parseDate = d3.timeParse('%Y-%m-%d')
 
@@ -30,13 +30,18 @@ var Barometer = React.createClass({
 
     var cellWidth = width/x_elements.length
     var cellHeight = 20 // height/y_elements.length
-    var height = cellHeight*y_elements.length + margin.top + margin.bottom
+    var mainHeight = cellHeight*y_elements.length
+
+    var brushMargin = {top: 20, right: 20, bottom: 40, left: 125}
+    var brushHeight = 50
+
+    var height=mainHeight+mainMargin.top+mainMargin.bottom+brushHeight+brushMargin.top + brushMargin.bottom
 
     var x = d3.scaleLinear()
     .range([0, width])
 
     var y = d3.scaleBand()
-    .range([0, height])
+    .range([0, mainHeight])
 
     var colour = d3.scaleOrdinal()
     .range(colourRange)
@@ -47,12 +52,13 @@ var Barometer = React.createClass({
 
     var node = ReactFauxDOM.createElement('svg')
     var svg = d3.select(node)
-    .attr('width', width + margin.left + margin.right)
-    .attr('height', height + margin.top + margin.bottom)
-    .append('g')
-    .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+    .attr('width', width + mainMargin.left + mainMargin.right)
+    .attr('height', height)
 
-    svg.selectAll('rect')
+    var mainGraph=svg.append('g')
+    .attr('transform', 'translate(' + mainMargin.left + ',' + mainMargin.top + ')')
+
+    mainGraph.selectAll('rect')
       .data(data)
       .enter().append('g').append('rect')
       .attr('class', 'cell')
@@ -71,14 +77,15 @@ var Barometer = React.createClass({
       }
     })).values().map(Number).filter(function(x){return(x>=xMin & x<=xMax)});
 
-    svg.append('g')
-      .attr("transform", "translate(0," + height + ")")
+    mainGraph.append('g')
+      .attr("transform", "translate(0," + mainHeight + ")")
       .call(
         d3.axisBottom(x)
           .tickValues(labTicks)
           .tickFormat(function(d,i){
             return(labs[d-1].week+'/'+labs[d-1].year.slice(-2))
           })
+          .tickSizeOuter(0)
       );
 
     var yearTicks = d3.set(labs.map(function(item) {
@@ -88,40 +95,86 @@ var Barometer = React.createClass({
         return -1
       }
     })).values().map(Number).filter(function(x){return(x>=xMin & x<=xMax)});
-    svg.append('g')
-      .attr("transform", "translate(0," + height + ")")
+    mainGraph.append('g')
+      .attr("transform", "translate(0," + mainHeight + ")")
+      .style('stroke-dasharray', '2 2')
       .call(
         d3.axisBottom(x)
           .tickValues(yearTicks)
           .tickFormat("")
-          .tickSizeOuter(-height)
-          .tickSizeInner(-height)
+          .tickSizeOuter(-mainHeight)
+          .tickSizeInner(-mainHeight)
       );
 
-    svg.append('g')
-      .call(d3.axisLeft(y));
+    mainGraph.append('g')
+      .call(
+        d3.axisLeft(y)
+          .tickSizeOuter(0)
+          .tickSizeInner(0)
+      );
 
+    mainGraph.append('g')
+      .style('stroke-dasharray', '2 2')
+      .call(
+        d3.axisLeft(y)
+          .tickSizeOuter(0)
+          .tickSizeInner(-width)
+      );
+
+    var brushX = d3.scaleLinear()
+    .range([0, width])
+    .domain([xMin, xMax])
+    var brushY = d3.scaleLinear()
+    .range([brushHeight, 0])
+    .domain([0, d3.max(dataBrush, function(d) { return d.n } ) ])
+
+    var line = d3.line()
+    .x(function (d) { return brushX(d.xRaw) })
+    .y(function (d) { return brushY(d.n) })
+
+    var brushGraph=svg.append('g')
+    .attr('transform', 'translate(' + brushMargin.left + ',' + (mainHeight+mainMargin.bottom+brushMargin.top) + ')')
+
+    brushGraph.append('path')
+      .data([dataBrush])
+      .attr('class', 'line')
+      .attr('d', line)
+      .attr('stroke', 'black')
+      .attr('fill', 'none')
+
+    brushGraph.append('g')
+      .attr("transform", "translate(0," + brushHeight + ")")
+      .call(
+        d3.axisBottom(x)
+          .tickValues(labTicks)
+          .tickFormat(function(d,i){
+            return(labs[d-1].week+'/'+labs[d-1].year.slice(-2))
+          })
+      );
 /*
-    svg.append('g')
-    .attr('class', 'x axis')
-    .attr('transform', 'translate(0,' + height + ')')
-    .call(xAxis)
-
-    svg.append('g')
-    .attr('class', 'y axis')
-    .call(yAxis)
-    .append('text')
-    .attr('transform', 'rotate(-90)')
-    .attr('y', 6)
-    .attr('dy', '.71em')
-    .style('text-anchor', 'end')
-    .text('Price ($)')
-
-    svg.append('path')
-    .datum(dataRaw)
-    .attr('class', 'line')
-    .attr('d', line)
+    brushGraph.append('g')
+      .call(
+        d3.axisLeft(brushY)
+          .ticks(0)
+          .tickSizeOuter(0)
+          .tickSizeInner(0)
+      );
 */
+
+  var brush = d3.brushX()
+    .extent([[0,-5], [width, brushHeight-5]])
+//    .on('brush end', brushed)
+
+  brushGraph.append('g')
+    .attr('class', 'brush')
+    .call(brush)
+    .call(brush.move, brushX.range())
+
+  function brushed(){
+    var selection = d3.event.selection
+    
+  }
+
     return (
         node.toReact()
     )

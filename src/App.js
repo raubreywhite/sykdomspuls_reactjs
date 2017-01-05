@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 	import { FormGroup, ControlLabel, FormControl, Navbar, Nav, NavDropdown, NavItem, MenuItem } from 'react-bootstrap';
+import { ThemeSwitcher } from 'react-bootstrap-theme-switcher';
 import Overview from './Overview.js';
 import Weekly from './Weekly.js';
 
@@ -27,6 +28,7 @@ class App extends Component {
   render(){
 
     return(
+<ThemeSwitcher themePath='/themes' defaultTheme='united'>
 <div>
   <Navbar fluid>
     <Navbar.Header>
@@ -48,6 +50,7 @@ class App extends Component {
       { this.state.tab == "overview" ? <Overview/> : null }
       { this.state.tab == "weekly" ? <Weekly/> : null }
 </div>
+</ThemeSwitcher>
     );
   }
 }

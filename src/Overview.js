@@ -21,13 +21,14 @@ var LeftSelect = React.createClass ({
 
   render : function() {
     return (
-      <FormGroup controlId="formControlsSelect">
+      <FormGroup controlId="formControlsSelect" bsSize="small">
         <ControlLabel>Sykdom/Symptom</ControlLabel>
         <FormControl componentClass="select" placeholder="select" onChange={this.handleChangeType}>
           {this.props.listType.map(function(listValue){
             return <option value={listValue["value"]}>{listValue["name"]}</option>;
           })}
         </FormControl>
+        <br/>
         <ControlLabel>Fylke</ControlLabel>
         <FormControl componentClass="select" placeholder="select" onChange={this.handleChangeFylke}>
           {this.props.listFylke.map(function(listValue){
@@ -124,7 +125,7 @@ var styleMain = {
     margin: '0 -220px 0 auto',
     width: '100%',
     float: 'right',
-    background: '#eee',
+    background: 'white',
     minHeight: '100px'
 };
 
@@ -132,7 +133,7 @@ var styleSidebar = {
     width: '200px',
     float: 'left',
     height: '200px',
-    background: '#eee',
+    background: 'white',
     minHeight: '100px'
 };
 
