@@ -48,6 +48,7 @@ class App extends Component {
       namesFylke: [1,2],
       selectedType: 'respiratory',
       selectedName: "Norge",
+      selectedPrettyName: "Norge",
       data : [],
       dimensions: {
         width: 800,
@@ -99,11 +100,23 @@ class App extends Component {
   }
 
   onUpdateSelectFylke(val){
-    console.log('parent')
-    console.log(val)
-    this.setState({ selectedName: val, selectedFylke: val }, function(){
-      this.GetData()
-    })
+    var selectedPrettyName = this.state.namesFylke.filter(function(el) {
+      return el['location']===val
+    })[0]['locationName']
+console.log(222)
+console.log(this.state.namesFylke)
+console.log(val)
+console.log(selectedPrettyName)
+    this.setState(
+      {
+        selectedName: val,
+        selectedFylke: val,
+        selectedPrettyName: selectedPrettyName
+      },
+      function(){
+        this.GetData()
+      }
+    )
   }
 
   componentDidMount(){
@@ -147,6 +160,7 @@ var fakeData = [
         <div style={styleSidebar}><LeftSelect onUpdateType={this.onUpdateSelectType} listType={this.state.namesType} onUpdateFylke={this.onUpdateSelectFylke} listFylke={this.state.namesFylke}/></div>
         <Measure onMeasure={(dimensions) => { this.setState({dimensions})}}>
           <div style={styleMain}>
+            <h3>{this.state.selectedPrettyName}</h3>
             <Barometer data={this.state.data} width={this.state.dimensions.width}/>
           </div>
         </Measure>

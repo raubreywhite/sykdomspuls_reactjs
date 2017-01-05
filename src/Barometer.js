@@ -7,8 +7,7 @@ import  './reactive.css';
 var Barometer = React.createClass({
   render: function () {
     if(this.props.data['data'] == null){
-      console.log("BAD")
-      return(<h2>Loading...</h2>)
+      return(<h3>Loading...</h3>)
     } else {
       var data = this.props.data['data']
       var dataBrush = this.props.data['brush']
@@ -17,7 +16,7 @@ var Barometer = React.createClass({
 
     var colourRange = [ '#91cf60', '#ffffbf', '#fc8d59' ]
 
-    var mainMargin = {top: 20, right: 20, bottom: 40, left: 125}
+    var mainMargin = {top:0, right: 20, bottom: 40, left: 125}
     var width = this.props.width - mainMargin.left - mainMargin.right + 150
 //    var height = 400 - margin.top - margin.bottom
     var parseDate = d3.timeParse('%Y-%m-%d')

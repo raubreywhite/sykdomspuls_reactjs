@@ -12,3 +12,7 @@ border-radius: 0 !important;
   text-shadow: none !important;
 }
 
+h1, h2, h3 {
+  text-align: center !important;
+}
+
