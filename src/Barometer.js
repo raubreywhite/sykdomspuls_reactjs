@@ -1,38 +1,49 @@
 var d3 = require('d3')
 var React = require('react')
 var ReactFauxDOM = require('react-faux-dom')
-import Measure from 'react-measure';
 import  './reactive.css';
 
 var Barometer = React.createClass({
+getInitialState:function () {
+    return {
+   brushMin: -1,
+  brushMax: -1   
+    };
+ },
   render: function () {
-    if(this.props.data['data'] == null){
+    if(this.props.data['data'] == null || this.props.brushValues == null){
       return(<h3>Loading...</h3>)
     } else {
-      var data = this.props.data['data']
-      var dataBrush = this.props.data['brush']
+      var brushValues = this.props.brushValues
+console.log(brushValues)
+     var data = this.props.data['data'].filter(function(x){return(
+          x.xRaw>= brushValues[0] && x.xRaw <= brushValues[1]
+        )})
+     var dataBrush = this.props.data['brush']
       var labs = this.props.data['labs']
     }
 
     var colourRange = [ '#91cf60', '#ffffbf', '#fc8d59' ]
 
-    var mainMargin = {top:0, right: 20, bottom: 40, left: 125}
+    var mainMargin = {top:0, right: 20, bottom: 20, left: 125}
     var width = this.props.width - mainMargin.left - mainMargin.right + 150
 //    var height = 400 - margin.top - margin.bottom
-    var parseDate = d3.timeParse('%Y-%m-%d')
 
     var x_elements = d3.set(data.map(function(item) { return item.xRaw; } )).values();
     var y_elements = d3.set(data.map(function(item) { return item.locationName; } )).values();
 
-    var xMin=d3.min(data.map(function(item){ return item.xRaw }))-2
-    var xMax=d3.max(data.map(function(item){ return item.xRaw }))+2
+    var xMin=d3.min(data.map(function(item){ return item.xRaw }))-1
+    var xMax=d3.max(data.map(function(item){ return item.xRaw }))+1
+
+    var brushXMin=d3.min(dataBrush.map(function(item){ return item.xRaw }))-1
+    var brushXMax=d3.max(dataBrush.map(function(item){ return item.xRaw }))+1
 
     var cellWidth = width/x_elements.length
     var cellHeight = 20 // height/y_elements.length
     var mainHeight = cellHeight*y_elements.length
 
-    var brushMargin = {top: 20, right: 20, bottom: 40, left: 125}
-    var brushHeight = 50
+    var brushMargin = {top: 20, right: 20, bottom: 0, left: 125}
+    var brushHeight = 40
 
     var height=mainHeight+mainMargin.top+mainMargin.bottom+brushHeight+brushMargin.top + brushMargin.bottom
 
@@ -66,10 +77,26 @@ var Barometer = React.createClass({
       .attr('x', function(d) { return x(d.xRaw-0.4) } )
       .attr('y', function(d) { return y(d.locationName) } )
       .attr('fill', function(d) { return colour(d.statusNum) } )
-      .attr('fill-opacity', 0.75)
+      .attr('fill-opacity', 0.6)
     
+    var howFrequent=26
+    var freeSpace = width/(xMax-xMin+1)
+    console.log(freeSpace)
+    if(freeSpace <=2){
+      howFrequent=52
+    } else if(freeSpace <= 4){
+      howFrequent=26
+    } else if (freeSpace <= 6){
+      howFrequent=13
+    } else if (freeSpace <= 8){
+      howFrequent=8
+    } else if (freeSpace <= 14){
+      howFrequent=4
+    } else {
+      howFrequent=2
+    }
     var labTicks = d3.set(labs.map(function(item) {
-      if((item.week%13-1) == 0){
+      if((item.week%howFrequent-1) === 0){
         return item.xRaw;
       } else {
         return -1
@@ -88,7 +115,7 @@ var Barometer = React.createClass({
       );
 
     var yearTicks = d3.set(labs.map(function(item) {
-      if(item.week == 1){
+      if(item.week === 1){
         return item.xRaw;
       } else {
         return -1
@@ -122,7 +149,7 @@ var Barometer = React.createClass({
 
     var brushX = d3.scaleLinear()
     .range([0, width])
-    .domain([xMin, xMax])
+    .domain([brushXMin, brushXMax])
     var brushY = d3.scaleLinear()
     .range([brushHeight, 0])
     .domain([0, d3.max(dataBrush, function(d) { return d.n } ) ])
@@ -140,7 +167,7 @@ var Barometer = React.createClass({
       .attr('d', line)
       .attr('stroke', 'black')
       .attr('fill', 'none')
-
+/*
     brushGraph.append('g')
       .attr("transform", "translate(0," + brushHeight + ")")
       .call(
@@ -150,30 +177,7 @@ var Barometer = React.createClass({
             return(labs[d-1].week+'/'+labs[d-1].year.slice(-2))
           })
       );
-/*
-    brushGraph.append('g')
-      .call(
-        d3.axisLeft(brushY)
-          .ticks(0)
-          .tickSizeOuter(0)
-          .tickSizeInner(0)
-      );
 */
-
-  var brush = d3.brushX()
-    .extent([[0,-5], [width, brushHeight-5]])
-//    .on('brush end', brushed)
-
-  brushGraph.append('g')
-    .attr('class', 'brush')
-    .call(brush)
-    .call(brush.move, brushX.range())
-
-  function brushed(){
-    var selection = d3.event.selection
-    
-  }
-
     return (
         node.toReact()
     )

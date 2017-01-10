@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-	import { FormGroup, ControlLabel, FormControl, Navbar, Nav, NavDropdown, NavItem, MenuItem } from 'react-bootstrap';
+	import { Navbar, Nav, NavDropdown, NavItem, MenuItem } from 'react-bootstrap';
 import { ThemeSwitcher } from 'react-bootstrap-theme-switcher';
 import Overview from './Overview.js';
 import Weekly from './Weekly.js';
@@ -8,8 +8,6 @@ import Weekly from './Weekly.js';
 //import { Plotly } from 'react-plotlyjs';
 //var format = require( 'string-kit').format;
 
-var sprintf = require("sprintf-js").sprintf
-const Plotly = require('react-plotlyjs');
 
 class App extends Component {
   constructor(props) {
@@ -27,6 +25,12 @@ class App extends Component {
 
   render(){
 
+
+var styleFooter = {
+    height: '5px',
+    background: '#d34615',
+    opacity: 1
+};
     return(
 <ThemeSwitcher themePath='/themes' defaultTheme='united'>
 <div>
@@ -47,8 +51,11 @@ class App extends Component {
       </Nav>
     </Navbar.Collapse>
   </Navbar>
-      { this.state.tab == "overview" ? <Overview/> : null }
-      { this.state.tab == "weekly" ? <Weekly/> : null }
+      { this.state.tab === "overview" ? <Overview/> : null }
+      { this.state.tab === "weekly" ? <Weekly/> : null }
+<img src='https://www.fhi.no/Static/templates/build/gfx/logo.svg' width={"150"} role={'presentation'}/>
+<div style={styleFooter}>
+</div>
 </div>
 </ThemeSwitcher>
     );
