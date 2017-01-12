@@ -9,6 +9,7 @@ var d3=require('d3');
 //var format = require( 'string-kit').format;
 
 import Barometer from './Barometer.js'
+import Lines from './Lines.js'
 
 var sprintf = require("sprintf-js").sprintf
 
@@ -65,7 +66,7 @@ class App extends Component {
   }
 
   GetData(){
-    var request = new Request(sprintf('http://linux.fhi.no/api/v1_0_DataWeeklyOverview?name=%s&type=%s', this.state.selectedName, this.state.selectedType), {
+    var request = new Request(sprintf(this.props.getData+'?name=%s&type=%s', this.state.selectedName, this.state.selectedType), {
       method: 'GET', 
       mode: 'cors', 
       redirect: 'follow',
@@ -80,7 +81,7 @@ class App extends Component {
   }
 
   GetNamesFylke(){
-    var request = new Request('http://linux.fhi.no/api/namesFylke', {
+    var request = new Request(this.props.getNamesFylke, {
      method: 'GET', 
      mode: 'cors', 
      redirect: 'follow',
@@ -216,7 +217,8 @@ var defaultValue=[xMin,xMax]
         <Measure onMeasure={(dimensions) => { this.setState({dimensions})}}>
           <div style={styleMain}>
             <h3>{this.state.selectedPrettyName}</h3>
-            <Barometer data={this.state.data} brushValues={this.state.brushValues} width={this.state.dimensions.width}/>
+      { this.props.type === "Barometer" ? <Barometer data={this.state.data} brushValues={this.state.brushValues} width={this.state.dimensions.width}/> : null }
+      { this.props.type === "Lines" ? <Lines data={this.state.data} brushValues={this.state.brushValues} width={this.state.dimensions.width}/> : null }
             <div style={styleBrush}>
             <Slider min={xMin} max={xMax} defaultValue={defaultValue} range={true} tipFormatter={this.tipFormatter} marks={marks} onAfterChange={this.setBrushValues}/>
             </div>
