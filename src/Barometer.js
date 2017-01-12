@@ -15,7 +15,6 @@ getInitialState:function () {
       return(<h3>Loading...</h3>)
     } else {
       var brushValues = this.props.brushValues
-console.log(brushValues)
      var data = this.props.data['data'].filter(function(x){return(
           x.xRaw>= brushValues[0] && x.xRaw <= brushValues[1]
         )})
@@ -46,6 +45,24 @@ console.log(brushValues)
     var brushHeight = 40
 
     var height=mainHeight+mainMargin.top+mainMargin.bottom+brushHeight+brushMargin.top + brushMargin.bottom
+
+    var howFrequent=''
+    var freeSpace = width/(xMax-xMin+1)
+    if(freeSpace <=2){
+      howFrequent='lab7'
+    } else if(freeSpace <= 4){
+      howFrequent='lab6'
+    } else if (freeSpace <= 6){
+      howFrequent='lab5'
+    } else if (freeSpace <= 8){
+      howFrequent='lab4'
+    } else if (freeSpace <= 14){
+      howFrequent='lab3'
+    } else if (freeSpace <= 28){
+      howFrequent='lab2'
+    } else {
+      howFrequent='lab1'
+    }
 
     var x = d3.scaleLinear()
     .range([0, width])
@@ -79,24 +96,8 @@ console.log(brushValues)
       .attr('fill', function(d) { return colour(d.statusNum) } )
       .attr('fill-opacity', 0.6)
     
-    var howFrequent=26
-    var freeSpace = width/(xMax-xMin+1)
-    console.log(freeSpace)
-    if(freeSpace <=2){
-      howFrequent=52
-    } else if(freeSpace <= 4){
-      howFrequent=26
-    } else if (freeSpace <= 6){
-      howFrequent=13
-    } else if (freeSpace <= 8){
-      howFrequent=8
-    } else if (freeSpace <= 14){
-      howFrequent=4
-    } else {
-      howFrequent=2
-    }
     var labTicks = d3.set(labs.map(function(item) {
-      if((item.week%howFrequent-1) === 0){
+      if(item[howFrequent] === 1){
         return item.xRaw;
       } else {
         return -1
@@ -109,13 +110,13 @@ console.log(brushValues)
         d3.axisBottom(x)
           .tickValues(labTicks)
           .tickFormat(function(d,i){
-            return(labs[d-1].week+'/'+labs[d-1].year.slice(-2))
+            return(labs[d-1].label)
           })
           .tickSizeOuter(0)
       );
 
     var yearTicks = d3.set(labs.map(function(item) {
-      if(item.week === 1){
+      if(item.vlines === 1){
         return item.xRaw;
       } else {
         return -1

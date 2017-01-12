@@ -133,7 +133,7 @@ tipFormatter(val){
     if(this.state.data['data'] == null){
   return(val)
 } else {
-  return(this.state.data.labs[val-1].week+'/'+this.state.data.labs[val-1].year.slice(-2))
+  return(this.state.data.labs[val-1].label)
 }
 }
 
@@ -145,8 +145,8 @@ console.log(val)
   render(){
 
 var styleWrap = {
-    margin: '20px',
-    padding: '20px',
+    margin: '0px',
+    padding: '0px',
     paddingRight: '240px',
     background: '#fff',
     overflow: 'hidden'
@@ -156,15 +156,18 @@ var styleMain = {
     margin: '0 -220px 0 auto',
     width: '100%',
     float: 'right',
-    background: 'white',
-    minHeight: '100px'
+    background: '#fff',
+    minHeight: '100px',
+    paddingBottom: '25px'
 };
 
 var styleSidebar = {
+    paddingLeft: '20px',
+    paddingTop: '55px',
     width: '200px',
     float: 'left',
     height: '200px',
-    background: 'white',
+    background: '#fff',
     minHeight: '100px'
 };
 
@@ -172,7 +175,6 @@ var styleBrush = {
     paddingLeft: '125px',
     paddingRight: '90px'
 }
-
 
 var xMin=1
 var xMax=10000
@@ -186,15 +188,15 @@ xMax=d3.max(this.state.data.data.map(function(item){ return item.xRaw }))
     var freeSpace = this.state.dimensions.width/(xMax-xMin+1)
     console.log(freeSpace)
     if(freeSpace <=2){
-      howFrequent=52
+      howFrequent='lab7'
     } else if(freeSpace <= 4){
-      howFrequent=26
+      howFrequent='lab6'
     } else {
-      howFrequent=13
+      howFrequent='lab5'
     }
 
     var ticks = d3.set(this.state.data.labs.map(function(item) {
-      if((item.week%howFrequent-1) === 0){
+      if(item[howFrequent] === 1){
         return item.xRaw;
       } else {
         return -1

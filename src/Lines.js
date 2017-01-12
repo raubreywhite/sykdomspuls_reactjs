@@ -3,24 +3,64 @@ var React = require('react')
 var ReactFauxDOM = require('react-faux-dom')
 
 var Lines = React.createClass({
-  propTypes: {
-    data: React.PropTypes.array
-  },
   render: function () {
-    var data = this.props.data
+    if(this.props.data['data'] == null || this.props.brushValues == null){
+      return(<h3>Loading...</h3>)
+    } else {
+      var brushValues = this.props.brushValues
+console.log(brushValues)
+     var data = this.props.data['data'].filter(function(x){return(
+          x.xRaw>= brushValues[0] && x.xRaw <= brushValues[1]
+        )})
+     var dataBrush = this.props.data['brush']
+      var labs = this.props.data['labs']
+    }
 
-    var margin = {top: 20, right: 20, bottom: 30, left: 50}
-    var width = 500 - margin.left - margin.right
-    var height = 350 - margin.top - margin.bottom
-    var parseDate = d3.timeParse('%Y-%m-%d')
+    var colourRange = [ '#91cf60', '#ffffbf', '#fc8d59' ]
+
+    var mainMargin = { top:0, right: 20, bottom: 20, left: 125}
+    var width = this.props.width - mainMargin.left - mainMargin.right + 150
+
+    var xMin=d3.min(data.map(function(item){ return item.xRaw }))-1
+    var xMax=d3.max(data.map(function(item){ return item.xRaw }))+1
+
+    var brushXMin=d3.min(dataBrush.map(function(item){ return item.xRaw }))-1
+    var brushXMax=d3.max(dataBrush.map(function(item){ return item.xRaw }))+1
+
+    var mainHeight = 500
+
+    var brushMargin = {top: 20, right: 20, bottom: 0, left: 125}
+    var brushHeight = 40
+
+    var height=mainHeight+mainMargin.top+mainMargin.bottom+brushHeight+brushMargin.top + brushMargin.bottom
+    var howFrequent=''
+    var freeSpace = width/(xMax-xMin+1)
+    if(freeSpace <=2){
+      howFrequent='lab7'
+    } else if(freeSpace <= 4){
+      howFrequent='lab6'
+    } else if (freeSpace <= 6){
+      howFrequent='lab5'
+    } else if (freeSpace <= 8){
+      howFrequent='lab4'
+    } else if (freeSpace <= 14){
+      howFrequent='lab3'
+    } else if (freeSpace <= 28){
+      howFrequent='lab2'
+    } else {
+      howFrequent='lab1'
+    }
+
+    var dotSizeBlack = Math.log2(freeSpace)*0.8+3
+    var dotSizeColour = Math.log2(freeSpace)*0.5+2
 
     var x = d3.scaleLinear()
     .range([0, width])
 
     var y = d3.scaleLinear()
-    .range([height, 0])
+    .range([mainHeight, 0])
 
-    x.domain(d3.extent(data, function (d) { return d.xRaw }))
+    x.domain([xMin, xMax])
     y.domain([0, d3.max(data, function (d) { return Math.max(d.threshold4, d.n) })])
 
     var line = d3.line()
@@ -29,7 +69,7 @@ var Lines = React.createClass({
 
     var areaNormal = d3.area()
       .x(function (d) { return x(d.xRaw) })
-      .y0(height)
+      .y0(mainHeight)
       .y1(function (d) { return y(d.threshold2) })
      
     var areaMedium = d3.area()
@@ -42,74 +82,141 @@ var Lines = React.createClass({
       .y0(function (d) { return y(d.threshold4) })
       .y1(0) 
  
-
     var node = ReactFauxDOM.createElement('svg')
     var svg = d3.select(node)
-    .attr('width', width + margin.left + margin.right)
-    .attr('height', height + margin.top + margin.bottom)
-    .append('g')
-    .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+    .attr('width', width + mainMargin.left + mainMargin.right)
+    .attr('height', height)
+
+    var mainGraph = svg.append('g')
+    .attr('transform', 'translate(' + mainMargin.left + ',' + mainMargin.top + ')')
     
-    svg.append('path')
+    mainGraph.append('path')
       .data([data])
       .attr('class', 'area')
       .attr('d', areaNormal)
       .attr('fill', '#91cf60')
-      .attr('fill-opacity', 0.75)
+      .attr('fill-opacity', 0.6)
 
-    svg.append('path')
+    mainGraph.append('path')
       .data([data])
       .attr('class', 'area')
       .attr('d', areaMedium)
       .attr('fill', '#ffffbf')
-      .attr('fill-opacity', 0.75)
+      .attr('fill-opacity', 0.6)
 
-    svg.append('path')
+    mainGraph.append('path')
       .data([data])
       .attr('class', 'area')
       .attr('d', areaHigh)
       .attr('fill', '#fc8d59')
-      .attr('fill-opacity', 0.75)
+      .attr('fill-opacity', 0.6)
 
-    svg.append('path')
+    mainGraph.append('path')
       .data([data])
       .attr('class', 'line')
       .attr('d', line)
       .attr('stroke', 'black')
       .attr('fill', 'none')
 
-    svg.selectAll('dot')
+    mainGraph.selectAll('dot')
       .data(data)
       .enter().append("circle")
-      .attr('r', 3)
+      .attr('r', dotSizeBlack)
       .attr('cx', function(d) { return x(d.xRaw); })
       .attr('cy', function(d) { return y(d.n); })
-      .attr('fill-opacity', function(d) { if(d.n >= d.threshold2){ return 1 } else { return 0 } })
+      .attr('fill-opacity', function(d) { if(d.n >= d.threshold2 || freeSpace>6){ return 1 } else { return 0 } })
 
-    svg.selectAll('dot')
+    mainGraph.selectAll('dot')
       .data(data)
       .enter().append("circle")
-      .attr('r', 2)
+      .attr('r', dotSizeColour)
       .attr('cx', function(d) { return x(d.xRaw); })
       .attr('cy', function(d) { return y(d.n); })
       .attr('fill', '#ffffbf')
       .attr('fill-opacity', function(d) { if(d.n >= d.threshold2 && d.n < d.threshold4){ return 1 } else { return 0 } })
 
-    svg.selectAll('dot')
+    mainGraph.selectAll('dot')
       .data(data)
       .enter().append("circle")
-      .attr('r', 2)
+      .attr('r', dotSizeColour)
       .attr('cx', function(d) { return x(d.xRaw); })
       .attr('cy', function(d) { return y(d.n); })
       .attr('fill', '#fc8d59')
       .attr('fill-opacity', function(d) { if(d.n >= d.threshold4){ return 1 } else { return 0 } })
 
-    svg.append('g')
-      .attr("transform", "translate(0," + height + ")")
-      .call(d3.axisBottom(x));
+    var labTicks = d3.set(labs.map(function(item) {
+      if(item[howFrequent] === 1){
+        return item.xRaw;
+      } else {
+        return -1
+      }
+    })).values().map(Number).filter(function(x){return(x>=xMin & x<=xMax)});
 
-    svg.append('g')
-      .call(d3.axisLeft(y));
+    mainGraph.append('g')
+      .attr("transform", "translate(0," + mainHeight + ")")
+      .call(
+        d3.axisBottom(x)
+          .tickValues(labTicks)
+          .tickFormat(function(d,i){
+            return(labs[d-1].label)
+          })
+          .tickSizeOuter(0)
+      );
+
+    var yearTicks = d3.set(labs.map(function(item) {
+      if(item.vlines === 1){
+        return item.xRaw;
+      } else {
+        return -1
+      }
+    })).values().map(Number).filter(function(x){return(x>=xMin & x<=xMax)});
+    mainGraph.append('g')
+      .attr("transform", "translate(0," + mainHeight + ")")
+      .style('stroke-dasharray', '2 2')
+      .call(
+        d3.axisBottom(x)
+          .tickValues(yearTicks)
+          .tickFormat("")
+          .tickSizeOuter(-mainHeight)
+          .tickSizeInner(-mainHeight)
+      );
+
+    mainGraph.append('g')
+      .call(
+        d3.axisLeft(y)
+          .tickSizeOuter(0)
+          .tickSizeInner(0)
+      );
+
+    mainGraph.append('g')
+      .style('stroke-dasharray', '2 2')
+      .call(
+        d3.axisLeft(y)
+          .tickSizeOuter(0)
+          .tickSizeInner(-width)
+      );
+
+
+    var brushX = d3.scaleLinear()
+    .range([0, width])
+    .domain([brushXMin, brushXMax])
+    var brushY = d3.scaleLinear()
+    .range([brushHeight, 0])
+    .domain([0, d3.max(dataBrush, function(d) { return d.n } ) ])
+
+    var brushLine = d3.line()
+    .x(function (d) { return brushX(d.xRaw) })
+    .y(function (d) { return brushY(d.n) })
+
+    var brushGraph=svg.append('g')
+    .attr('transform', 'translate(' + brushMargin.left + ',' + (mainHeight+mainMargin.bottom+brushMargin.top) + ')')
+
+    brushGraph.append('path')
+      .data([dataBrush])
+      .attr('class', 'line')
+      .attr('d', brushLine)
+      .attr('stroke', 'black')
+      .attr('fill', 'none')
 
 /*
     svg.append('g')
