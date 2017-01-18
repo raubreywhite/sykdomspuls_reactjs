@@ -70,6 +70,8 @@ class App extends Component {
       selectedType: 'respiratory',
       selectedAge: 'Totalt',
       selectedName: "Norge",
+      selectedPrettyType: 'Øvre-luftvei diagnose',
+      selectedPrettyAge: 'Totalt',
       selectedPrettyName: "Norge",
       data : [],
       brushValues: [0,10000],
@@ -120,13 +122,25 @@ class App extends Component {
   }
 
   onUpdateSelectType(val){
-    this.setState({selectedType: val}, function(){
+    var selectedPrettyType = this.state.namesType.filter(function(el){
+      return el['value']===val
+    })[0]['name']
+    this.setState({
+      selectedType: val,
+      selectedPrettyType: selectedPrettyType
+    }, function(){
       this.GetData()
     })
   }
 
   onUpdateSelectAge(val){
-    this.setState({selectedAge: val}, function(){
+    var selectedPrettyAge = this.state.namesAge.filter(function(el){
+      return el['value']===val
+    })[0]['name']
+    this.setState({
+      selectedAge: val,
+      selectedPrettyAge: selectedPrettyAge
+    }, function(){
       this.GetData()
     })
   }
@@ -237,7 +251,7 @@ var defaultValue=[xMin,xMax]
         <div style={styleSidebar}><LeftSelect onUpdateType={this.onUpdateSelectType} listType={this.state.namesType} listAge={this.state.namesAge} onUpdateAge={this.onUpdateSelectAge} onUpdateFylke={this.onUpdateSelectFylke} listFylke={this.state.namesFylke}/></div>
         <Measure onMeasure={(dimensions) => { this.setState({dimensions})}}>
           <div style={styleMain}>
-            <h3>{this.state.selectedPrettyName}</h3>
+            <h3>{this.state.selectedPrettyType} i {this.state.selectedPrettyName} ({this.state.selectedPrettyAge})</h3>
       { this.props.type === "Barometer" ? <Barometer data={this.state.data} brushValues={this.state.brushValues} width={this.state.dimensions.width}/> : null }
       { this.props.type === "Lines" ? <Lines data={this.state.data} brushValues={this.state.brushValues} width={this.state.dimensions.width}/> : null }
             <div style={styleBrush}>
