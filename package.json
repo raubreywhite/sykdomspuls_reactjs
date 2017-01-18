@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "bootstrap": "^3.3.7",
+    "d3-svg-legend": "^2.19.0",
     "rc-slider": "^5.4.3",
     "react": "^15.4.1",
     "react-bootstrap": "^0.30.7",

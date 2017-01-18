@@ -17,6 +17,9 @@ var LeftSelect = React.createClass ({
   handleChangeType : function(event){
     this.props.onUpdateType(event.target.value)
   },
+  handleChangeAge : function(event){
+    this.props.onUpdateAge(event.target.value)
+  },
   handleChangeFylke : function(event){
     console.log(event.target.value) 
     this.props.onUpdateFylke(event.target.value)
@@ -35,10 +38,17 @@ var LeftSelect = React.createClass ({
           })}
         </FormControl>
         <br/>
+        <ControlLabel>Alder</ControlLabel>
+        <FormControl componentClass="select" placeholder="select" onChange={this.handleChangeAge}>
+          {this.props.listAge.map(function(listValue, i){
+            return <option key={i} value={listValue["value"]}>{listValue["name"]}</option>;
+          })}
+        </FormControl>
+        <br/>
         <ControlLabel>Fylke</ControlLabel>
         <FormControl componentClass="select" placeholder="select" onChange={this.handleChangeFylke}>
           {this.props.listFylke.map(function(listValue, i){
-            return <option key={i} value={listValue["location"]}>{listValue["locationName"]}</option>;
+        return <option key={i} value={listValue["location"]}>{listValue["locationName"]}</option>;
           })}
         </FormControl>
         <br/>
@@ -58,9 +68,19 @@ class App extends Component {
     super(props);
     this.state = {
       namesType: [{'value':'respiratory','name':'Øvre-luftvei diagnose'},{'value':'gastro','name':'Mage-tarm diagnose'}],
+      namesAge: [
+        {'value':'Totalt','name':'Totalt'},
+        {'value':'0-4','name':'0-4'},
+        {'value':'5-14','name':'5-14'},
+        {'value':'15-19','name':'15-19'},
+        {'value':'20-29','name':'20-29'},
+        {'value':'30-64','name':'30-64'},
+        {'value':'65p','name':'65+'}
+        ],
       namesFylke: [1,2],
       namesKommune: [1,2],
       selectedType: 'respiratory',
+      selectedAge: 'Totalt',
       selectedFylke: "Norge",
       selectedName: "Norge",
       selectedPrettyName: "Norge",
@@ -72,6 +92,7 @@ class App extends Component {
       }
     };
     this.onUpdateSelectType = this.onUpdateSelectType.bind(this)
+    this.onUpdateSelectAge = this.onUpdateSelectAge.bind(this)
     this.onUpdateSelectFylke = this.onUpdateSelectFylke.bind(this)
     this.onUpdateSelectKommune = this.onUpdateSelectKommune.bind(this)
     this.tipFormatter = this.tipFormatter.bind(this)
@@ -79,7 +100,7 @@ class App extends Component {
   }
 
   GetData(){
-    var request = new Request(sprintf(this.props.getData+'?name=%s&type=%s', this.state.selectedName, this.state.selectedType), {
+    var request = new Request(sprintf(this.props.getData+'?type=%s&age=%s&name=%s',this.state.selectedType,this.state.selectedAge, this.state.selectedName), {
       method: 'GET', 
       mode: 'cors', 
       redirect: 'follow',
@@ -133,6 +154,11 @@ class App extends Component {
     })
   }
 
+  onUpdateSelectAge(val){
+    this.setState({selectedAge: val}, function(){
+      this.GetData()
+    })
+  }
   onUpdateSelectFylke(val){
     console.log('parent')
     console.log(val)
@@ -206,7 +232,7 @@ var styleBrush = {
 
 var xMin=1
 var xMax=10000
-var marks= {1: 'ok'}
+var marks= {1: ' '}
     if(this.state.data['data'] == null){
     } else {
 xMin=d3.min(this.state.data.data.map(function(item){ return item.xRaw }))
@@ -240,7 +266,7 @@ var defaultValue=[xMin,xMax]
 
     return(
       <div style={styleWrap}>
-      <div style={styleSidebar}><LeftSelect onUpdateType={this.onUpdateSelectType} listType={this.state.namesType} onUpdateFylke={this.onUpdateSelectFylke} listFylke={this.state.namesFylke} onUpdateKommune={this.onUpdateSelectKommune} listKommune={this.state.namesKommune}/></div>
+      <div style={styleSidebar}><LeftSelect onUpdateType={this.onUpdateSelectType} listType={this.state.namesType} listAge={this.state.namesAge} onUpdateAge={this.onUpdateSelectAge} onUpdateFylke={this.onUpdateSelectFylke} listFylke={this.state.namesFylke} onUpdateKommune={this.onUpdateSelectKommune} listKommune={this.state.namesKommune}/></div>
       <Measure onMeasure={(dimensions) => { this.setState({dimensions})}}>
       <div style={styleMain}>
         <h3>{this.state.selectedPrettyName}</h3>

@@ -1,6 +1,7 @@
 var d3 = require('d3')
 var React = require('react')
 var ReactFauxDOM = require('react-faux-dom')
+import legend from 'd3-svg-legend';
 import  './reactive.css';
 
 var Barometer = React.createClass({
@@ -95,6 +96,15 @@ getInitialState:function () {
       .attr('y', function(d) { return y(d.locationName) } )
       .attr('fill', function(d) { return colour(d.statusNum) } )
       .attr('fill-opacity', 0.6)
+
+    mainGraph.append('g')
+      .attr('transform', 'translate(20,20)')
+      .call(
+        legend.legendColor()
+        .shape("path", d3.symbol().type(d3.symbolTriangle).size(150)())
+        .shapePadding(10)
+        .scale(colour)
+      )
     
     var labTicks = d3.set(labs.map(function(item) {
       if(item[howFrequent] === 1){
