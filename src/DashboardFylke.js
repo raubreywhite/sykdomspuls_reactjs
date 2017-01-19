@@ -7,7 +7,6 @@ var d3=require('d3');
 //import { SideNav, Nav } from 'react-sidenav';
 //import { Plotly } from 'react-plotlyjs';
 //var format = require( 'string-kit').format;
-
 import Barometer from './Barometer.js'
 import Lines from './Lines.js'
 
@@ -180,38 +179,6 @@ setBrushValues(val){
 
   render(){
 
-var styleWrap = {
-    margin: '0px',
-    padding: '0px',
-    paddingRight: '240px',
-    background: '#fff',
-    overflow: 'hidden'
-};
-
-var styleMain = {
-    margin: '0 -220px 0 auto',
-    width: '100%',
-    float: 'right',
-    background: '#fff',
-    minHeight: '100px',
-    paddingBottom: '25px'
-};
-
-var styleSidebar = {
-    paddingLeft: '20px',
-    paddingTop: '55px',
-    width: '200px',
-    float: 'left',
-    height: '200px',
-    background: '#fff',
-    minHeight: '100px'
-};
-
-var styleBrush = {
-    paddingLeft: '125px',
-    paddingRight: '90px'
-}
-
 var xMin=1
 var xMax=10000
 var marks= {1: ' '}
@@ -247,14 +214,14 @@ var defaultValue=[xMin,xMax]
 
 
     return(
-      <div style={styleWrap}>
-        <div style={styleSidebar}><LeftSelect onUpdateType={this.onUpdateSelectType} listType={this.state.namesType} listAge={this.state.namesAge} onUpdateAge={this.onUpdateSelectAge} onUpdateFylke={this.onUpdateSelectFylke} listFylke={this.state.namesFylke}/></div>
+      <div className="Dashboard-wrap" >
+        <div className="Dashboard-sidebar"><LeftSelect onUpdateType={this.onUpdateSelectType} listType={this.state.namesType} listAge={this.state.namesAge} onUpdateAge={this.onUpdateSelectAge} onUpdateFylke={this.onUpdateSelectFylke} listFylke={this.state.namesFylke}/></div>
         <Measure onMeasure={(dimensions) => { this.setState({dimensions})}}>
-          <div style={styleMain}>
+          <div className="Dashboard-main">
             <h3>{this.state.selectedPrettyType} i {this.state.selectedPrettyName} ({this.state.selectedPrettyAge})</h3>
       { this.props.type === "Barometer" ? <Barometer data={this.state.data} brushValues={this.state.brushValues} width={this.state.dimensions.width}/> : null }
       { this.props.type === "Lines" ? <Lines data={this.state.data} brushValues={this.state.brushValues} width={this.state.dimensions.width}/> : null }
-            <div style={styleBrush}>
+            <div className="Dashboard-brush">
             <Slider min={xMin} max={xMax} defaultValue={defaultValue} range={true} tipFormatter={this.tipFormatter} marks={marks} onAfterChange={this.setBrushValues}/>
             </div>
           </div>

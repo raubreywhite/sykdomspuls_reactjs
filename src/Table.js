@@ -9,7 +9,7 @@ var Table = React.createClass({
   render: function() {
     
     if(this.props.data.length == 0){
-      return(<h3>Loading...</h3>)
+      return(<h3>Ingen signaler</h3>)
     } 
     //  return(<h3>Loading...</h3>)
 

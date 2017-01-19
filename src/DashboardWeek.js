@@ -115,38 +115,10 @@ console.log(this.state.data)
   }
 
   render(){
-
-var styleWrap = {
-    margin: '0px',
-    padding: '0px',
-    paddingRight: '240px',
-    background: '#fff',
-    overflow: 'hidden'
-};
-
-var styleMain = {
-    margin: '0 -220px 0 auto',
-    width: '100%',
-    float: 'right',
-    background: '#fff',
-    minHeight: '100px',
-    paddingBottom: '25px'
-};
-
-var styleSidebar = {
-    paddingLeft: '20px',
-    paddingTop: '55px',
-    width: '200px',
-    float: 'left',
-    height: '200px',
-    background: '#fff',
-    minHeight: '100px'
-};
-
     return(
-      <div style={styleWrap}>
-        <div style={styleSidebar}><LeftSelect onUpdateWeek={this.onUpdateSelectWeek} listWeek={this.state.namesWeek} listLevel={this.state.namesLevel} onUpdateLevel={this.onUpdateSelectLevel} /></div>
-          <div style={styleMain}>
+      <div className="Dashboard-wrap">
+        <div className="Dashboard-sidebar"><LeftSelect onUpdateWeek={this.onUpdateSelectWeek} listWeek={this.state.namesWeek} listLevel={this.state.namesLevel} onUpdateLevel={this.onUpdateSelectLevel} /></div>
+          <div className="Dashboard-main">
             <h3>{this.state.selectedWeek}</h3>
             <Table data={this.state.data} />
           </div>

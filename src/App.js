@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-	import { Navbar, Nav, NavDropdown, NavItem, MenuItem } from 'react-bootstrap';
+import { Navbar, Nav, NavDropdown, NavItem, MenuItem } from 'react-bootstrap';
 import { ThemeSwitcher } from 'react-bootstrap-theme-switcher';
-//import Overview from './Overview.js';
+
 import DashboardFylke from './DashboardFylke.js';
 import DashboardKommune from './DashboardKommune.js';
 import DashboardWeek from './DashboardWeek.js';
@@ -15,7 +15,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      tab: 'signals'
+      tab: 'overview'
     };
     this.handleSelect = this.handleSelect.bind(this)
   }
@@ -24,15 +24,9 @@ class App extends Component {
     console.log(event);
     this.setState( { tab: event } );
   }
-
   render(){
 
 
-var styleFooter = {
-    height: '5px',
-    background: '#d34615',
-    opacity: 1
-};
     return(
 <ThemeSwitcher themePath='/themes' defaultTheme='united'>
 <div>
@@ -61,7 +55,7 @@ var styleFooter = {
       { this.state.tab === "daily" ? <DashboardFylke type={"Lines"} getData={"http://linux.fhi.no/api/v1_0_DataDailyLine"} getNamesFylke={"http://linux.fhi.no/api/namesFylke"}/> : null }
       { this.state.tab === "help" ? <DashboardHelp /> : null }
 <img src='https://www.fhi.no/Static/templates/build/gfx/logo.svg' width={"150"} role={'presentation'}/>
-<div style={styleFooter}>
+<div className="App-footer">
 </div>
 </div>
 </ThemeSwitcher>

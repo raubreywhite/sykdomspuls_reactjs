@@ -2,7 +2,6 @@ var d3 = require('d3')
 var React = require('react')
 var ReactFauxDOM = require('react-faux-dom')
 import {legendColor}  from 'd3-svg-legend';
-import  './reactive.css';
 
 var Barometer = React.createClass({
 getInitialState:function () {

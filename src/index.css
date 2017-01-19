@@ -16,3 +16,69 @@ h1, h2, h3 {
   text-align: center !important;
 }
 
+.App-footer {
+    height: 5px !important;
+    background-color: #d34615;
+    opacity: 1 !important;
+}
+
+.Dashboard-wrap {
+    margin: 0px !important;
+    padding: 0px !important;
+    padding-right: 240px !important;
+    background-color: white;
+    overflow: hidden !important;
+}
+
+
+.Dashboard-sidebar {
+    background-color: white !important;
+    padding-left: 20px;
+    padding-top: 55px;
+    width: 200px !important;
+    float: left !important;
+    height: 200px !important;
+    min-height: 100px !important;
+}
+
+
+.Dashboard-main {
+    margin: 0 -220px 0 auto !important;
+    width: 100% !important;
+    float: right !important;
+    background-color: white !important;
+    min-height: 100px;
+    padding-bottom: 25px;
+}
+
+.Dashboard-brush {
+    padding-left: 125px !important;
+    padding-right: 90px !important;
+}
+
+.Dashboard-main thead tr:first-child {
+  border-bottom: 1px solid #000;
+}
+
+.Dashboard-main td {
+  padding : 5px;
+}
+
+.Dashboard-main tr:nth-child(even) {
+  background-color: #d3d3d3;
+}
+
+.Dashboard-main table {
+  width: 100%;
+}
+
+.Dashboard-main td:first-child {
+  min-width: 150px;
+}
+
+.Dashboard-main td:nth-child(2),
+.Dashboard-main td:nth-last-child(2),
+.Dashboard-main td:nth-last-child(1) {
+  min-width: 100px;
+}
+

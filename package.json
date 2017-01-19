@@ -3,8 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
+    "css-loader": "^0.26.1",
     "react-scripts": "0.7.0",
-    "react-sidenav": "^1.0.4"
+    "react-sidenav": "^1.0.4",
+    "style-loader": "^0.13.1"
   },
   "dependencies": {
     "bootstrap": "^3.3.7",
