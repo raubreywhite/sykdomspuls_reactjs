@@ -15,17 +15,57 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      tab: 'overview'
+      tab: 'overview',
+      baseURL: 'null'
     };
     this.handleSelect = this.handleSelect.bind(this)
+    this.determineBaseURL = this.determineBaseURL.bind(this)
   }
 
   handleSelect(event, eventKey){
     console.log(event);
     this.setState( { tab: event } );
   }
-  render(){
 
+  determineBaseURL() {
+    var urls = [
+      "http://sykdomspulsen.fhi.no:8000/",
+      "http://linux.fhi.no/api/",
+      "http://localhost:10002/api/"
+    ]
+    var check = "namesFylke"
+    var setURL=false
+    for(var i=0; i<urls.length; i++){
+      var request = new Request(urls[i]+"test?x="+i, {
+      method: 'GET', 
+      mode: 'cors', 
+      redirect: 'follow',
+      headers: new Headers({
+        'Content-Type': 'text/plain'
+      })
+     });
+     // Now use it!
+     console.log(i)
+     fetch(request)
+        .then((responseText) => responseText.json())
+        .then((response) => {
+          var workingURL = urls[JSON.parse(response)]
+         console.log("PASS")
+         if(!setURL){
+           this.setState({baseURL:workingURL})
+           setURL=true
+         }
+        })
+       .catch(function(err){console.log("FAIL")});
+    }
+  }
+
+  componentWillMount(){
+
+    this.determineBaseURL()
+  }
+
+  render(){
 
     return(
 <ThemeSwitcher themePath='/themes' defaultTheme='united'>
@@ -49,7 +89,7 @@ class App extends Component {
       </Nav>
     </Navbar.Collapse>
   </Navbar>
-      { this.state.tab === "overview" ? <DashboardFylke type={"Barometer"} getData={"http://linux.fhi.no/api/v1_0_DataWeeklyOverview"} getNamesFylke={"http://linux.fhi.no/api/namesFylke"}/> : null }
+      { this.state.baseURL!="null" && this.state.tab === "overview" ? <DashboardFylke type={"Barometer"} getData={this.state.baseURL+"v1_0_DataWeeklyOverview"} getNamesFylke={"http://linux.fhi.no/api/namesFylke"}/> : null }
       { this.state.tab === "signals" ? <DashboardWeek getData={"http://linux.fhi.no/api/v1_0_DataWeeklySignal"} getNamesWeek={"http://linux.fhi.no/api/v1_0_WeeksWeeklySignal"}/> : null }
       { this.state.tab === "weekly" ? <DashboardKommune type={"Lines"} getData={"http://linux.fhi.no/api/v1_0_DataWeeklyLine"} getNamesFylke={"http://linux.fhi.no/api/namesFylke"} getNamesKommune={"http://linux.fhi.no/api/namesKommune"}/> : null }
       { this.state.tab === "daily" ? <DashboardFylke type={"Lines"} getData={"http://linux.fhi.no/api/v1_0_DataDailyLine"} getNamesFylke={"http://linux.fhi.no/api/namesFylke"}/> : null }
