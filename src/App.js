@@ -31,7 +31,7 @@ class App extends Component {
     var urls = [
       "http://sykdomspulsen.fhi.no:8000/",
       "http://linux.fhi.no/api/",
-      "http://localhost:10002/api/"
+      "http://localhost:10001/api/"
     ]
     var check = "namesFylke"
     var setURL=false
@@ -56,7 +56,7 @@ class App extends Component {
            setURL=true
          }
         })
-       .catch(function(err){console.log("FAIL")});
+       .catch(function(err){console.log("FAIL: "+err)});
     }
   }
 
@@ -89,10 +89,10 @@ class App extends Component {
       </Nav>
     </Navbar.Collapse>
   </Navbar>
-      { this.state.baseURL!="null" && this.state.tab === "overview" ? <DashboardFylke type={"Barometer"} getData={this.state.baseURL+"v1_0_DataWeeklyOverview"} getNamesFylke={"http://linux.fhi.no/api/namesFylke"}/> : null }
-      { this.state.tab === "signals" ? <DashboardWeek getData={"http://linux.fhi.no/api/v1_0_DataWeeklySignal"} getNamesWeek={"http://linux.fhi.no/api/v1_0_WeeksWeeklySignal"}/> : null }
-      { this.state.tab === "weekly" ? <DashboardKommune type={"Lines"} getData={"http://linux.fhi.no/api/v1_0_DataWeeklyLine"} getNamesFylke={"http://linux.fhi.no/api/namesFylke"} getNamesKommune={"http://linux.fhi.no/api/namesKommune"}/> : null }
-      { this.state.tab === "daily" ? <DashboardFylke type={"Lines"} getData={"http://linux.fhi.no/api/v1_0_DataDailyLine"} getNamesFylke={"http://linux.fhi.no/api/namesFylke"}/> : null }
+      { this.state.baseURL!="null" && this.state.tab === "overview" ? <DashboardFylke type={"Barometer"} getData={this.state.baseURL+"v1_0_DataWeeklyOverview"} getNamesFylke={this.state.baseURL+"namesFylke"}/> : null }
+      { this.state.tab === "signals" ? <DashboardWeek getData={this.state.baseURL+"v1_0_DataWeeklySignal"} getNamesWeek={this.state.baseURL+"v1_0_WeeksWeeklySignal"}/> : null }
+      { this.state.tab === "weekly" ? <DashboardKommune type={"Lines"} getData={this.state.baseURL+"v1_0_DataWeeklyLine"} getNamesFylke={this.state.baseURL+"namesFylke"} getNamesKommune={this.state.baseURL+"namesKommune"}/> : null }
+      { this.state.tab === "daily" ? <DashboardFylke type={"Lines"} getData={this.state.baseURL+"v1_0_DataDailyLine"} getNamesFylke={this.state.baseURL+"namesFylke"}/> : null }
       { this.state.tab === "help" ? <DashboardHelp /> : null }
 <img src='https://www.fhi.no/Static/templates/build/gfx/logo.svg' width={"150"} role={'presentation'}/>
 <div className="App-footer">
