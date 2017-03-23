@@ -44,17 +44,16 @@ h1, h2, h3 {
 
 
 .Dashboard-main {
-    margin: 0 -220px 0 auto !important;
+    margin-left: -125px;
+    margin-right: auto;
     width: 100% !important;
-    float: right !important;
-    background-color: white !important;
     min-height: 100px;
     padding-bottom: 25px;
 }
 
 .Dashboard-brush {
-    padding-left: 125px !important;
-    padding-right: 90px !important;
+    padding-left: 5px !important;
+    padding-right: 20px !important;
 }
 
 .Dashboard-main thead tr:first-child {
@@ -445,23 +444,24 @@ img {
     height: auto; }
 
 /* ----Fonts---- */
-body {
-    font-family: "Cardo", "Palatino Linotype", "Book Antiqua", Palatino, serif;
-    color: #444;
-    font-size: 18px;
+body, table {
+    font-size: 12px;
     line-height: 1.5; }
 
-h1, h2, h3, h4, h5, h6, button, select, input, textarea, nav, .nav, svg text {
-    font-family: "Montserrat", Avenir Next, Arial, Helvetica, sans-serif; }
+body, table, a, h1, h2, h3, h4, h5, h6, button, select, input, textarea, nav, .nav, svg text {
+    font-family: "Montserrat", Avenir Next, Arial, Helvetica, sans-serif;
+ }
 
 h1 {
-    font-size: 38px; }
+    font-size: 20px; }
 
 h2 {
-    font-size: 30px; }
+    font-size: 16px; }
 
 h3 {
-    font-size: 22px; }
+    font-size: 12px; 
+font-weight: normal!important;
+}
 
 code {
     font-family: Courier;
@@ -473,22 +473,26 @@ html {
     overflow-y: scroll; }
 
 h1, h2 {
-    padding-top: 30px;
-    padding-bottom: 15px; }
+    padding-top: 10px;
+    padding-bottom: 5px; }
 
 h3, h4, h5, h6 {
-    padding-top: 15px;
-    padding-bottom: 15px; }
+    padding-top: 5px;
+    padding-bottom: 5px; }
 
-header, footer {
-    padding-top: 30px;
-    padding-bottom: 30px; }
+header{
+    padding-top: 10px;
+    padding-bottom: 0px; }
+footer {
+    padding-top: 50px;
+    padding-bottom: 50px; }
 
 small {
     font-size: 12px; }
 
 section {
-    padding-bottom: 30px; }
+    padding-top: 10px;
+    padding-bottom: 0px; }
 
 p {
     margin-bottom: 1em;
@@ -510,8 +514,8 @@ a:hover {
 hr {
     border: 0;
     border-top: 1px solid #E4E4E4;
-    margin-top: 30px;
-    margin-bottom: 30px; }
+    margin-top: 10px;
+    margin-bottom: 10px; }
 
 ul {
     margin-left: 40px;
@@ -545,9 +549,9 @@ blockquote {
     text-decoration: none;
     padding: 5px 15px 5px 10px;
     margin-left: 0;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     color: #444;
-    font-size: 18px;
+    font-size: 12px;
     white-space: nowrap;
     font-weight: 400;
     display: inline-block; }
@@ -571,7 +575,7 @@ blockquote {
     margin-bottom: 10px; }
 .nav.nav-small a {
     border: none;
-    font-size: 14px;
+    font-size: 12px;
     padding: 12px 15px 5px 10px; }
 
 /* Forms */
@@ -584,7 +588,11 @@ label {
 
 /* Tables */
 table {
-    border-spacing: 0px; }
+    border-spacing: 0px; 
+    margin: 0px;
+    width: 100%;
+    font-size: 12px;
+}
 table thead th {
     border-bottom: 2px solid #999; }
 table thead th:not(:last-child), table tbody td:not(:last-child) {
@@ -718,11 +726,11 @@ table.light tbody tr:not(:last-child) td {
 
 /* Buttons */
 button, input[type="submit"], select, option, .btn {
-    font-size: 14px;
+    font-size: 12px;
     background: none;
     border: 2px solid #11AAB0;
-    padding: 7px;
-    color: #11AAB0;
+    padding: 5px;
+    color: #fff;
     margin-right: 20px;
     outline: none;
     border-radius: 0px;
@@ -768,3 +776,53 @@ select, .btn.btn-active {
     color: #fff; }
 
 /*# sourceMappingURL=minimal-ui.css.map */
+
+
+.container250 {
+    margin: 0 auto;
+    padding: 0;
+    position: relative;
+    width: 1140px; }
+
+.container250 .left-margin {
+    margin-left: 0; }
+
+.container250 .right-margin {
+    margin-right: 0; }
+
+@media only screen and (min-width: 1210px) and (max-width: 1410px) {
+    .container250 {
+        width: 960px; }
+}
+    
+@media only screen and (min-width: 1018px) and (max-width: 1209px) {
+    .container250 {
+        width: 768px;}
+}
+
+
+@media only screen and (min-width: 730px) and (max-width: 1017px) {
+    .container250 {
+        width: 420px; }
+}
+
+
+   @media only screen and (max-width: 729px) {
+    .container250 {
+        width: 300px; }
+
+}
+/*
+.Dashboard-main-outer {
+width:100%;
+        background:#232323;
+        position:relative;
+transform: translate(-50%, 0%);
+}
+*/
+.Dashboard-main-inner {
+  position:relative;
+        margin-left:-125px; 
+}
+
+

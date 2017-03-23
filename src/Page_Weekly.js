@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import DashboardFylke from './DashboardFylke';
-var Node = require('react-if-comp')
+import DashboardKommune from './DashboardKommune.js';
+import renderIf from 'render-if';
 
 class App extends Component {
 
   render(){
     return(
-<Node if={this.props.baseURL!="null"}>
-<Node then><DashboardFylke type={"Barometer"} getData={this.props.baseURL+"v1_0_DataWeeklyOverview"} getNamesFylke={this.props.baseURL+"namesFylke"}/></Node>
-</Node>
+<div>
+{renderIf(this.props.baseURL!="null")(
+<DashboardKommune type={"Lines"} getData={this.props.baseURL+"v1_0_DataWeeklyLine"} getNamesFylke={this.props.baseURL+"namesFylke"} getNamesKommune={this.props.baseURL+"namesKommune"}/>)}
+</div>
     );
   }
 }

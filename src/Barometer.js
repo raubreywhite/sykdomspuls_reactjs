@@ -12,7 +12,7 @@ getInitialState:function () {
  },
   render: function () {
     if(this.props.data['data'] == null || this.props.brushValues == null){
-      return(<h3>Loading...</h3>)
+      return(<h3>Laster...</h3>)
     } else {
       var brushValues = this.props.brushValues
      var data = this.props.data['data'].filter(function(x){return(
@@ -25,7 +25,7 @@ getInitialState:function () {
     var colourRange = [ '#91cf60', '#ffffbf', '#fc8d59' ]
 
     var mainMargin = {top:0, right: 20, bottom: 20, left: 125}
-    var width = this.props.width - mainMargin.left - mainMargin.right + 150
+    var width = this.props.width - mainMargin.left - mainMargin.right+125
 //    var height = 400 - margin.top - margin.bottom
 
     var x_elements = d3.set(data.map(function(item) { return item.xRaw; } )).values();

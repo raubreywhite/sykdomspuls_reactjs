@@ -15,7 +15,7 @@ import Weekly from './Page_Weekly.js';
 import Daily from './Page_Daily.js';
 import DashboardHelp from './DashboardHelp.js';
 
-import {Router, Route, IndexRoute, browserHistory } from 'react-router'
+import {Router, Route, IndexRoute, hashHistory } from 'react-router'
 
 let store = createStore(sykdomspulsApp)
 
@@ -28,8 +28,10 @@ function  determineBaseURL() {
     var urls = [
       "http://sykdomspulsen.fhi.no/api/",
       "http://sykdomspulsen-test.fhi.no/api/",
+      "http://linux.fhi.no/api/",
       "http://localhost:10001/api/"
     ]
+    var urls = ["http://sykdomspulsen-test.fhi.no/api/"]
     var check = "namesFylke"
     var setURL=false
     for(var i=0; i<urls.length; i++){
@@ -63,13 +65,13 @@ value:workingURL
 
 ReactDOM.render((
   <Provider store={store}>
-    <Router history={browserHistory}>
+    <Router history={hashHistory}>
         <Route path="/" component={App}>
             <IndexRoute component={Overview}/>
-            <Route path="/signaler" component={Signals}/>
-            <Route path="/ukentlig" component={Weekly}/>
-            <Route path="/daglig" component={Daily}/>
-            <Route path="/hjelp" component={DashboardHelp}/>
+            <Route path="signaler" component={Signals}/>
+            <Route path="ukentlig" component={Weekly}/>
+            <Route path="daglig" component={Daily}/>
+            <Route path="hjelp" component={DashboardHelp}/>
         </Route>
     </Router>
   </Provider>

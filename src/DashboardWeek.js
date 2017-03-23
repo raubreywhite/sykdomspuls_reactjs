@@ -22,21 +22,18 @@ var LeftSelect = React.createClass ({
 
   render : function() {
     return (
-      <FormGroup controlId="formControlsSelect" bsSize="small">
-        <ControlLabel>Uke</ControlLabel>
-        <FormControl componentClass="select" placeholder="select" onChange={this.handleChangeWeek}>
+      <div>
+        <select onChange={this.handleChangeWeek}>
           {this.props.listWeek.map(function(listValue, i){
-            return <option key={i} value={listValue["value"]}>{listValue["name"]}</option>;
+            return <option key={i} value={listValue["value"]}>Uke {listValue["name"]}</option>;
           })}
-        </FormControl>
-        <br/>
-        <ControlLabel>Nivå</ControlLabel>
-        <FormControl componentClass="select" placeholder="select" onChange={this.handleChangeLevel}>
+        </select>
+        <select onChange={this.handleChangeLevel}>
           {this.props.listLevel.map(function(listValue, i){
             return <option key={i} value={listValue["value"]}>{listValue["name"]}</option>;
           })}
-        </FormControl>
-      </FormGroup>
+        </select>
+       </div>
     )
   }
 });
@@ -47,8 +44,8 @@ class App extends Component {
     this.state = {
       namesWeek: [1,2],
       namesLevel: [
-        {'value':'fylke','name':'Fylke'},
-        {'value':'kommune','name':'Kommune'}
+        {'value':'fylke','name':'Fylke nivå'},
+        {'value':'kommune','name':'Kommune nivå'}
         ],
       selectedWeek: '1',
       selectedLevel: 'fylke',
@@ -116,12 +113,19 @@ console.log(this.state.data)
 
   render(){
     return(
-      <div className="Dashboard-wrap">
-        <div className="Dashboard-sidebar"><LeftSelect onUpdateWeek={this.onUpdateSelectWeek} listWeek={this.state.namesWeek} listLevel={this.state.namesLevel} onUpdateLevel={this.onUpdateSelectLevel} /></div>
-          <div className="Dashboard-main">
-            <h3>{this.state.selectedWeek}</h3>
-            <Table data={this.state.data} />
-          </div>
+      <div>
+      <section id="usage">
+      <div className="container">
+      <div className="column10 prefix1 txt-center">
+        <LeftSelect onUpdateWeek={this.onUpdateSelectWeek} listWeek={this.state.namesWeek} listLevel={this.state.namesLevel} onUpdateLevel={this.onUpdateSelectLevel} />
+      </div>
+      <br/>
+      <br/>
+      <div className="column12 txt-center">
+        <Table data={this.state.data} />
+      </div>
+      </div>
+      </section>
       </div>
     );
   }

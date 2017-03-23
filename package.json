@@ -1,8 +1,8 @@
 {
   "name": "sykdomspuls",
+  "homepage": "http://sykdomspulsen-test.fhi.no/lege123",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://sykdomspulsen.fhi.no/lege123",
   "devDependencies": {
     "css-loader": "^0.26.1",
     "react-scripts": "0.7.0",

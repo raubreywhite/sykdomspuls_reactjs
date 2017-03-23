@@ -9,6 +9,7 @@ var d3=require('d3');
 //var format = require( 'string-kit').format;
 import Barometer from './Barometer.js'
 import Lines from './Lines.js'
+import renderIf from 'render-if';
 
 var sprintf = require("sprintf-js").sprintf
 
@@ -25,28 +26,23 @@ var LeftSelect = React.createClass ({
 
   render : function() {
     return (
-      <FormGroup controlId="formControlsSelect" bsSize="small">
-        <ControlLabel>Sykdom/Symptom</ControlLabel>
-        <FormControl componentClass="select" placeholder="select" onChange={this.handleChangeType}>
+      <div>
+        <select onChange={this.handleChangeType}>
           {this.props.listType.map(function(listValue, i){
             return <option key={i} value={listValue["value"]}>{listValue["name"]}</option>;
           })}
-        </FormControl>
-        <br/>
-        <ControlLabel>Alder</ControlLabel>
-        <FormControl componentClass="select" placeholder="select" onChange={this.handleChangeAge}>
+        </select>
+        <select onChange={this.handleChangeAge}>
           {this.props.listAge.map(function(listValue, i){
-            return <option key={i} value={listValue["value"]}>{listValue["name"]}</option>;
+            return <option key={i} value={listValue["value"]}>Alder: {listValue["name"]}</option>;
           })}
-        </FormControl>
-        <br/>
-        <ControlLabel>Fylke</ControlLabel>
-        <FormControl componentClass="select" placeholder="select" onChange={this.handleChangeFylke}>
+        </select>
+        <select onChange={this.handleChangeFylke}>
           {this.props.listFylke.map(function(listValue, i){
             return <option key={i} value={listValue["location"]}>{listValue["locationName"]}</option>;
           })}
-        </FormControl>
-      </FormGroup>
+        </select>
+      </div>
     )
   }
 });
@@ -214,19 +210,34 @@ var defaultValue=[xMin,xMax]
 
 
     return(
-      <div className="Dashboard-wrap" >
-        <div className="Dashboard-sidebar"><LeftSelect onUpdateType={this.onUpdateSelectType} listType={this.state.namesType} listAge={this.state.namesAge} onUpdateAge={this.onUpdateSelectAge} onUpdateFylke={this.onUpdateSelectFylke} listFylke={this.state.namesFylke}/></div>
-        <Measure onMeasure={(dimensions) => { this.setState({dimensions})}}>
-          <div className="Dashboard-main">
-            <h3>{this.state.selectedPrettyType} i {this.state.selectedPrettyName} ({this.state.selectedPrettyAge})</h3>
-      { this.props.type === "Barometer" ? <Barometer data={this.state.data} brushValues={this.state.brushValues} width={this.state.dimensions.width}/> : null }
-      { this.props.type === "Lines" ? <Lines data={this.state.data} brushValues={this.state.brushValues} width={this.state.dimensions.width}/> : null }
-            <div className="Dashboard-brush">
-            <Slider min={xMin} max={xMax} defaultValue={defaultValue} range={true} tipFormatter={this.tipFormatter} marks={marks} onAfterChange={this.setBrushValues}/>
-            </div>
-          </div>
-        </Measure>
-      </div>
+       <div>
+       <section id="usage">
+       <div className="container">
+       <div className="column10 prefix1 txt-center">
+         <LeftSelect onUpdateType={this.onUpdateSelectType} listType={this.state.namesType} listAge={this.state.namesAge} onUpdateAge={this.onUpdateSelectAge} onUpdateFylke={this.onUpdateSelectFylke} listFylke={this.state.namesFylke}/>
+       </div>
+       </div>
+       <br/>
+       <br/>
+       <div className="container250">
+       <Measure onMeasure={(dimensions) => { this.setState({dimensions})}}>
+           <div className="Dashboard-main-outer">
+           <div className="Dashboard-main-inner">
+             {renderIf(this.props.type==="Barometer")(
+               <Barometer data={this.state.data} brushValues={this.state.brushValues} width={this.state.dimensions.width}/>)}
+             {renderIf(this.props.type==="Lines")(
+               <Lines data={this.state.data} brushValues={this.state.brushValues} width={this.state.dimensions.width}/>)}
+           </div>
+           </div>
+       </Measure>
+           <div className="Dashboard-brush">
+           {renderIf(xMax!=10000)(
+           <Slider min={xMin} max={xMax} defaultValue={defaultValue} range={true} tipFormatter={this.tipFormatter} marks={marks} onAfterChange={this.setBrushValues}/>)}
+           </div>
+       </div>
+       </section>
+       </div>
+
     );
   }
 }

@@ -5,7 +5,7 @@ var ReactFauxDOM = require('react-faux-dom')
 var Lines = React.createClass({
   render: function () {
     if(this.props.data['data'] == null || this.props.brushValues == null){
-      return(<h3>Loading...</h3>)
+      return(<h3>Laster...</h3>)
     } else {
       var brushValues = this.props.brushValues
 console.log(brushValues)

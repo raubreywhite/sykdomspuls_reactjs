@@ -3,6 +3,7 @@ import { bindActionCreators } from 'redux';
 import {connect } from 'react-redux';
 import { Navbar, Nav, NavDropdown, NavItem, MenuItem } from 'react-bootstrap';
 import { ThemeSwitcher } from 'react-bootstrap-theme-switcher';
+import {IndexLink, Link } from 'react-router';
 import * as baseURLActions from './actions/baseURL.actions.js';
 
 //import { SideNav, Nav } from 'react-sidenav';
@@ -15,35 +16,32 @@ class App extends Component {
   render(){
 
     return(
-<ThemeSwitcher themePath='/themes' defaultTheme='united'>
 <div>
-  <Navbar fluid>
-    <Navbar.Header>
-      <Navbar.Brand>
-        <a href="#">Sykdomspulsen</a>
-      </Navbar.Brand>
-    <Navbar.Toggle />
-    </Navbar.Header>
-    <Navbar.Collapse>
-      <Nav>
-        <NavItem href="/">Oversikt</NavItem>
-        <NavItem href="/signaler">Signaler</NavItem>
-        <NavDropdown title="Antall" id="basic-nav-dropdown">
-          <MenuItem href="/ukentlig">Ukentlig</MenuItem>
-          <MenuItem href="/daglig">Daglig</MenuItem>
-        </NavDropdown>
-        <NavItem  href="/hjelp">Hjelp/Om Sykdomspulsen</NavItem>
-      </Nav>
-    </Navbar.Collapse>
-  </Navbar>
+<header>
+<div className="container">
+<div className="txt-center">
+<h1 className="column12">Sykdomspulsen</h1>
+<nav className="column12 nav nav-small">
+<IndexLink to="/" activeClassName="cl-teal">Oversikt</IndexLink>
+<Link to="signaler" activeClassName="cl-teal">Signaler</Link>
+<Link to="ukentlig" activeClassName="cl-teal">Ukentlig</Link>
+<Link to="daglig" activeClassName="cl-teal">Daglig</Link>
+<Link to="hjelp" activeClassName="cl-teal">Hjelp</Link>
+</nav>
+</div>
+</div>
+</header>
 
 {this.props.children}
 
+<footer>
+<div className="container txt-center">
+<div className="column12">
 <img src='https://www.fhi.no/Static/templates/build/gfx/logo.svg' width={"150"} role={'presentation'}/>
-<div className="App-footer">
 </div>
 </div>
-</ThemeSwitcher>
+</footer>
+</div>
     );
   }
 }
