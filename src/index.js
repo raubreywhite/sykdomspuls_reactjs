@@ -31,7 +31,8 @@ function  determineBaseURL() {
       "http://linux.fhi.no/api/",
       "http://localhost:10001/api/"
     ]
-    var urls = ["http://sykdomspulsen-test.fhi.no/api/"]
+    var urls = ["http://"+window.location.host+"/api/"]
+    console.log(urls)
     var check = "namesFylke"
     var setURL=false
     for(var i=0; i<urls.length; i++){

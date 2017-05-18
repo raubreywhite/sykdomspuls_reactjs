@@ -61,7 +61,7 @@ console.log(brushValues)
     .range([mainHeight, 0])
 
     x.domain([xMin, xMax])
-    y.domain([0, d3.max(data, function (d) { return Math.max(d.threshold4, d.n) })])
+    y.domain([0, d3.max(data, function (d) { return 1.05*(2+Math.max(d.threshold4, d.n)) })])
 
     var line = d3.line()
     .x(function (d) { return x(d.xRaw) })
