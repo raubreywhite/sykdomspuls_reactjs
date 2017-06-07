@@ -20,9 +20,10 @@ class App extends Component {
 <header>
 <div className="container">
 <div className="txt-center">
-<h1 className="column12">Sykdomspulsen</h1>
-<nav className="column12 nav nav-small">
-<IndexLink to="/" activeClassName="cl-teal">Oversikt</IndexLink>
+<nav className="column6 prefix3 nav nav-small">
+<IndexLink to="/" activeClassName="cl-teal">Nyheter</IndexLink>
+<Link to="kommune" activeClassName="cl-teal">Kommune</Link>
+<Link to="oversikt" activeClassName="cl-teal">Oversikt</Link>
 <Link to="signaler" activeClassName="cl-teal">Signaler</Link>
 <Link to="ukentlig" activeClassName="cl-teal">Ukentlig</Link>
 <Link to="daglig" activeClassName="cl-teal">Daglig</Link>
@@ -37,6 +38,7 @@ class App extends Component {
 <footer>
 <div className="container txt-center">
 <div className="column12">
+<img src='sykdomspulsen.svg' width={"150"} role={'presentation'}/>
 <img src='https://www.fhi.no/Static/templates/build/gfx/logo.svg' width={"150"} role={'presentation'}/>
 </div>
 </div>

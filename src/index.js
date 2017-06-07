@@ -9,6 +9,8 @@ import sykdomspulsApp from './reducers';
 //import 'bootstrap/dist/css/bootstrap.css';
 //import 'bootstrap/dist/css/bootstrap-theme.css';
 
+import News from './Page_News.js';
+import Kommune from './Page_Kommune.js';
 import Overview from './Page_Overview.js';
 import Signals from './Page_Signals.js';
 import Weekly from './Page_Weekly.js';
@@ -25,13 +27,7 @@ store.dispatch({
 });
 
 function  determineBaseURL() {
-    var urls = [
-      "http://sykdomspulsen.fhi.no/api/",
-      "http://sykdomspulsen-test.fhi.no/api/",
-      "http://linux.fhi.no/api/",
-      "http://localhost:10001/api/"
-    ]
-    var urls = ["http://"+window.location.host+"/api/"]
+    var urls = ["http://localhost:10001/api/","http://"+window.location.host+"/api/"]
     console.log(urls)
     var check = "namesFylke"
     var setURL=false
@@ -68,7 +64,9 @@ ReactDOM.render((
   <Provider store={store}>
     <Router history={hashHistory}>
         <Route path="/" component={App}>
-            <IndexRoute component={Overview}/>
+            <IndexRoute component={News}/>
+            <Route path="kommune" component={Kommune}/>
+            <Route path="oversikt" component={Overview}/>
             <Route path="signaler" component={Signals}/>
             <Route path="ukentlig" component={Weekly}/>
             <Route path="daglig" component={Daily}/>
