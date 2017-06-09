@@ -18,8 +18,8 @@ console.log(brushValues)
 
     var colourRange = [ '#91cf60', '#ffffbf', '#fc8d59' ]
 
-    var mainMargin = { top:0, right: 20, bottom: 20, left: 125}
-    var width = this.props.width - mainMargin.left - mainMargin.right + 150
+    var mainMargin = { top:0, right: 0, bottom: 20, left: 50}
+    var width = this.props.width - mainMargin.left - mainMargin.right
 
     var xMin=d3.min(data.map(function(item){ return item.xRaw }))-1
     var xMax=d3.max(data.map(function(item){ return item.xRaw }))+1
@@ -27,9 +27,12 @@ console.log(brushValues)
     var brushXMin=d3.min(dataBrush.map(function(item){ return item.xRaw }))-1
     var brushXMax=d3.max(dataBrush.map(function(item){ return item.xRaw }))+1
 
-    var mainHeight = 500
+    var mainHeight = width*0.5
+    if(mainHeight > this.props.height - 200){
+      mainHeight = this.props.height - 200
+    }
 
-    var brushMargin = {top: 20, right: 20, bottom: 0, left: 125}
+    var brushMargin = {top: 20, right: 0, bottom: 0, left: 50}
     var brushHeight = 40
 
     var height=mainHeight+mainMargin.top+mainMargin.bottom+brushHeight+brushMargin.top + brushMargin.bottom
@@ -51,8 +54,9 @@ console.log(brushValues)
       howFrequent='lab1'
     }
 
-    var dotSizeBlack = Math.log2(freeSpace)*0.8+3
-    var dotSizeColour = Math.log2(freeSpace)*0.5+2
+    var dotSizeBlack = Math.log2(freeSpace)*0.8+3.5
+    var dotSizeColour = Math.log2(freeSpace)*0.5+2.5
+    var lineWidth = Math.log2(freeSpace)*0.5+2.5
 
     var x = d3.scaleLinear()
     .range([0, width])
@@ -117,6 +121,7 @@ console.log(brushValues)
       .attr('d', line)
       .attr('stroke', 'black')
       .attr('fill', 'none')
+      .style('stroke-width', lineWidth)
 
     mainGraph.selectAll('dot')
       .data(data.filter(function(d){ return (d.n>=d.threshold2 || freeSpace>6)}))
@@ -173,6 +178,8 @@ console.log(brushValues)
     mainGraph.append('g')
       .attr("transform", "translate(0," + mainHeight + ")")
       .style('stroke-dasharray', '2 2')
+      .style('stroke-width', width/1000)
+      .style('stroke-opacity', 0.6)
       .call(
         d3.axisBottom(x)
           .tickValues(yearTicks)
@@ -190,6 +197,8 @@ console.log(brushValues)
 
     mainGraph.append('g')
       .style('stroke-dasharray', '2 2')
+      .style('stroke-width', width/1000)
+      .style('stroke-opacity', 0.6)
       .call(
         d3.axisLeft(y)
           .tickSizeOuter(0)

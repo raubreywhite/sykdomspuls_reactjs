@@ -1,66 +1,83 @@
 import React, { Component } from 'react';
-import { bindActionCreators } from 'redux';
-import {connect } from 'react-redux';
-import { Navbar, Nav, NavDropdown, NavItem, MenuItem } from 'react-bootstrap';
-import { ThemeSwitcher } from 'react-bootstrap-theme-switcher';
 import {IndexLink, Link } from 'react-router';
-import * as baseURLActions from './actions/baseURL.actions.js';
+import { inject, observer } from 'mobx-react';
+import FullWidthSelection from './FullWidthSelection.js';
 
-//import { SideNav, Nav } from 'react-sidenav';
-//import { Plotly } from 'react-plotlyjs';
-//var format = require( 'string-kit').format;
+import {deepOrange500, blue500} from 'material-ui/styles/colors';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import {List, ListItem} from 'material-ui/List';
+import AppBar from 'material-ui/AppBar';
+import Drawer from 'material-ui/Drawer';
+import MenuItem from 'material-ui/MenuItem';
+import IconButton from 'material-ui/IconButton';
+import NavigationClose from 'material-ui/svg-icons/navigation/close';
+import NavigationMenu from 'material-ui/svg-icons/navigation/menu';
 
+import {styles} from './Styles'
 
-class App extends Component {
+import injectTapEventPlugin from 'react-tap-event-plugin';
 
-  render(){
+// Needed for onTouchTap
+// http://stackoverflow.com/a/34015469/988941
+injectTapEventPlugin();
 
-    return(
-<div>
-<header>
-<div className="container">
-<div className="txt-center">
-<nav className="column6 prefix3 nav nav-small">
-<IndexLink to="/" activeClassName="cl-teal">Nyheter</IndexLink>
-<Link to="kommune" activeClassName="cl-teal">Kommune</Link>
-<Link to="oversikt" activeClassName="cl-teal">Oversikt</Link>
-<Link to="signaler" activeClassName="cl-teal">Signaler</Link>
-<Link to="ukentlig" activeClassName="cl-teal">Ukentlig</Link>
-<Link to="daglig" activeClassName="cl-teal">Daglig</Link>
-<Link to="hjelp" activeClassName="cl-teal">Hjelp</Link>
-</nav>
-</div>
-</div>
-</header>
+const muiTheme = getMuiTheme({
+  palette: {
+    
+  },
+  appBar: {
+    zIndex: 5,
+    align: 'left',
+  },
+  drawer: {
+    zIndex:0
+  },
+});
 
-{this.props.children}
-
-<footer>
-<div className="container txt-center">
-<div className="column12">
-<img src='sykdomspulsen.svg' width={"150"} role={'presentation'}/>
-<img src='https://www.fhi.no/Static/templates/build/gfx/logo.svg' width={"150"} role={'presentation'}/>
-</div>
-</div>
-</footer>
-</div>
-    );
-  }
-}
-
-function mapStateToProps(state, ownProps) {
+var App = inject("store")(observer(React.createClass({
+getInitialState() {
   return {
-    baseURL: state.baseURL
-  }
-}
+    open: false
+  };
+},
+handleToggle(){
+  console.log("OK")
+  this.setState({open: !this.state.open})
+},
+render(){
 
-function mapDispatchToProps(dispatch){
-  return bindActionCreators({
-  setBaseURL: baseURLActions.setBaseURL
-  }, dispatch)
+  return(
+  <MuiThemeProvider muiTheme={muiTheme} >
+  <div>
+    <AppBar style={styles.appBar} titleStyle={styles.headerTitleInverse} title="Sykdomspulsen" onClick={this.handleToggle} iconElementLeft={this.state.open? <IconButton><NavigationClose /></IconButton> : <IconButton><NavigationMenu /></IconButton> } />
+    <Drawer style={styles.drawer} open={this.state.open}>
+    <AppBar style={styles.appBar} onClick={this.handleToggle} iconElementLeft={<IconButton><NavigationClose/></IconButton>}></AppBar>
+    
+    <MenuItem style={styles.menuItemTop} primaryText="Nyheter" linkButton={true} containerElement={<IndexLink to="/" />} />
+    <MenuItem style={styles.menuItem} primaryText="Kommune" linkButton={true} containerElement={<Link to="kommune" />} />
+    <MenuItem style={styles.menuItem} primaryText="Oversikt" linkButton={true} containerElement={<Link to="oversikt" />} />
+    <MenuItem style={styles.menuItem} primaryText="Signaler" linkButton={true} containerElement={<Link to="signaler" />} />
+    <MenuItem style={styles.menuItem} primaryText="Ukentlig" linkButton={true} containerElement={<Link to="ukentlig" />} />
+    <MenuItem style={styles.menuItem} primaryText="Daglig" linkButton={true} containerElement={<Link to="daglig" />} />
+    <MenuItem style={styles.menuItem} primaryText="Hjelp" linkButton={true} containerElement={<Link to="hjelp" />} />
+    </Drawer>
+    
+    {this.props.children}
+    
+    <footer style={styles.footer}>
+    
+    <img src='sykdomspulsen.svg' width={"150"} role={'presentation'}/>
+    <img src='https://www.fhi.no/Static/templates/build/gfx/logo.svg' width={"150"} role={'presentation'}/>
+    
+    </footer>
+  </div>
+  </MuiThemeProvider>
+  );
 }
+})))
 
-export default connect(mapStateToProps,mapDispatchToProps)(App)
+export default App
 
 //export default App;
 

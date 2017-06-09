@@ -1,27 +1,23 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import { inject, observer } from 'mobx-react';
 import DashboardKommune from './DashboardKommune.js';
 import renderIf from 'render-if';
+import FullWidthSelection from './FullWidthSelection.js';
 
-class App extends Component {
+var App = inject("store")(observer(React.createClass({
 
   render(){
+  console.log(this.props.store.baseURL)
     return(
-<div>
-{renderIf(this.props.baseURL!="null")(
-<DashboardKommune type={"Lines"} getData={this.props.baseURL+"v1_0_DataWeeklyLine"} getNamesFylke={this.props.baseURL+"namesFylke"} getNamesKommune={this.props.baseURL+"namesKommune"}/>)}
-</div>
+<FullWidthSelection>
+{renderIf(this.props.store.baseURL!="null")(
+<DashboardKommune type={"Lines"} getData={this.props.store.baseURL+"v1_0_DataWeeklyLine"} getNamesFylke={this.props.store.baseURL+"namesFylke"} getNamesKommune={this.props.store.baseURL+"namesKommune"}/>)}
+</FullWidthSelection>
     );
   }
-}
+})))
 
-function mapStateToProps(state) {
-  return {
-    baseURL: state.baseURL
-  }
-}
-
-export default connect(mapStateToProps)(App);
+export default App
 
 
 //export default App;

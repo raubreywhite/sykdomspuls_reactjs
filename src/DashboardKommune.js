@@ -1,8 +1,13 @@
 import React, { Component } from 'react';
 import { FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
 import Measure from 'react-measure';
-require('rc-slider/assets/index.css');
+import 'rc-slider/assets/index.css';
 import Slider from 'rc-slider';
+import MenuItem from 'material-ui/MenuItem';
+import SelectField from 'material-ui/SelectField';
+import DropDownMenu from 'material-ui/DropDownMenu';
+import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
+
 var d3=require('d3');
 //import { SideNav, Nav } from 'react-sidenav';
 //import { Plotly } from 'react-plotlyjs';
@@ -11,46 +16,67 @@ var d3=require('d3');
 import Lines from './Lines.js'
 import Barometer from './Barometer.js'
 import renderIf from 'render-if'
+import {GridList, GridTile} from 'material-ui/GridList';
 var sprintf = require("sprintf-js").sprintf
 
 var LeftSelect = React.createClass ({
-  handleChangeType : function(event){
-    this.props.onUpdateType(event.target.value)
+  getInitialState() {
+    return {
+      value1: 1,
+    };
   },
-  handleChangeAge : function(event){
-    this.props.onUpdateAge(event.target.value)
+  handleChangeType : function(event, index, value){
+    this.props.onUpdateType(value)
   },
-  handleChangeFylke : function(event){
-    console.log(event.target.value) 
-    this.props.onUpdateFylke(event.target.value)
+  handleChangeAge : function(event, index, value){
+    this.props.onUpdateAge(value)
   },
-  handleChangeKommune: function(event){
-    this.props.onUpdateKommune(event.target.value)
+  handleChangeFylke : function(event, index, value){
+    this.props.onUpdateFylke(value)
+  },
+  handleChangeKommune: function(event, index, value){
+    this.props.onUpdateKommune(value)
   },
 
   render : function() {
     return (
 <div>
-        <select onChange={this.handleChangeType}>
-          {this.props.listType.map(function(listValue, i){
-            return <option key={i} value={listValue["value"]}>{listValue["name"]}</option>;
-          })}
-        </select>
-        <select onChange={this.handleChangeAge}>
-          {this.props.listAge.map(function(listValue, i){
-            return <option key={i} value={listValue["value"]}>Alder: {listValue["name"]}</option>;
-          })}
-        </select>
-        <select onChange={this.handleChangeFylke}>
-          {this.props.listFylke.map(function(listValue, i){
-        return <option key={i} value={listValue["location"]}>{listValue["locationName"]}</option>;
-          })}
-        </select>
-        <select onChange={this.handleChangeKommune}>
-          {this.props.listKommune.map(function(listValue, i){
-            return <option key={i} value={listValue["location"]}>{listValue["locationName"]}</option>;
-          })}
-        </select>
+<GridList cols={4} cellHeight="auto" padding={5}>
+<GridTile>
+<SelectField autoWidth={true} floatingLabelText="Sykdom" value={this.props.onUpdateTypeVal} onChange={this.handleChangeType}>
+{this.props.listType.map(function(listValue, i){
+  return <MenuItem key={i} value={listValue["value"]} primaryText={listValue["name"]}/>;
+})}
+</SelectField>
+
+</GridTile>
+<GridTile>
+
+<SelectField autoWidth={true} floatingLabelText="Alder" value={this.props.onUpdateAgeVal} onChange={this.handleChangeAge}>
+{this.props.listAge.map(function(listValue, i){
+  return <MenuItem key={i} value={listValue["value"]} primaryText={listValue["name"]}/>;
+})}
+</SelectField>
+
+</GridTile>
+<GridTile>
+
+<SelectField autoWidth={true} floatingLabelText="Fylke" value={this.props.onUpdateFylkeVal} onChange={this.handleChangeFylke}>
+{this.props.listFylke.map(function(listValue, i){
+  return <MenuItem key={i} value={listValue["location"]} primaryText={listValue["locationName"]}/>;
+})}
+</SelectField>
+
+</GridTile>
+<GridTile>
+
+<SelectField autoWidth={true} floatingLabelText="Kommune" value={this.props.onUpdateKommuneVal} onChange={this.handleChangeKommune}>
+{this.props.listKommune.map(function(listValue, i){
+  return <MenuItem key={i} value={listValue["location"]} primaryText={listValue["locationName"]}/>;
+})}
+</SelectField>
+</GridTile>
+</GridList>
 </div>
     )
   }
@@ -250,13 +276,18 @@ xMax=d3.max(this.state.data.data.map(function(item){ return item.xRaw }))
 }
 var defaultValue=[xMin,xMax]
 
-
     return(
         <div>
         <section id="usage">
         <div className="container">
-        <div className="column10 prefix1 txt-center">
-          <LeftSelect onUpdateType={this.onUpdateSelectType} listType={this.state.namesType} listAge={this.state.namesAge} onUpdateAge={this.onUpdateSelectAge} onUpdateFylke={this.onUpdateSelectFylke} listFylke={this.state.namesFylke} onUpdateKommune={this.onUpdateSelectKommune} listKommune={this.state.namesKommune}/>
+        <div className="Dashboard-select">
+          <LeftSelect onUpdateType={this.onUpdateSelectType} onUpdateTypeVal={this.state.selectedType} listType={this.state.namesType}
+              listAge={this.state.namesAge}
+              onUpdateAge={this.onUpdateSelectAge} onUpdateAgeVal={this.state.selectedAge}
+              onUpdateFylke={this.onUpdateSelectFylke} onUpdateFylkeVal={this.state.selectedFylke}
+              listFylke={this.state.namesFylke}
+              onUpdateKommune={this.onUpdateSelectKommune} onUpdateKommuneVal={this.state.selectedName}
+              listKommune={this.state.namesKommune}/>
         </div>
         </div>
         <br/>
@@ -266,15 +297,16 @@ var defaultValue=[xMin,xMax]
             <div className="Dashboard-main-outer">
             <div className="Dashboard-main-inner">
               {renderIf(this.props.type==="Barometer")(
-                <Barometer data={this.state.data} brushValues={this.state.brushValues} width={this.state.dimensions.width}/>)}
+                <Barometer data={this.state.data} brushValues={this.state.brushValues} width={this.state.dimensions.width} />)}
               {renderIf(this.props.type==="Lines")(
-                <Lines data={this.state.data} brushValues={this.state.brushValues} width={this.state.dimensions.width}/>)}
+                <Lines data={this.state.data} brushValues={this.state.brushValues} width={this.state.dimensions.width} height={window.innerHeight}/>)}
             </div>
             </div>
         </Measure>
             <div className="Dashboard-brush">
             {renderIf(xMax!=10000)(
-              <Slider min={xMin} max={xMax} defaultValue={defaultValue} range={true} tipFormatter={this.tipFormatter} marks={marks} onAfterChange={this.setBrushValues}/>)}
+              <Slider railStyle={{ backgroundColor: 'red', height: 10 }} min={xMin} max={xMax} defaultValue={defaultValue} range={true} tipFormatter={this.tipFormatter} marks={marks} onAfterChange={this.setBrushValues}/>
+              )}
             </div>
         </div>
         </section>
