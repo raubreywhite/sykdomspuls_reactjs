@@ -1,11 +1,18 @@
+import CircularProgress from 'material-ui/CircularProgress';
+import {styles} from './Styles'
 var d3 = require('d3')
 var React = require('react')
 var ReactFauxDOM = require('react-faux-dom')
 
+
 var Lines = React.createClass({
   render: function () {
     if(this.props.data['data'] == null || this.props.brushValues == null){
-      return(<h3>Laster...</h3>)
+      return(
+      <div className="Dashboard-loading">
+      <CircularProgress size={100} color={styles.progress.color} />
+      </div>
+      )
     } else {
       var brushValues = this.props.brushValues
 console.log(brushValues)

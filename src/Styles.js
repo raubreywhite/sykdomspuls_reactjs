@@ -1,14 +1,30 @@
-import {blue400, blue300, blue200, blue100, grey900} from 'material-ui/styles/colors';
+import {blue500, blue400, blue300, blue200, blue100, grey900} from 'material-ui/styles/colors';
 import spacing from 'material-ui/styles/spacing';
 const desktopGutter = spacing.desktopGutter;
 
+const colors = {
+ main: blue500,
+}
+
 export const styles = {
+  color: {
+    main: colors.main,
+  },
   appBar: {
   position: 'fixed',
         // Needed to overlap the examples
         fontSize: 20,
         top: 0,
-        background: blue300,
+        background: colors.main,
+  },
+  tab: {
+        // Needed to overlap the examples
+        fontSize: 14,
+        backgroundColor: colors.main,
+        tapHighlightColor: grey900,
+  },
+  progress: {
+    color: colors.main,
   },
   drawer: {
     // Needed to overlap the examples
@@ -53,17 +69,20 @@ export const styles = {
     headerTitle: {
         fontSize: 20,
         fontWeight: 200,
-        color: blue300,
+        color: colors.main,
+        paddingBottom: desktopGutter*0.1
       },
     subheaderTitle: {
         fontSize: 14,
         fontWeight: 200,
-        color: 'black',
+        color: 'white',
+        backgroundColor: colors.main,
       },
     text: {
         fontSize: 14,
         fontWeight: 200,
         color: 'black',
+        lineHeight: '200%',
     },
     footer: {
       align: 'center',

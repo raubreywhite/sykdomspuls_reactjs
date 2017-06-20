@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import { FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
 import Measure from 'react-measure';
-require('rc-slider/assets/index.css');
 import Slider from 'rc-slider';
+import Table from './Table.js'
 var d3=require('d3');
+require('rc-slider/assets/index.css');
 //import { SideNav, Nav } from 'react-sidenav';
 //import { Plotly } from 'react-plotlyjs';
 //var format = require( 'string-kit').format;
 
-import Table from './Table.js'
 
 var sprintf = require("sprintf-js").sprintf
 

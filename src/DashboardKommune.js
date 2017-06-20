@@ -7,16 +7,15 @@ import MenuItem from 'material-ui/MenuItem';
 import SelectField from 'material-ui/SelectField';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
-
-var d3=require('d3');
-//import { SideNav, Nav } from 'react-sidenav';
-//import { Plotly } from 'react-plotlyjs';
-//var format = require( 'string-kit').format;
-
 import Lines from './Lines.js'
 import Barometer from './Barometer.js'
 import renderIf from 'render-if'
 import {GridList, GridTile} from 'material-ui/GridList';
+import {styles} from './Styles'
+
+var d3=require('d3');
+
+
 var sprintf = require("sprintf-js").sprintf
 
 var LeftSelect = React.createClass ({
@@ -121,6 +120,7 @@ class App extends Component {
   }
 
   GetData(){
+    this.setState({ data: [] })
     var request = new Request(sprintf(this.props.getData+'?type=%s&age=%s&name=%s',this.state.selectedType,this.state.selectedAge, this.state.selectedName), {
       method: 'GET', 
       mode: 'cors', 
@@ -274,7 +274,7 @@ xMax=d3.max(this.state.data.data.map(function(item){ return item.xRaw }))
     marks[ticks[i]] = this.tipFormatter(ticks[i])
     }
 }
-var defaultValue=[xMin,xMax]
+var defaultValue=[xMin, xMax]
 
     return(
         <div>
@@ -292,22 +292,32 @@ var defaultValue=[xMin,xMax]
         </div>
         <br/>
         <br/>
-        <div className="container250">
-        <Measure onMeasure={(dimensions) => { this.setState({dimensions})}}>
-            <div className="Dashboard-main-outer">
-            <div className="Dashboard-main-inner">
+        <div>
+        <Measure bounds onResize={(contentRect) => { this.setState({dimensions : contentRect.bounds}); console.log("HI"); console.log(this.state.dimensions.width)}}>
+        {({ measureRef }) =>
+            <div ref={measureRef} className="Dashboard-main">
               {renderIf(this.props.type==="Barometer")(
                 <Barometer data={this.state.data} brushValues={this.state.brushValues} width={this.state.dimensions.width} />)}
               {renderIf(this.props.type==="Lines")(
                 <Lines data={this.state.data} brushValues={this.state.brushValues} width={this.state.dimensions.width} height={window.innerHeight}/>)}
             </div>
-            </div>
+           
+        }
         </Measure>
-            <div className="Dashboard-brush">
-            {renderIf(xMax!=10000)(
-              <Slider railStyle={{ backgroundColor: 'red', height: 10 }} min={xMin} max={xMax} defaultValue={defaultValue} range={true} tipFormatter={this.tipFormatter} marks={marks} onAfterChange={this.setBrushValues}/>
-              )}
-            </div>
+        <div className="Dashboard-brush">
+        {renderIf(xMax!=10000)(
+          <Slider.Range
+            min={xMin}
+            max={xMax}
+            defaultValue={defaultValue}
+            range={true}
+            tipFormatter={this.tipFormatter}
+            marks={marks}
+            onAfterChange={this.setBrushValues}
+            trackStyle={[{ backgroundColor: styles.color.main}]}
+            />
+          )}
+        </div>
         </div>
         </section>
         </div>    

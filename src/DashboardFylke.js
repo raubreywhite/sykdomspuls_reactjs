@@ -1,16 +1,13 @@
 import React, { Component } from 'react';
 import { FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
 import Measure from 'react-measure';
-require('rc-slider/assets/index.css');
 import Slider from 'rc-slider';
-var d3=require('d3');
-//import { SideNav, Nav } from 'react-sidenav';
-//import { Plotly } from 'react-plotlyjs';
-//var format = require( 'string-kit').format;
 import Barometer from './Barometer.js'
 import Lines from './Lines.js'
 import renderIf from 'render-if';
 
+require('rc-slider/assets/index.css');
+var d3=require('d3');
 var sprintf = require("sprintf-js").sprintf
 
 var LeftSelect = React.createClass ({

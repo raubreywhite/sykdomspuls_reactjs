@@ -2,15 +2,21 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import DashboardWeek from './DashboardWeek.js';
 import renderIf from 'render-if';
+import {Tabs, Tab} from 'material-ui/Tabs';
 
 class App extends Component {
 
   render(){
     return(
-<div>
+<Tabs>
+<Tab label="Item one">
 {renderIf(this.props.baseURL!="null")(
   <DashboardWeek getData={this.props.baseURL+"v1_0_DataWeeklySignal"} getNamesWeek={this.props.baseURL+"v1_0_WeeksWeeklySignal"}/>)}
-</div>
+</Tab>
+<Tab label="Item two">
+<p> hi </p>
+</Tab>
+</Tabs>
     );
   }
 }
