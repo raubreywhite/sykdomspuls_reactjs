@@ -11,7 +11,7 @@ import Lines from './Lines.js'
 import Barometer from './Barometer.js'
 import renderIf from 'render-if'
 import {GridList, GridTile} from 'material-ui/GridList';
-import {styles} from './Styles'
+import {muiTheme} from './Styles'
 
 var d3=require('d3');
 
@@ -39,36 +39,38 @@ var LeftSelect = React.createClass ({
 
   render : function() {
     return (
-<div>
+<div className="Dashboard-select-header">
+<div className="Dashboard-select-left">
+{this.props.info}
+</div>
+<div className="Dashboard-select-right">
 <GridList cols={4} cellHeight="auto" padding={5}>
+
 <GridTile>
 <SelectField autoWidth={true} floatingLabelText="Sykdom" value={this.props.onUpdateTypeVal} onChange={this.handleChangeType}>
 {this.props.listType.map(function(listValue, i){
   return <MenuItem key={i} value={listValue["value"]} primaryText={listValue["name"]}/>;
 })}
 </SelectField>
-
 </GridTile>
-<GridTile>
 
+<GridTile>
 <SelectField autoWidth={true} floatingLabelText="Alder" value={this.props.onUpdateAgeVal} onChange={this.handleChangeAge}>
 {this.props.listAge.map(function(listValue, i){
   return <MenuItem key={i} value={listValue["value"]} primaryText={listValue["name"]}/>;
 })}
 </SelectField>
-
 </GridTile>
-<GridTile>
 
+<GridTile>
 <SelectField autoWidth={true} floatingLabelText="Fylke" value={this.props.onUpdateFylkeVal} onChange={this.handleChangeFylke}>
 {this.props.listFylke.map(function(listValue, i){
   return <MenuItem key={i} value={listValue["location"]} primaryText={listValue["locationName"]}/>;
 })}
 </SelectField>
-
 </GridTile>
-<GridTile>
 
+<GridTile>
 <SelectField autoWidth={true} floatingLabelText="Kommune" value={this.props.onUpdateKommuneVal} onChange={this.handleChangeKommune}>
 {this.props.listKommune.map(function(listValue, i){
   return <MenuItem key={i} value={listValue["location"]} primaryText={listValue["locationName"]}/>;
@@ -76,6 +78,7 @@ var LeftSelect = React.createClass ({
 </SelectField>
 </GridTile>
 </GridList>
+</div>
 </div>
     )
   }
@@ -105,21 +108,65 @@ class App extends Component {
       selectedPrettyAge: 'Totalt',
       selectedPrettyName: "Norge",
       data : [],
+      brushXMin : 1,
+      brushXMax : 10000,
+      brushDefaultValues : [1, 10000],
+      brushMarks : {1: ' '},
       brushValues: [0, 10000],
       dimensions: {
         width: 800,
         height: 400
       }
     };
+    this.CalculateBrush = this.CalculateBrush.bind(this)
     this.onUpdateSelectType = this.onUpdateSelectType.bind(this)
     this.onUpdateSelectAge = this.onUpdateSelectAge.bind(this)
     this.onUpdateSelectFylke = this.onUpdateSelectFylke.bind(this)
     this.onUpdateSelectKommune = this.onUpdateSelectKommune.bind(this)
     this.tipFormatter = this.tipFormatter.bind(this)
-    this.setBrushValues = this.setBrushValues.bind(this)
+    this.SetBrushValues = this.SetBrushValues.bind(this)
+  }
+  
+  CalculateBrush(){
+  console.log("BRUSHING")
+    if(this.state.data['data'] == null || this.state.brushXMax!=10000){
+      } else {
+        var xMin=d3.min(this.state.data.data.map(function(item){ return item.xRaw }))
+        var xMax=d3.max(this.state.data.data.map(function(item){ return item.xRaw }))
+
+        var howFrequent=26
+        var freeSpace = this.state.dimensions.width/(xMax-xMin+1)
+        console.log(freeSpace)
+        if(freeSpace <=2){
+          howFrequent='lab7'
+        } else if(freeSpace <= 4){
+          howFrequent='lab6'
+        } else {
+          howFrequent='lab5'
+        }
+
+        var ticks = d3.set(this.state.data.labs.map(function(item) {
+          if(item[howFrequent] === 1){
+            return item.xRaw;
+          } else {
+            return -1
+          }
+        })).values().map(Number).filter(function(x){return(x>=xMin & x<=xMax)});
+        var marks ={}
+        for(var i=0; i < ticks.length; i++){
+          marks[ticks[i]] = {style: muiTheme.brushMarks, label : this.tipFormatter(ticks[i])}
+        }
+        this.setState({
+          brushXMin : xMin,
+          brushXMax : xMax,
+          brushDefaultValues : [xMin, xMax],
+          brushMarks : marks,
+        })
+    }
   }
 
   GetData(){
+    
     this.setState({ data: [] })
     var request = new Request(sprintf(this.props.getData+'?type=%s&age=%s&name=%s',this.state.selectedType,this.state.selectedAge, this.state.selectedName), {
       method: 'GET', 
@@ -132,7 +179,13 @@ class App extends Component {
     // Now use it!
     fetch(request)
       .then((responseText) => responseText.json())
-      .then((response) => this.setState({ data: JSON.parse(response) }));
+      .then((response) => this.setState({
+        data: JSON.parse(response)
+      }, function(){
+        this.CalculateBrush()
+      }));
+    
+    
   }
 
   GetNamesFylke(){
@@ -236,52 +289,20 @@ tipFormatter(val){
 }
 }
 
-setBrushValues(val){
+SetBrushValues(val){
   this.setState({brushValues:val})
-console.log(val)
+
 }
 
   render(){
-
-var xMin=1
-var xMax=10000
-var marks= {1: ' '}
-    if(this.state.data['data'] == null){
-    } else {
-xMin=d3.min(this.state.data.data.map(function(item){ return item.xRaw }))
-xMax=d3.max(this.state.data.data.map(function(item){ return item.xRaw }))
-
-    var howFrequent=26
-    var freeSpace = this.state.dimensions.width/(xMax-xMin+1)
-    console.log(freeSpace)
-    if(freeSpace <=2){
-      howFrequent='lab7'
-    } else if(freeSpace <= 4){
-      howFrequent='lab6'
-    } else {
-      howFrequent='lab5'
-    }
-
-    var ticks = d3.set(this.state.data.labs.map(function(item) {
-      if(item[howFrequent] === 1){
-        return item.xRaw;
-      } else {
-        return -1
-      }
-    })).values().map(Number).filter(function(x){return(x>=xMin & x<=xMax)});
-  marks ={} 
-  for(var i=0; i < ticks.length; i++){
-    marks[ticks[i]] = this.tipFormatter(ticks[i])
-    }
-}
-var defaultValue=[xMin, xMax]
 
     return(
         <div>
         <section id="usage">
         <div className="container">
         <div className="Dashboard-select">
-          <LeftSelect onUpdateType={this.onUpdateSelectType} onUpdateTypeVal={this.state.selectedType} listType={this.state.namesType}
+          <LeftSelect info={this.props.info}
+              onUpdateType={this.onUpdateSelectType} onUpdateTypeVal={this.state.selectedType} listType={this.state.namesType}
               listAge={this.state.namesAge}
               onUpdateAge={this.onUpdateSelectAge} onUpdateAgeVal={this.state.selectedAge}
               onUpdateFylke={this.onUpdateSelectFylke} onUpdateFylkeVal={this.state.selectedFylke}
@@ -305,16 +326,17 @@ var defaultValue=[xMin, xMax]
         }
         </Measure>
         <div className="Dashboard-brush">
-        {renderIf(xMax!=10000)(
+        {renderIf(this.state.brushXMax!=10000)(
           <Slider.Range
-            min={xMin}
-            max={xMax}
-            defaultValue={defaultValue}
+            min={this.state.brushXMin}
+            max={this.state.brushXMax}
+            defaultValue={this.state.brushDefaultValues}
             range={true}
             tipFormatter={this.tipFormatter}
-            marks={marks}
-            onAfterChange={this.setBrushValues}
-            trackStyle={[{ backgroundColor: styles.color.main}]}
+            marks={this.state.brushMarks}
+            onAfterChange={this.SetBrushValues}
+            trackStyle={[{ backgroundColor: muiTheme.color.main}]}
+            handleStyle={[{ borderColor: muiTheme.color.main}, { borderColor: muiTheme.color.main}, { borderColor: muiTheme.color.main}]}
             />
           )}
         </div>

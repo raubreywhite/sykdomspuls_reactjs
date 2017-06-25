@@ -1,3 +1,4 @@
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import {blue500, blue400, blue300, blue200, blue100, grey900} from 'material-ui/styles/colors';
 import spacing from 'material-ui/styles/spacing';
 const desktopGutter = spacing.desktopGutter;
@@ -6,16 +7,25 @@ const colors = {
  main: blue500,
 }
 
-export const styles = {
+export const muiTheme = getMuiTheme({
+  palette: {
+    
+  },
   color: {
     main: colors.main,
   },
   appBar: {
-  position: 'fixed',
+    position: 'fixed',
         // Needed to overlap the examples
         fontSize: 20,
         top: 0,
         background: colors.main,
+        paddingLeft: 100,
+        paddingTop: 0,
+        paddingBottom: 0,
+  },
+  brushMarks: {
+  fontSize: 10, color: 'black',
   },
   tab: {
         // Needed to overlap the examples
@@ -42,6 +52,9 @@ export const styles = {
     zIndex: 100,
     fontSize: 14,
         fontWeight: 200,
+        paddingLeft: 0,
+        paddingTop: 0,
+        paddingBottom: 0,
   },
   content: {
         maxWidth: 1200,
@@ -90,5 +103,4 @@ export const styles = {
       textAlign: 'center',
       paddingBottom: desktopGutter*2
     }
-
-};
+});

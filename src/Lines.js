@@ -1,5 +1,5 @@
 import CircularProgress from 'material-ui/CircularProgress';
-import {styles} from './Styles'
+import {muiTheme} from './Styles'
 var d3 = require('d3')
 var React = require('react')
 var ReactFauxDOM = require('react-faux-dom')
@@ -10,7 +10,7 @@ var Lines = React.createClass({
     if(this.props.data['data'] == null || this.props.brushValues == null){
       return(
       <div className="Dashboard-loading">
-      <CircularProgress size={100} color={styles.progress.color} />
+      <CircularProgress size={100} color={muiTheme.progress.color} />
       </div>
       )
     } else {
@@ -34,13 +34,27 @@ console.log(brushValues)
     var brushXMin=d3.min(dataBrush.map(function(item){ return item.xRaw }))-1
     var brushXMax=d3.max(dataBrush.map(function(item){ return item.xRaw }))+1
 
-    var mainHeight = width*0.5
-    if(mainHeight > this.props.height - 200){
-      mainHeight = this.props.height - 200
+    var landscape = false
+    if(width > this.props.height){
+      landscape = true
+    }
+
+    var mainHeight = width*0.6
+    
+    if(landscape){
+      if(mainHeight > this.props.height - 500){
+        mainHeight = this.props.height - 500
+      }
+      if(mainHeight < 300){
+        mainHeight = this.props.height * 0.5
+      }
     }
 
     var brushMargin = {top: 20, right: 0, bottom: 0, left: 50}
-    var brushHeight = 40
+    var brushHeight = mainHeight*0.1
+    if(brushHeight > 40){
+      brushHeight = 40;
+    }
 
     var height=mainHeight+mainMargin.top+mainMargin.bottom+brushHeight+brushMargin.top + brushMargin.bottom
     var howFrequent=''
@@ -189,7 +203,7 @@ console.log(brushValues)
       .style('stroke-opacity', 0.6)
       .call(
         d3.axisBottom(x)
-          .tickValues(yearTicks)
+          .tickValues(labTicks)
           .tickFormat("")
           .tickSizeOuter(-mainHeight)
           .tickSizeInner(-mainHeight)
@@ -218,7 +232,7 @@ console.log(brushValues)
     .domain([brushXMin, brushXMax])
     var brushY = d3.scaleLinear()
     .range([brushHeight, 0])
-    .domain([0, d3.max(dataBrush, function(d) { return d.n } ) ])
+    .domain([d3.min(dataBrush, function(d) { return d.n-1 } ), d3.max(dataBrush, function(d) { return d.n } ) ])
 
     var brushLine = d3.line()
     .x(function (d) { return brushX(d.xRaw) })

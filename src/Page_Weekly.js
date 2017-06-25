@@ -10,8 +10,9 @@ import {styles} from './Styles'
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import IconButton from 'material-ui/IconButton';
+import FontIcon from 'material-ui/FontIcon';
 
-class DialogExampleSimple extends React.Component {
+class Info extends React.Component {
   state = {
     open: false,
   };
@@ -35,13 +36,16 @@ class DialogExampleSimple extends React.Component {
 
     return (
       <div>
-        <IconButton iconClassName="muidocs-icon-custom-github" onTouchTap={this.handleOpen} />
+      <IconButton onTouchTap={this.handleOpen} >
+      <ActionInfo/>
+      </IconButton>
         <Dialog
           title="Info"
           actions={actions}
           modal={false}
           open={this.state.open}
           onRequestClose={this.handleClose}
+          autoScrollBodyContent={true}
         >
 Grafen viser antall konsultasjoner per uke med en indikasjon om antallet er som forventet eller ikke. Valg av sykdom/symptom, sted og tidsrom gjøres på venstre side. Den svarte streken med rundingene viser antallet faktiske konsultasjoner. Bakgrunnsfargen er laget ut fra beregninger fra de foregående 5 årene i samme geografiske område. Når den svarte streken ligger i den grønne bakgrunnsfargen er antallet konsultasjoner som forventet og rundingen vises med svart. Når den svarte streken ligger i det gule feltet er antall konsultasjoner høyere enn forventet og fyllet i rundingen blir gult. Dersom den svarte streken ligger i det røde feltet er antall konsultasjoner betydelig høyere enn forventet og fyllet i rundingen blir rødt.
         </Dialog>
@@ -56,12 +60,8 @@ var App = inject("store")(observer(React.createClass({
   console.log(this.props.store.baseURL)
     return(
 <FullWidthSelection>
-<div>
 {renderIf(this.props.store.baseURL!="null")(
-<DashboardKommune type={"Lines"} getData={this.props.store.baseURL+"v1_0_DataWeeklyLine"} getNamesFylke={this.props.store.baseURL+"namesFylke"} getNamesKommune={this.props.store.baseURL+"namesKommune"}/>)}
-<DialogExampleSimple/>
-</div>
-
+<DashboardKommune info={<Info/>} type={"Lines"} getData={this.props.store.baseURL+"v1_0_DataWeeklyLine"} getNamesFylke={this.props.store.baseURL+"namesFylke"} getNamesKommune={this.props.store.baseURL+"namesKommune"}/>)}
 </FullWidthSelection>
 
     );
