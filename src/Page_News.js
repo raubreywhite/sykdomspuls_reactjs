@@ -15,7 +15,7 @@ titleStyle={muiTheme.headerTitle} title="Økt antall konsultasjoner i 15-19 alde
 subtitleStyle={muiTheme.subheaderTitle} subtitle="15.08.2017"
 />
 <CardText style = {muiTheme.text}>
-<p>På grunn av nye regelverk angående videregåendeskole, har vi sett en stor økning i antall konsultasjoner i 15-19 aldersgruppen. </p>
+<p>På grunn av nye regelverk angående videre gåendeskole, har vi sett en stor økning i antall konsultasjoner i 15-19 aldersgruppen. </p>
 </CardText>
 </Card>
 

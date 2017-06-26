@@ -15,17 +15,17 @@ var Lines = React.createClass({
       )
     } else {
       var brushValues = this.props.brushValues
-console.log(brushValues)
      var data = this.props.data['data'].filter(function(x){return(
           x.xRaw>= brushValues[0] && x.xRaw <= brushValues[1]
         )})
      var dataBrush = this.props.data['brush']
       var labs = this.props.data['labs']
+      var titleMain = this.props.data['titleMain']
     }
 
     var colourRange = [ '#91cf60', '#ffffbf', '#fc8d59' ]
 
-    var mainMargin = { top:0, right: 0, bottom: 20, left: 50}
+    var mainMargin = { top:20, right: 0, bottom: 20, left: 50}
     var width = this.props.width - mainMargin.left - mainMargin.right
 
     var xMin=d3.min(data.map(function(item){ return item.xRaw }))-1
@@ -225,6 +225,12 @@ console.log(brushValues)
           .tickSizeOuter(0)
           .tickSizeInner(-width)
       );
+      
+    mainGraph.append('text')
+      .attr("x", (width / 2))
+      .attr("y", 0 - (mainMargin.top / 2))
+      .attr("text-anchor", "middle")
+      .text(titleMain);
 
 
     var brushX = d3.scaleLinear()

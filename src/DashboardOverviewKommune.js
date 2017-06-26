@@ -56,29 +56,7 @@ class App extends Component {
     
   };
   
-  GetNamesKommune(){
-    var request = new Request(this.props.getNamesKommune, {
-     method: 'GET', 
-     mode: 'cors', 
-     redirect: 'follow',
-     headers: new Headers({
-       'Content-Type': 'text/plain'
-     })
-    });
-    // Now use it!
-    fetch(request)
-      .then((responseText) => responseText.json())
-      .then((response) => this.setState({ namesKommune: JSON.parse(response).map(function(item){
-        return { 'location': item.location, 'locationName': item.locationName+' \['+item.location.substr(item.location.length - 4)+'\]'}
-      }) }));
-  }
   
-  
-
-
-  componentDidMount(){
-    this.GetNamesKommune()
-  }
 
   render(){
   
@@ -100,12 +78,13 @@ class App extends Component {
         <GridList cols={1} cellHeight="auto" padding={0}>
         <GridTile>
         <AutoComplete
+          value="municip0301"
           hintText="Skriv inn kommunenavn"
           errorText={this.state.errorText}
           filter={AutoComplete.caseInsensitiveFilter}
           maxSearchResults={20}
           onNewRequest={this.handleNewRequest}
-          dataSource={this.state.namesKommune}
+          dataSource={this.props.namesKommune}
           dataSourceConfig={namesKommuneConfig}
           openOnFocus={true}
           animated={false}

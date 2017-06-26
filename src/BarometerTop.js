@@ -23,14 +23,12 @@ getInitialState:function () {
     } else {
       var data = this.props.data['data']
       var labs = this.props.data['labs']
-      console.log("IN BARAOMETER TOP")
-      console.log(data)
-      console.log(labs)
+      var titleMain = this.props.data['titleMain']
     }
 
     var colourRange = [ '#91cf60', '#ffffbf', '#fc8d59' ]
 
-    var mainMargin = {top:0, right: 0, bottom: 20, left: 100}
+    var mainMargin = {top:20, right: 0, bottom: 20, left: 100}
     var width = this.props.width - mainMargin.left - mainMargin.right
 //    var height = 400 - margin.top - margin.bottom
 
@@ -167,6 +165,12 @@ getInitialState:function () {
           .tickSizeOuter(0)
           .tickSizeInner(-width)
       );
+      
+    mainGraph.append('text')
+      .attr("x", (width / 2))
+      .attr("y", 0 - (mainMargin.top / 2))
+      .attr("text-anchor", "middle")
+      .text(titleMain);
 
 
     return (

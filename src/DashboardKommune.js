@@ -118,7 +118,8 @@ class App extends Component {
         height: 400
       }
     };
-    this.CalculateBrush = this.CalculateBrush.bind(this)
+    this.CalculateBrushMaxMin = this.CalculateBrushMaxMin.bind(this)
+    this.CalculateBrushMarks = this.CalculateBrushMarks.bind(this)
     this.onUpdateSelectType = this.onUpdateSelectType.bind(this)
     this.onUpdateSelectAge = this.onUpdateSelectAge.bind(this)
     this.onUpdateSelectFylke = this.onUpdateSelectFylke.bind(this)
@@ -127,22 +128,46 @@ class App extends Component {
     this.SetBrushValues = this.SetBrushValues.bind(this)
   }
   
-  CalculateBrush(){
-  console.log("BRUSHING")
-    if(this.state.data['data'] == null || this.state.brushXMax!=10000){
+  CalculateBrushMaxMin(){
+    if(this.state.data['data']!=null &&this.state.brushXMax==10000){
+      var xMin=d3.min(this.state.data.data.map(function(item){ return item.xRaw }))
+      var xMax=d3.max(this.state.data.data.map(function(item){ return item.xRaw }))
+    
+    this.setState({
+          brushXMin : xMin,
+          brushXMax : xMax,
+          brushDefaultValues : [xMin, xMax],
+        }, function(){
+          this.CalculateBrushMarks()
+        })
+    } else if(this.state.data['data']!=null){
+      this.CalculateBrushMarks()
+    }
+  }
+  
+  CalculateBrushMarks(){
+    if(this.state.data['data'] == null){
       } else {
-        var xMin=d3.min(this.state.data.data.map(function(item){ return item.xRaw }))
-        var xMax=d3.max(this.state.data.data.map(function(item){ return item.xRaw }))
+        
+        var xMin= this.state.brushXMin
+      var xMax= this.state.brushXMax
 
         var howFrequent=26
         var freeSpace = this.state.dimensions.width/(xMax-xMin+1)
-        console.log(freeSpace)
         if(freeSpace <=2){
           howFrequent='lab7'
         } else if(freeSpace <= 4){
           howFrequent='lab6'
-        } else {
+        } else if (freeSpace <= 6){
           howFrequent='lab5'
+        } else if (freeSpace <= 8){
+          howFrequent='lab4'
+        } else if (freeSpace <= 14){
+          howFrequent='lab3'
+        } else if (freeSpace <= 28){
+          howFrequent='lab2'
+        } else {
+          howFrequent='lab1'
         }
 
         var ticks = d3.set(this.state.data.labs.map(function(item) {
@@ -157,14 +182,11 @@ class App extends Component {
           marks[ticks[i]] = {style: muiTheme.brushMarks, label : this.tipFormatter(ticks[i])}
         }
         this.setState({
-          brushXMin : xMin,
-          brushXMax : xMax,
-          brushDefaultValues : [xMin, xMax],
           brushMarks : marks,
         })
     }
   }
-
+  
   GetData(){
     
     this.setState({ data: [] })
@@ -182,7 +204,7 @@ class App extends Component {
       .then((response) => this.setState({
         data: JSON.parse(response)
       }, function(){
-        this.CalculateBrush()
+        this.CalculateBrushMaxMin()
       }));
     
     
@@ -314,7 +336,17 @@ SetBrushValues(val){
         <br/>
         <br/>
         <div>
-        <Measure bounds onResize={(contentRect) => { this.setState({dimensions : contentRect.bounds}); console.log("HI"); console.log(this.state.dimensions.width)}}>
+        <Measure bounds
+          onResize={
+            (contentRect) => {
+              this.setState(
+                {dimensions : contentRect.bounds},
+                function(){
+                  this.CalculateBrushMarks()
+                }
+            )}
+          }
+        >
         {({ measureRef }) =>
             <div ref={measureRef} className="Dashboard-main">
               {renderIf(this.props.type==="Barometer")(

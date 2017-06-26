@@ -11,8 +11,10 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import IconButton from 'material-ui/IconButton';
 import FontIcon from 'material-ui/FontIcon';
+import URLSearchParams from 'query-string';
 
 var sprintf = require("sprintf-js").sprintf
+
 
 class Info extends React.Component {
   state = {
@@ -49,7 +51,7 @@ class Info extends React.Component {
           onRequestClose={this.handleClose}
           autoScrollBodyContent={true}
         >
-Grafen viser antall konsultasjoner per uke med en indikasjon om antallet er som forventet eller ikke. Valg av sykdom/symptom, sted og tidsrom gjøres på venstre side. Den svarte streken med rundingene viser antallet faktiske konsultasjoner. Bakgrunnsfargen er laget ut fra beregninger fra de foregående 5 årene i samme geografiske område. Når den svarte streken ligger i den grønne bakgrunnsfargen er antallet konsultasjoner som forventet og rundingen vises med svart. Når den svarte streken ligger i det gule feltet er antall konsultasjoner høyere enn forventet og fyllet i rundingen blir gult. Dersom den svarte streken ligger i det røde feltet er antall konsultasjoner betydelig høyere enn forventet og fyllet i rundingen blir rødt.
+Dersom ruten for en gitt uke er farget med grønn farge betyr det at antall konsultasjoner i den gitte kommunen er som forventet denne uken. En gul farge en gitt uke betyr at antall konsultasjoner i den gitte kommunen eller fylket er høyere enn forventet denne uken. En rød farge en gitt uke betyr at antall konsultasjoner i den gitte kommunen eller fylket er betydelig høyere enn forventet denne uken. Fargene er laget ut fra beregninger fra de foregående 5 årene i fylke eller kommunen.
         </Dialog>
       </div>
     );
@@ -60,20 +62,48 @@ var App = inject("store")(observer(React.createClass({
   getInitialState:function(){
   console.log("HI DATA")
     return {
-    data : null
+      namesKommune: [{location: "municip0301", locationName: "Oslo [0301]"}],
+      data : null
   }},
   componentDidMount:function(){
   console.log("LOADING DATA")
+    this.props.store.kommuneSelectedName = this.props.match.params.kommune
+    console.log(this.props.store.kommuneSelectedName)
+    this.GetNamesKommune()
     this.GetData()
   },
   SetSelectedName(val){
     console.log(val)
     this.props.store.kommuneSelectedName = val
+    this.props.history.push('/kommune/'+this.props.store.kommuneSelectedName)
     this.GetData()
+  },
+  GetNamesKommune(){
+    var that=this;
+    var request = new Request(this.props.store.baseURL+"namesKommune?name=All", {
+     method: 'GET', 
+     mode: 'cors', 
+     redirect: 'follow',
+     headers: new Headers({
+       'Content-Type': 'text/plain'
+     })
+    });
+    fetch(request)
+      .then(function(response){
+        if(response.ok) {
+          return response.json()
+        }
+        throw new Error('Bad kommune.');
+      })
+      .then((response) => this.setState({
+        namesKommune: JSON.parse(response).map(function(item){
+            return { 'location': item.location, 'locationName': item.locationName+' \['+item.location.substr(item.location.length - 4)+'\]'}
+          })}));
   },
   GetData(){
     console.log(this.props.store.kommuneSelectedName)
     this.setState({ data: null })
+    var that = this
     var request = new Request(sprintf(this.props.store.baseURL+'v1_0_DataWeeklyOverviewKommune?name=%s', this.props.store.kommuneSelectedName), {
       method: 'GET', 
       mode: 'cors', 
@@ -82,14 +112,21 @@ var App = inject("store")(observer(React.createClass({
         'Content-Type': 'text/plain'
       })
     });
-    // Now use it!
     fetch(request)
-      .then((responseText) => responseText.json())
+      .then(function(response){
+        if(response.ok) {
+          return response.json()
+        }
+        throw new Error('Bad kommune.');
+      })
       .then((response) => this.setState({
         data: JSON.parse(response)
       }, function(){
         console.log(this.state.data)
-      }));
+      }))
+      .catch(function(error) {
+        console.log('There has been a problem with your fetch operation: ' + error.message);
+      });
     
     
   },
@@ -100,13 +137,13 @@ var App = inject("store")(observer(React.createClass({
   console.log(this.props.store.baseURL)
     return(
 <FullWidthSelection>
-
 {renderIf(this.props.store.baseURL!="null")(
 <DashboardOverviewKommune
   info={<Info/>}
   SetSelectedName={this.SetSelectedName}
   GetData={this.GetData}
   selectedName = {this.props.store.kommuneSelectedName}
+  namesKommune = {this.state.namesKommune}
   data = {this.state.data}
   getNamesKommune={this.props.store.baseURL+"namesKommune?name=All"}
   getData={this.props.store.baseURL+"v1_0_DataWeeklyOverviewKommune"}/>)}
