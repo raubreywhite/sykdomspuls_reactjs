@@ -190,7 +190,7 @@ class App extends Component {
   GetData(){
     
     this.setState({ data: [] })
-    var request = new Request(sprintf(this.props.getData+'?type=%s&age=%s&name=%s',this.state.selectedType,this.state.selectedAge, this.state.selectedName), {
+    var request = new Request(sprintf(this.props.getData+'?xtype=%s&xage=%s&xname=%s',this.state.selectedType,this.state.selectedAge, this.state.selectedName), {
       method: 'GET', 
       mode: 'cors', 
       redirect: 'follow',
@@ -226,7 +226,7 @@ class App extends Component {
   }
 
   GetNamesKommune(){
-    var request = new Request(sprintf(this.props.getNamesKommune+'?name=%s', this.state.selectedFylke), {
+    var request = new Request(sprintf(this.props.getNamesKommune+'?xname=%s', this.state.selectedFylke), {
      method: 'GET', 
      mode: 'cors', 
      redirect: 'follow',

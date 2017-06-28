@@ -80,7 +80,7 @@ var App = inject("store")(observer(React.createClass({
   },
   GetNamesKommune(){
     var that=this;
-    var request = new Request(this.props.store.baseURL+"namesKommune?name=All", {
+    var request = new Request(this.props.store.baseURL+"namesKommune?xname=All", {
      method: 'GET', 
      mode: 'cors', 
      redirect: 'follow',
@@ -104,7 +104,7 @@ var App = inject("store")(observer(React.createClass({
     console.log(this.props.store.kommuneSelectedName)
     this.setState({ data: null })
     var that = this
-    var request = new Request(sprintf(this.props.store.baseURL+'v1_0_DataWeeklyOverviewKommune?name=%s', this.props.store.kommuneSelectedName), {
+    var request = new Request(sprintf(this.props.store.baseURL+'v1_0_DataWeeklyOverviewKommune?xname=%s', this.props.store.kommuneSelectedName), {
       method: 'GET', 
       mode: 'cors', 
       redirect: 'follow',
