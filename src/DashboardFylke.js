@@ -183,6 +183,7 @@ class App extends Component {
       .then((response) => this.setState({
         data: JSON.parse(response)
       }, function(){
+        console.log(this.state.data)
         this.CalculateBrushMaxMin()
       }));
   }
