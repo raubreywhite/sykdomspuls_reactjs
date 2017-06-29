@@ -18,7 +18,8 @@ import {store} from './store'
 const stores = {store}
 
 function  determineBaseURL() {
-  var urls = ["http://localhost:10002/","http://"+window.location.host+"/api/"]
+  //var urls = ["http://localhost:10002/","http://"+window.location.host+"/api/"]
+  var urls = ["http://sykdomspulsen-test.fhi.no/api/"]
   console.log(urls)
   var setURL=false
   for(var i=0; i<urls.length; i++){
