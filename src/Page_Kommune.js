@@ -51,7 +51,13 @@ class Info extends React.Component {
           onRequestClose={this.handleClose}
           autoScrollBodyContent={true}
         >
-Dersom ruten for en gitt uke er farget med grønn farge betyr det at antall konsultasjoner i den gitte kommunen er som forventet denne uken. En gul farge en gitt uke betyr at antall konsultasjoner i den gitte kommunen eller fylket er høyere enn forventet denne uken. En rød farge en gitt uke betyr at antall konsultasjoner i den gitte kommunen eller fylket er betydelig høyere enn forventet denne uken. Fargene er laget ut fra beregninger fra de foregående 5 årene i fylke eller kommunen.
+<p>Dette diagrammet viser de siste 8 ukene i en valgt kommune.</p>
+<p>Velg ønsket kommune på den røde streken oppe til venstre.</p>
+<p>X-aksen viser uke og år, y-aksen viser hvilken sykdom/symptom og alder.</p>
+<p>Grønne felt betyr at antall konsultasjoner ikke er høyere enn forventet i forhold til sykdommen/symptomet, tid, alder og kommune.</p>
+<p>Gule felt betyr at antall konsultasjoner er høyere enn forventet i forhold til sykdommen/symptomet, tid, alder og kommune.</p>
+<p>Røde felt betyr at antall konsultasjoner er betydelig høyere enn forventet i forhold til sykdommen/symptomet, tid, alder og kommune.</p>
+<p>Fargene er laget ut fra beregninger fra de foregående 5 årene i kommunen.</p>
         </Dialog>
       </div>
     );
@@ -75,7 +81,7 @@ var App = inject("store")(observer(React.createClass({
   SetSelectedName(val){
     console.log(val)
     this.props.store.kommuneSelectedName = val
-    this.props.history.push('/kommune/'+this.props.store.kommuneSelectedName)
+    this.props.history.push('/oversikt/'+this.props.store.kommuneSelectedName)
     this.GetData()
   },
   GetNamesKommune(){

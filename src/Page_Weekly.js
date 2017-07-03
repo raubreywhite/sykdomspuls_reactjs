@@ -47,7 +47,11 @@ class Info extends React.Component {
           onRequestClose={this.handleClose}
           autoScrollBodyContent={true}
         >
-Grafen viser antall konsultasjoner per uke med en indikasjon om antallet er som forventet eller ikke. Valg av sykdom/symptom, sted og tidsrom gjøres på venstre side. Den svarte streken med rundingene viser antallet faktiske konsultasjoner. Bakgrunnsfargen er laget ut fra beregninger fra de foregående 5 årene i samme geografiske område. Når den svarte streken ligger i den grønne bakgrunnsfargen er antallet konsultasjoner som forventet og rundingen vises med svart. Når den svarte streken ligger i det gule feltet er antall konsultasjoner høyere enn forventet og fyllet i rundingen blir gult. Dersom den svarte streken ligger i det røde feltet er antall konsultasjoner betydelig høyere enn forventet og fyllet i rundingen blir rødt.
+<p>Denne grafen viser antall konsultasjoner per uke med en indikasjon om antallet er som forventet eller ikke.</p>
+<p>Valg av sykdom/symptom, alder og fylke/kommune gjøres i nedtrekksmenyene over grafen.</p>
+<p>Under grafen er en tidslinje. Ved å skyve på endene i tidslinja kan man zoome inn på ønsket tisdperiode.</p>
+<p>Den svarte streken viser antallet faktiske konsultasjoner. Bakgrunnsfargen er laget ut fra beregninger fra de foregående 5 årene i samme geografiske område.</p>
+<p>Når den svarte streken ligger i den grønne bakgrunnsfargen er antallet konsultasjoner som forventet og rundingen vises med svart. Når den svarte streken ligger i det gule feltet er antall konsultasjoner høyere enn forventet og fyllet i rundingen blir gult. Dersom den svarte streken ligger i det røde feltet er antall konsultasjoner betydelig høyere enn forventet og fyllet i rundingen blir rødt.</p>
         </Dialog>
       </div>
     );

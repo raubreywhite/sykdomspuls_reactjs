@@ -46,12 +46,12 @@ render(){
   <div>
   
       
-    <AppBar style={muiTheme.appBar} titleStyle={muiTheme.headerTitleInverse} title="Sykdomspulsen" onClick={this.handleToggle} iconElementLeft={this.state.open? <IconButton><NavigationClose /></IconButton> : <IconButton><NavigationMenu /></IconButton> } />
+    <AppBar style={muiTheme.appBar} titleStyle={muiTheme.headerTitleInverse} title="Kommunehelsetjenesten" onClick={this.handleToggle} iconElementLeft={this.state.open? <IconButton><NavigationClose /></IconButton> : <IconButton><NavigationMenu /></IconButton> } />
     <Drawer style={muiTheme.drawer} open={this.state.open}>
     <AppBar style={muiTheme.appBar} onClick={this.handleToggle} iconElementLeft={<IconButton><NavigationClose/></IconButton>}></AppBar>
     
     <MenuItem style={muiTheme.menuItemTop} primaryText="Nyheter" containerElement={<Link to="/" />} onClick={this.handleToggle} />
-    <MenuItem style={muiTheme.menuItem} primaryText="Kommune" containerElement={<Link to={"/kommune/"+this.props.store.kommuneSelectedName} />} onClick={this.handleToggle} />
+    <MenuItem style={muiTheme.menuItem} primaryText="Oversikt" containerElement={<Link to={"/oversikt/"+this.props.store.kommuneSelectedName} />} onClick={this.handleToggle} />
     <MenuItem style={muiTheme.menuItem} primaryText="Ukentlig" containerElement={<Link to="/ukentlig" />} onClick={this.handleToggle} />
     <MenuItem style={muiTheme.menuItem} primaryText="Daglig" containerElement={<Link to="/daglig" />} onClick={this.handleToggle} />
     <MenuItem style={muiTheme.menuItem} primaryText="Hjelp" containerElement={<Link to="/hjelp" />}  onClick={this.handleToggle} />
@@ -60,7 +60,7 @@ render(){
     {renderIf(this.props.store.baseURL!="null")(
       <Switch>
         <Route exact path="/" component={News}/>
-        <Route path="/kommune/:kommune" component={Kommune}/>
+        <Route path="/oversikt/:kommune" component={Kommune}/>
         <Route exact path="/signaler" component={Signals}/>
         <Route exact path="/ukentlig" component={Weekly}/>
         <Route exact path="/daglig" component={Daily}/>
