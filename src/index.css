@@ -9,6 +9,15 @@ body {
     font-size: 10px;
 }
 
+a:link {
+    color: black;
+}
+
+/* visited link */
+a:visited {
+    color: black;
+}
+
 .Dashboard-select-header {
   
 }

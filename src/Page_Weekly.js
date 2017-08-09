@@ -47,11 +47,45 @@ class Info extends React.Component {
           onRequestClose={this.handleClose}
           autoScrollBodyContent={true}
         >
-<p>Denne grafen viser antall konsultasjoner per uke med en indikasjon om antallet er som forventet eller ikke.</p>
-<p>Valg av sykdom/symptom, alder og fylke/kommune gjøres i nedtrekksmenyene over grafen.</p>
-<p>Under grafen er en tidslinje. Ved å skyve på endene i tidslinja kan man zoome inn på ønsket tisdperiode.</p>
-<p>Den svarte streken viser antallet faktiske konsultasjoner. Bakgrunnsfargen er laget ut fra beregninger fra de foregående 5 årene i samme geografiske område.</p>
-<p>Når den svarte streken ligger i den grønne bakgrunnsfargen er antallet konsultasjoner som forventet og rundingen vises med svart. Når den svarte streken ligger i det gule feltet er antall konsultasjoner høyere enn forventet og fyllet i rundingen blir gult. Dersom den svarte streken ligger i det røde feltet er antall konsultasjoner betydelig høyere enn forventet og fyllet i rundingen blir rødt.</p>
+      <p>
+Denne grafen viser antall konsultasjoner per uke for angitt sykdom/syndrom, sted, tid og aldersgruppe. En uke går fra mandag til søndag.
+  </p>
+  
+      <p>
+  Sykdom/syndrom, aldersgruppe og sted velges ved å klikke på rullegardinmenyene øverst. I tidslinje nederst kan man skyve på rundingene i endene for å zoome inn på ønsket tidsperiode.
+      </p>
+      
+      <p>
+      X-aksen viser uke/år, y-aksen viser antallet konsultasjoner. Den svarte streken viser antallet faktiske konsultasjoner.
+      </p>
+      
+      <p>
+      Bakgrunnsfargen er laget ut fra beregninger fra de foregående 5 årene i samme geografiske område (for årene 2006-2010 er 5 fremtidige år brukt).
+      </p>
+      
+      <p>
+      Når den svarte streken ligger i den grønne bakgrunnsfargen er antallet konsultasjoner som forventet og rundingen vises med svart.
+      </p>
+      
+      <p>
+      Når den svarte streken ligger i det gule feltet er antall konsultasjoner høyere enn forventet og fyllet i rundingen blir gult.
+      </p>
+      
+      <p>
+      Dersom den svarte streken ligger i det røde feltet er antall konsultasjoner betydelig høyere enn forventet og fyllet i rundingen blir rødt.
+      </p>
+      
+      <p>
+      Antallet konsultasjoner er lavere i ferier og på helligdager. Dette er spesielt tydelig rundt jul/nyttår og påske, men også i sommerferieukene.
+      </p>
+      
+      <p>
+      Kommunereformen: Kommuner som har blitt slått sammen og fått et nytt navn vil ikke finnes i oversiktene. Kommuner som har blitt slått sammen med en annen kommune men beholdt navnet vil vises i oversiktene, og beregningene tar hensyn til sammenslåingen. Det samme gjelder sammenslåtte kommuner som får nytt kommunenavn.
+      </p>
+
+      <p>
+Små kommuner: Kommuner med under 500 innbyggere vil ikke kunne se grafer for aldersgrupperinger, men bare «totalt antall». Dette er av hensyn til personvern.
+      </p>
         </Dialog>
       </div>
     );

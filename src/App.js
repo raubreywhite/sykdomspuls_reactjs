@@ -17,6 +17,7 @@ import {muiTheme} from './Styles'
 
 import injectTapEventPlugin from 'react-tap-event-plugin';
 
+import Home from './Page_Home.js';
 import News from './Page_News.js';
 import Kommune from './Page_Kommune.js';
 import Overview from './Page_Overview.js';
@@ -24,6 +25,7 @@ import Signals from './Page_Signals.js';
 import Weekly from './Page_Weekly.js';
 import Daily from './Page_Daily.js';
 import DashboardHelp from './Page_Help.js';
+import About from './Page_About.js';
 
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
@@ -46,25 +48,29 @@ render(){
   <div>
   
       
-    <AppBar style={muiTheme.appBar} titleStyle={muiTheme.headerTitleInverse} title="Kommunehelsetjenesten" onClick={this.handleToggle} iconElementLeft={this.state.open? <IconButton><NavigationClose /></IconButton> : <IconButton><NavigationMenu /></IconButton> } />
+    <AppBar style={muiTheme.appBar} titleStyle={muiTheme.headerTitleInverse} title="Sykdomspulsen" onClick={this.handleToggle} iconElementLeft={this.state.open? <IconButton><NavigationClose /></IconButton> : <IconButton><NavigationMenu /></IconButton> } />
     <Drawer style={muiTheme.drawer} open={this.state.open}>
     <AppBar style={muiTheme.appBar} onClick={this.handleToggle} iconElementLeft={<IconButton><NavigationClose/></IconButton>}></AppBar>
     
-    <MenuItem style={muiTheme.menuItemTop} primaryText="Nyheter" containerElement={<Link to="/" />} onClick={this.handleToggle} />
+    <MenuItem style={muiTheme.menuItemTop} primaryText="Hjem" containerElement={<Link to="/" />} onClick={this.handleToggle} />
+    <MenuItem style={muiTheme.menuItem} primaryText="Nyheter" containerElement={<Link to="/nyheter" />} onClick={this.handleToggle} />
     <MenuItem style={muiTheme.menuItem} primaryText="Oversikt" containerElement={<Link to={"/oversikt/"+this.props.store.kommuneSelectedName} />} onClick={this.handleToggle} />
     <MenuItem style={muiTheme.menuItem} primaryText="Ukentlig" containerElement={<Link to="/ukentlig" />} onClick={this.handleToggle} />
     <MenuItem style={muiTheme.menuItem} primaryText="Daglig" containerElement={<Link to="/daglig" />} onClick={this.handleToggle} />
     <MenuItem style={muiTheme.menuItem} primaryText="Hjelp" containerElement={<Link to="/hjelp" />}  onClick={this.handleToggle} />
+    <MenuItem style={muiTheme.menuItem} primaryText="Om Sykdomspulsen" containerElement={<Link to="/om" />}  onClick={this.handleToggle} />
     </Drawer>
     
     {renderIf(this.props.store.baseURL!="null")(
       <Switch>
-        <Route exact path="/" component={News}/>
+        <Route exact path="/" component={Home}/>
+	<Route exact path="/nyheter" component={News}/>
         <Route path="/oversikt/:kommune" component={Kommune}/>
         <Route exact path="/signaler" component={Signals}/>
         <Route exact path="/ukentlig" component={Weekly}/>
         <Route exact path="/daglig" component={Daily}/>
         <Route exact path="/hjelp" component={DashboardHelp}/>
+        <Route exact path="/om" component={About}/>
       </Switch>
     )}
     
