@@ -33,7 +33,7 @@ var App = inject("store")(observer(React.createClass({
       </p>    
 
       <p>
-      Sykdomspulsen er et overvåkningssystem basert på diagnosekoder (ICPC-2 koder) satt på legekontor og legevakter i hele Norge. Formålet med Sykdomspulsen er å se trender og utbredelse av smittsomme sykdommer slik at utbrudd oppdages så tidlig som mulig. I tillegg kan overvåkningen brukes til å iverksette folkehelsetiltak og se effekt av tiltak.
+      Sykdomspulsen er et overvåkningssystem basert på diagnosekoder (ICPC-2 koder) satt på legekontor og legevakter i hele Norge. Formålet med Sykdomspulsen er å se trender og utbredelse av smittsomme sykdommer slik at utbrudd oppdages så tidlig som mulig. I tillegg kan overvåkningen brukes til å vurdere effekt av folkehelsetiltak.
       </p>
 
       <p>
@@ -47,7 +47,7 @@ var App = inject("store")(observer(React.createClass({
       </p>
       
       <p>
-      <span style={muiTheme.textBlue}>Men du har ikke lov til å distribuere webadressen til andre</span>, hverken til ansatte i kommunehelsetjenesten eller utenfor. Det er fordi dette er et pilotprosjekt der vi ønsker å ha kontroll på hvem som bruker det. Dersom noen andre enn deg ønsker å få tilgang til websiden skal de kontakte oss på Sykdomspulsen@fhi.no.
+      <span style={muiTheme.textBlue}>Men vi ber om at du ikke distribuerer webadressen til andre</span>, hverken til ansatte i kommunehelsetjenesten eller utenfor. Det er fordi dette er et pilotprosjekt der vi ønsker å ha oversikt overå hvem som bruker det. Dersom noen andre enn deg ønsker å få tilgang til websiden kan de kontakte oss på Sykdomspulsen@fhi.no.
       </p>
       </CardText>
       <br/>

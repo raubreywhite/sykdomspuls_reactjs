@@ -86,6 +86,10 @@ class Info extends React.Component {
       <p>
       Små kommuner: Kommuner med under 500 innbyggere vil ikke kunne se grafer for aldersgrupperinger, men bare «totalt antall». Dette er av hensyn til personvern.
       </p>
+            
+      <p>
+      Interkommunalt samarbeid om legekontor/legevakt: I Sykdomspulsen er geografisk område basert på stedet for legekonsultasjon, ikke pasientens bosted. Derfor vil legekontorets/legevaktens postadresse si hvilken kommune som vises i Sykdomspulsen. De andre kommunene som er med på det interkommunale samarbeidet vil ikke vises i Sykdomspulsen.
+      </p>
 
       <p>
       65p: 65p betyr at alle over 65 år er med i denne aldersgruppen

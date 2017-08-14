@@ -96,7 +96,7 @@ class App extends Component {
         {'value':'15-19','name':'15-19'},
         {'value':'20-29','name':'20-29'},
         {'value':'30-64','name':'30-64'},
-        {'value':'65p','name':'65+'}
+        {'value':'65+','name':'65+'}
       ],
       namesFylke: [1,2],
       namesKommune: [1,2],

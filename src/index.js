@@ -18,8 +18,9 @@ import {store} from './store'
 const stores = {store}
 
 function  determineBaseURL() {
-  var urls = ["http://localhost:10002/","http://"+window.location.host+"/api/","http://sykdomspulsen.fhi.no/api/"]
-  var urls = ["http://sykdomspulsen.fhi.no/api/"]
+  var urls = ["http://localhost:8000/","http://"+window.location.host+"/api/","http://sykdomspulsen.fhi.no/api/"]
+  var urls = ["http://"+window.location.host+"/api/","http://sykdomspulsen.fhi.no/api/"]
+  //var urls = ["http://sykdomspulsen.fhi.no/api/"]
   console.log(urls)
   var setURL=false
   for(var i=0; i<urls.length; i++){
@@ -37,10 +38,10 @@ function  determineBaseURL() {
       .then((responseText) => responseText.json())
       .then((response) => {
         var workingURL = urls[JSON.parse(response)]
-        console.log("PASS")
         if(!setURL){
           stores.store.baseURL = workingURL
           setURL=true
+          console.log("PASS "+workingURL)
         }
       })
       .catch(function(err){console.log("FAIL: "+err)});

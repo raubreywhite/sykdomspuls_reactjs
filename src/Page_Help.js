@@ -47,7 +47,11 @@ var App = inject("store")(observer(React.createClass({
       </p>
 
       <p>
-      Når du klikker øverst til venstre på Sykdomspulsen websiden får du en liste over andre diagrammer, tabeller og grafer.
+      <span style={muiTheme.textBlue}>Interkommunalt samarbeid om legekontor/legevakt</span>: I Sykdomspulsen er geografisk område basert på stedet for legekonsultasjon, ikke pasientens bosted. Derfor vil legekontorets/legevaktens postadresse si hvilken kommune som vises i Sykdomspulsen. De andre kommunene som er med på det interkommunale samarbeidet vil ikke vises i Sykdomspulsen.
+      </p>
+           
+      <p>
+      <span style={muiTheme.textBlue}>Når du klikker øverst til venstre</span> på Sykdomspulsen websiden får du en liste over andre diagrammer, tabeller og grafer.
       </p>
 
       <p>
@@ -179,7 +183,7 @@ var App = inject("store")(observer(React.createClass({
       </p>
       
       <p>
-      X-aksen viser dag/uke/år, y-aksen viser antallet konsultasjoner. Den svarte streken viser antallet faktiske konsultasjoner.
+      X-aksen viser dag/mnd/år, y-aksen viser antallet konsultasjoner. Den svarte streken viser antallet faktiske konsultasjoner.
       </p>
       
       <p>

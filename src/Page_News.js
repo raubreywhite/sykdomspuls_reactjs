@@ -16,12 +16,36 @@ class App extends Component {
       />
       <CardText style = {muiTheme.text}>
       <p>
-      I aldersgruppen 15-19 år ser vi en stor økning av mage-tarminfeksjoner fra sesongen 2016/2017. Dette kan antakelig skyldes de nye fraværsreglene som ble innført i den videregående skole fra høsten 2016.
+      Fra høsten 2016 ser vi en økning i antall konsultasjoner hos lege og legevakt for aldersgruppen 15-19 år. Dette har antakelig sammenheng med at det ble innført nye fraværsregler i den videregående skole fra skolestart høsten 2016.
       </p>
       </CardText>
       </Card>
 
       <br/>
+           
+      <Card>
+      <CardHeader
+      titleStyle={muiTheme.headerTitle} title="Lavere antall konsultasjoner med mage-tarminfeksjoner i aldersgruppen 0-4 år"
+      subtitleStyle={muiTheme.subheaderTitle} subtitle="15.08.2017"
+      />
+      <CardText style = {muiTheme.text}>
+      <p>
+      Antallet konsultasjoner med mage-tarminfeksjoner blant 0-4 åringer er lavere i årets og fjorårets sesong enn i de foregående årene. Det har antakelig en sammenheng med rotavirus vaksinasjonen som ble innført i denne aldersgruppen i 2014.
+      </p>
+      </CardText>
+      </Card>
+    
+      <br/>
+
+      <Card>
+      <CardHeader
+      titleStyle={muiTheme.headerTitle} title="Kommunereformen"
+      subtitleStyle={muiTheme.subheaderTitle} subtitle="15.08.2017"
+      />
+      <CardText style = {muiTheme.text}>
+      <p>Kommuner som har blitt slått sammen og fått et nytt navn vil ikke finnes i oversiktene. Kommuner som har blitt slått sammen med en annen kommune men beholdt navnet vil vises i oversiktene, og beregningene tar hensyn til sammenslåingen. Det samme gjelder sammenslåtte kommuner som får nytt kommunenavn.</p>
+      </CardText>
+      </Card>
 
       <Card>
       <CardHeader
