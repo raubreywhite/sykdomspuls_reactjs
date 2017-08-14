@@ -43,7 +43,20 @@ handleToggle(){
 },
 render(){
 
+  const isIE = /*@cc_on!@*/false || !!document.documentMode;
+                                                     
   return(
+  <div>
+  {renderIf(isIE==true)(
+    <div>
+    <h2>Sykdomspulsen til kommunehelsetjenesten</h2>
+    <h2>Du har nå prøvd å logge inn på Sykdomspulsen til kommunehelsetjenesten ved å bruke Internet Explorer</h2>
+    <h2>Denne websiden virker ikke når du bruker Internet Explorer</h2>
+    <h2>Du må derfor laste ned en mer moderne nettleser som for eksempel Google Chrome</h2>
+    <h2>Ta kontakt med oss på e-post sykdomspulsen@fhi.no dersom du har problemer</h2>
+    </div>
+  )}
+  {renderIf(isIE==false)(
   <MuiThemeProvider muiTheme={muiTheme} >
   <div>
   
@@ -83,6 +96,8 @@ render(){
     </footer>
   </div>
   </MuiThemeProvider>
+  )}
+  </div>
   );
 }
 })))

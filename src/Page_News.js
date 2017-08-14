@@ -36,6 +36,20 @@ class App extends Component {
       </Card>
     
       <br/>
+           
+      <Card>
+      <CardHeader
+      titleStyle={muiTheme.headerTitle} title="Interkommunalt samarbeid om legekontor/legevakt"
+      subtitleStyle={muiTheme.subheaderTitle} subtitle="15.08.2017"
+      />
+      <CardText style = {muiTheme.text}>
+      <p>
+      I Sykdomspulsen er geografisk område basert på stedet for legekonsultasjon, ikke pasientens bosted. Derfor vil legekontorets/legevaktens postadresse si hvilken kommune som vises i Sykdomspulsen. De andre kommunene som er med på det interkommunale samarbeidet vil ikke vises i Sykdomspulsen.
+      </p>
+      </CardText>
+      </Card>
+
+      <br/>
 
       <Card>
       <CardHeader

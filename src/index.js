@@ -20,7 +20,7 @@ const stores = {store}
 function  determineBaseURL() {
   var urls = ["http://localhost:8000/","http://"+window.location.host+"/api/","http://sykdomspulsen.fhi.no/api/"]
   var urls = ["http://"+window.location.host+"/api/","http://sykdomspulsen.fhi.no/api/"]
-  //var urls = ["http://sykdomspulsen.fhi.no/api/"]
+  var urls = ["http://sykdomspulsen.fhi.no/api/"]
   console.log(urls)
   var setURL=false
   for(var i=0; i<urls.length; i++){

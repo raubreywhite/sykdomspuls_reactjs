@@ -52,9 +52,31 @@ var App = inject("store")(observer(React.createClass({
       <p>
       <span style={muiTheme.textBlue}>Kommunereformen</span>: Kommuner som har blitt slått sammen og fått et nytt navn vil ikke finnes i oversiktene. Kommuner som har blitt slått sammen med en annen kommune men beholdt navnet vil vises i oversiktene, og beregningene tar hensyn til sammenslåingen. Det samme gjelder sammenslåtte kommuner som får nytt kommunenavn.
       </p>
+           
       <p>
       <span style={muiTheme.textBlue}>Små kommuner</span>: Kommuner med under 500 innbyggere vil ikke kunne se grafer for aldersgrupperinger, men bare «totalt antall». Dette er av hensyn til personvern.
       </p>
+           
+      <p>
+      <span style={muiTheme.textBlue}>Interkommunalt samarbeid om legekontor/legevakt</span>: I Sykdomspulsen er geografisk område basert på stedet for legekonsultasjon, ikke pasientens bosted. Derfor vil legekontorets/legevaktens postadresse si hvilken kommune som vises i Sykdomspulsen. De andre kommunene som er med på det interkommunale samarbeidet vil ikke vises i Sykdomspulsen.
+      </p>
+           
+      <p>
+      Dette er et pilotprosjekt fra Folkehelseinstituttet.
+      </p>
+
+      <p>
+      <span style={muiTheme.textBlue}>Prosjektleder</span>: Gry M Grøneng.
+      </p>
+
+      <p>
+      <span style={muiTheme.textBlue}>Statistiker og webansvarlig</span>: Richard White.
+      </p>
+
+      <p>
+      <span style={muiTheme.textBlue}>Ved spørsmål</span> eller ris/ros, send mail til Sykdomspulsen@fhi.no
+      </p>
+
 
       </CardText>
 

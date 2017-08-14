@@ -47,7 +47,11 @@ var App = inject("store")(observer(React.createClass({
       </p>
       
       <p>
-      <span style={muiTheme.textBlue}>Men vi ber om at du ikke distribuerer webadressen til andre</span>, hverken til ansatte i kommunehelsetjenesten eller utenfor. Det er fordi dette er et pilotprosjekt der vi ønsker å ha oversikt overå hvem som bruker det. Dersom noen andre enn deg ønsker å få tilgang til websiden kan de kontakte oss på Sykdomspulsen@fhi.no.
+      <span style={muiTheme.textBlue}>Men vi ber om at du ikke distribuerer webadressen til andre</span>, hverken til ansatte i kommunehelsetjenesten eller utenfor. Det er fordi dette er et pilotprosjekt der vi ønsker å ha oversikt over hvem som bruker det. Dersom noen andre enn deg ønsker å få tilgang til websiden kan de kontakte oss på Sykdomspulsen@fhi.no.
+      </p>
+           
+      <p>
+      Gry M Grøneng er prosjektleder og Richard White er statistiker og webansvarlig. Hvis du har spørsmål eller ris/ros til websiden ta kontakt med oss på mailadresse: sykdomspulsen@fhi.no.
       </p>
       </CardText>
       <br/>

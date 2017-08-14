@@ -13,7 +13,7 @@ var App = inject("store")(observer(React.createClass({
 
       <Card style={muiTheme.fullWidthPanel}>
       <br/>
-      <p style={muiTheme.headerTitleCentered}>Om Sykdomspulsen</p>
+      <p style={muiTheme.headerTitleCentered}>Hjelp</p>
       <CardText style={muiTheme.text}>
       <p>
       Under ser du en oversikt over de forskjellige funksjonene på denne websiden. Dersom du ikke finner svar på det du lurer på kan du sende en mail til Sykdomspulsen@fhi.no. Vi ønsker også tilbakemelding på om det er noe som ikke fungerer og ris/ros.
@@ -40,10 +40,6 @@ var App = inject("store")(observer(React.createClass({
 
       <p>
       <span style={muiTheme.textBlue}>Små kommuner</span>: Kommuner med under 500 innbyggere vil ikke kunne se grafer for aldersgrupperinger, men bare «totalt antall». Dette er av hensyn til personvern.
-      </p>
-
-      <p>
-      <span style={muiTheme.textBlue}>65p</span>: 65p betyr at alle over 65 år er med i denne aldersgruppen.
       </p>
 
       <p>
