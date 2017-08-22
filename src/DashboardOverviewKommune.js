@@ -101,6 +101,7 @@ class App extends Component {
             <div ref={measureRef} className="Dashboard-main">
             {renderIf(this.props.selectedName!="")(
             <BarometerTop
+              
               data={this.props.data}
               width={this.state.dimensions.width}
               height={window.innerHeight}

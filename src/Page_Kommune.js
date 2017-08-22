@@ -12,6 +12,11 @@ import FlatButton from 'material-ui/FlatButton';
 import IconButton from 'material-ui/IconButton';
 import FontIcon from 'material-ui/FontIcon';
 import URLSearchParams from 'query-string';
+import {GridList, GridTile} from 'material-ui/GridList';
+import {muiTheme} from './Styles'
+import AutoComplete from 'material-ui/AutoComplete';
+import BarometerTop from './BarometerTop.js'
+import Measure from 'react-measure';
 
 var sprintf = require("sprintf-js").sprintf
 
@@ -102,7 +107,17 @@ var App = inject("store")(observer(React.createClass({
     console.log("HI DATA")
     return {
       namesKommune: [{location: "municip0301", locationName: "Oslo [0301]"}],
-      data : null
+      kommuneLocation: ["municip0301"],
+      kommuneLocationName: ["Oslo"],
+      selectedName: "",
+      selectedPrettyName: "Oslo",
+      errorText: "",
+      data : null,
+      searchText: '',
+      dimensions: {
+        width: 800,
+        height: 400
+      }
     }},
   componentDidMount:function(){
     console.log("LOADING DATA")
@@ -169,23 +184,101 @@ var App = inject("store")(observer(React.createClass({
 
 
   },
-
+  GoToWeekly(d){
+    console.log(d)
+    var partsOfStr = d.locationName.split(' - ');
+      console.log(partsOfStr);
+      var age=partsOfStr[1]
+      var type="gastro";
+      if(partsOfStr[0]==="Luftvei"){
+        type = "respiratory"
+      }
+      var fylke = this.props.store.kommuneSelectedName
+      fylke=fylke.substr(fylke.length - 4)      
+      console.log(fylke)
+      fylke="county"+fylke.substr(0,2)
+      console.log(fylke)
+      this.props.history.push("/ukentlig/"+fylke+"/"+this.props.store.kommuneSelectedName+"/"+type+"/"+age)
+    //console.log(val)
+    //this.props.store.kommuneSelectedName = val
+    //this.props.history.push('/oversikt/'+this.props.store.kommuneSelectedName)
+    //this.GetData()
+  },
+  handleUpdateInput(searchText){
+    this.setState({
+      searchText: searchText,
+    });
+  },
+  handleNewRequest (searchText, searchIndex){
+      console.log(searchIndex)
+      if(searchIndex!=-1){
+        console.log(searchText)
+        this.SetSelectedName(searchText.location)
+      } else {
+        this.setState({
+          errorText: "Velg fra listen",
+        })
+      }
+    
+    
+  },
 
   render(){
+  
+  const namesKommuneConfig = {
+      text: 'locationName',
+      value: 'location',
+    };
 
     console.log(this.props.store.baseURL)
     return(
       <FullWidthSelection>
       {renderIf(this.props.store.baseURL!="null")(
-        <DashboardOverviewKommune
-        info={<Info/>}
-        SetSelectedName={this.SetSelectedName}
-        GetData={this.GetData}
-        selectedName = {this.props.store.kommuneSelectedName}
-        namesKommune = {this.state.namesKommune}
-        data = {this.state.data}
-        getNamesKommune={this.props.store.baseURL+"namesKommune?name=All"}
-        getData={this.props.store.baseURL+"v1_0_DataWeeklyOverviewKommune"}/>)}
+      <div>
+        <section id="usage">
+        <div className="container">
+        <div className="Dashboard-select">
+        <div className="Dashboard-select-header">
+        <div className="Dashboard-info-autocomplete">
+        <Info/>
+        </div>
+        <div className="Dashboard-select-right">
+        <GridList cols={1} cellHeight="auto" padding={0}>
+        <GridTile>
+        <AutoComplete
+          value="municip0301"
+          hintText="Skriv inn kommunenavn"
+          errorText={this.state.errorText}
+          filter={AutoComplete.caseInsensitiveFilter}
+          maxSearchResults={20}
+          onNewRequest={this.handleNewRequest}
+          dataSource={this.state.namesKommune}
+          dataSourceConfig={namesKommuneConfig}
+          openOnFocus={true}
+          animated={false}
+          menuCloseDelay={0}
+        />
+        </GridTile>
+        </GridList>
+        </div>
+        </div>
+        </div>
+        </div>
+      <Measure bounds onResize={(contentRect) => { this.setState({dimensions : contentRect.bounds}); console.log("HI"); console.log(this.state.dimensions.width)}}>
+        {({ measureRef }) =>
+            <div ref={measureRef} className="Dashboard-main">
+            <BarometerTop
+              onRectangleClick={this.GoToWeekly}
+              data={this.state.data}
+              width={this.state.dimensions.width}
+              height={window.innerHeight}
+            />
+            </div>
+           
+        }
+        </Measure>
+        </section>
+      </div>)}
       </FullWidthSelection>
 
     );

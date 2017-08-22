@@ -171,6 +171,16 @@ getInitialState:function () {
       .attr("y", 0 - (mainMargin.top / 2))
       .attr("text-anchor", "middle")
       .text(titleMain);
+           
+    var that=this;
+    mainGraph.selectAll('rect')
+    .attr("style","cursor: pointer;")
+    .on('click', function(d) {
+      that.props.onRectangleClick(d)
+    /*
+     
+      */
+      });
 
 
     return (

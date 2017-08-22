@@ -61,7 +61,7 @@ var App = inject("store")(observer(React.createClass({
       <Link to={"/oversikt/"+this.props.store.kommuneSelectedName}>Oversikt</Link> er et diagram som viser de siste 8 ukene i en valgt kommune. Med dette diagrammet kan du se om antallet konsultasjoner for mage-tarm infeksjoner og øvre luftveisinfeksjoner var som forventet, høyere eller betydelig høyere enn forventet.
       </li>
       <li>
-      <Link to="/ukentlig">Ukentlig</Link> er en graf som viser antall konsultasjoner per uke for angitt sykdom/syndrom, sted, tid og aldersgruppe.
+      <Link to={"/ukentlig/"+this.props.store.weekSelectedFylke+"/"+this.props.store.weekSelectedName+"/"+this.props.store.weekSelectedType+"/"+this.props.store.weekSelectedAge}>Ukentlig</Link> er en graf som viser antall konsultasjoner per uke for angitt sykdom/syndrom, sted, tid og aldersgruppe.
       </li>
       <li>
       <Link to="/daglig">Daglig</Link> er en graf som viser antall konsultasjoner per dag for angitt sykdom/syndrom, sted, tid og aldersgruppe.
@@ -148,7 +148,7 @@ var App = inject("store")(observer(React.createClass({
       <p style={muiTheme.headerTitleCentered}>Ukentlig</p>
       <CardText style={muiTheme.text}>
       <p>
-      <Link to="/ukentlig">Denne</Link> grafen viser antall konsultasjoner per uke for angitt sykdom/syndrom, sted, tid og aldersgruppe.
+      <Link to={"/ukentlig/"+this.props.store.weekSelectedFylke+"/"+this.props.store.weekSelectedName+"/"+this.props.store.weekSelectedType+"/"+this.props.store.weekSelectedAge}>Denne</Link> grafen viser antall konsultasjoner per uke for angitt sykdom/syndrom, sted, tid og aldersgruppe.
       </p>
       
       <p>Sykdom/syndrom, aldersgruppe og sted velges ved å klikke på rullegardinmenyene øverst. I tidslinje nederst kan man skyve på rundingene i endene for å zoome inn på ønsket tidsperiode. 

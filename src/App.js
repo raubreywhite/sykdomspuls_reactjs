@@ -68,7 +68,7 @@ render(){
     <MenuItem style={muiTheme.menuItemTop} primaryText="Hjem" containerElement={<Link to="/" />} onClick={this.handleToggle} />
     <MenuItem style={muiTheme.menuItem} primaryText="Nyheter" containerElement={<Link to="/nyheter" />} onClick={this.handleToggle} />
     <MenuItem style={muiTheme.menuItem} primaryText="Oversikt" containerElement={<Link to={"/oversikt/"+this.props.store.kommuneSelectedName} />} onClick={this.handleToggle} />
-    <MenuItem style={muiTheme.menuItem} primaryText="Ukentlig" containerElement={<Link to="/ukentlig" />} onClick={this.handleToggle} />
+    <MenuItem style={muiTheme.menuItem} primaryText="Ukentlig" containerElement={<Link to={"/ukentlig/"+this.props.store.weekSelectedFylke+"/"+this.props.store.weekSelectedName+"/"+this.props.store.weekSelectedType+"/"+this.props.store.weekSelectedAge} />} onClick={this.handleToggle} />
     <MenuItem style={muiTheme.menuItem} primaryText="Daglig" containerElement={<Link to="/daglig" />} onClick={this.handleToggle} />
     <MenuItem style={muiTheme.menuItem} primaryText="Hjelp" containerElement={<Link to="/hjelp" />}  onClick={this.handleToggle} />
     <MenuItem style={muiTheme.menuItem} primaryText="Om Sykdomspulsen" containerElement={<Link to="/om" />}  onClick={this.handleToggle} />
@@ -77,10 +77,9 @@ render(){
     {renderIf(this.props.store.baseURL!="null")(
       <Switch>
         <Route exact path="/" component={Home}/>
-	<Route exact path="/nyheter" component={News}/>
+        <Route exact path="/nyheter" component={News}/>
         <Route path="/oversikt/:kommune" component={Kommune}/>
-        <Route exact path="/signaler" component={Signals}/>
-        <Route exact path="/ukentlig" component={Weekly}/>
+        <Route path="/ukentlig/:selectedFylke/:selectedName/:selectedType/:selectedAge" component={Weekly}/>
         <Route exact path="/daglig" component={Daily}/>
         <Route exact path="/hjelp" component={DashboardHelp}/>
         <Route exact path="/om" component={About}/>
