@@ -15,7 +15,7 @@ var App = inject("store")(observer(React.createClass({
     return(
       <FullWidthSelection>
       <FullWidthPanel style={muiTheme.latestNewsTitle} onClick={this.goToNews}>
-      15.08.2017 Siste nytt: økt antall konsultasjoner i aldersgruppen 15-19 år
+      24.08.2017 Siste nytt: Ny funksjon for oversikt-siden
       </FullWidthPanel>
       <br/>
 

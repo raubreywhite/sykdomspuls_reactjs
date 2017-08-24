@@ -95,6 +95,10 @@ class Info extends React.Component {
       <p>
       Interkommunalt samarbeid om legekontor/legevakt: I Sykdomspulsen er geografisk område basert på stedet for legekonsultasjon, ikke pasientens bosted. Derfor vil legekontorets/legevaktens postadresse si hvilken kommune som vises i Sykdomspulsen. De andre kommunene som er med på det interkommunale samarbeidet vil ikke vises i Sykdomspulsen.
       </p>
+      
+      <p>
+      Etter tilbakemelding fra en av pilotbrukerne har vi forbedret funksjonen på oversikt-siden. Nå er det mulig å klikke på feltene i diagrammet på oversikt-siden. Du vil da komme direkte til ukentlig-siden der grafen vil vise samme sykdom/symptom, kommune og aldersgruppe som du klikket på.
+      </p>
 
       </Dialog>
       </div>

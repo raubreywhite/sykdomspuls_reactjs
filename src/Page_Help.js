@@ -137,6 +137,10 @@ var App = inject("store")(observer(React.createClass({
       <p>
       Betydningen av de forskjellige fargekodene er beskrevet tidligere i denne brukerveiledningen. 
       </p>
+      
+      <p>
+      Etter tilbakemelding fra en av pilotbrukerne har vi forbedret funksjonen på oversikt-siden. Nå er det mulig å klikke på feltene i diagrammet på oversikt-siden. Du vil da komme direkte til ukentlig-siden der grafen vil vise samme sykdom/symptom, kommune og aldersgruppe som du klikket på.
+      </p>
       </CardText>
       <br/>
       </Card>

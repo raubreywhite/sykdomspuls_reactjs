@@ -1,14 +1,30 @@
 import React, { Component } from 'react';
+import { inject, observer } from 'mobx-react';
 import Measure from 'react-measure';
 import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
 import FullWidthSelection from './FullWidthSelection.js';
 import {muiTheme} from './Styles'
+import {Link} from 'react-router-dom';
 
-class App extends Component {
+var App = inject("store")(observer(React.createClass({
 
   render(){
     return(
       <FullWidthSelection>
+      <Card>
+      <CardHeader
+      titleStyle={muiTheme.headerTitle} title="Ny funksjon for oversikt-siden"
+      subtitleStyle={muiTheme.subheaderTitle} subtitle="24.08.2017"
+      />
+      <CardText style = {muiTheme.text}>
+      <p>
+      Etter tilbakemelding fra en av pilotbrukerne har vi forbedret funksjonen på <Link to={"/oversikt/"+this.props.store.kommuneSelectedName}>oversikt-siden</Link>. Nå er det mulig å klikke på feltene i diagrammet på <Link to={"/oversikt/"+this.props.store.kommuneSelectedName}>oversikt-siden</Link>. Du vil da komme direkte til ukentlig-siden der grafen vil vise samme sykdom/symptom, kommune og aldersgruppe som du klikket på.
+      </p>
+      </CardText>
+      </Card>
+
+      <br/>
+      
       <Card>
       <CardHeader
       titleStyle={muiTheme.headerTitle} title="Økt antall konsultasjoner i aldersgruppen 15-19 år"
@@ -16,7 +32,7 @@ class App extends Component {
       />
       <CardText style = {muiTheme.text}>
       <p>
-      Fra høsten 2016 ser vi en økning i antall konsultasjoner hos lege og legevakt for aldersgruppen 15-19 år. Dette har antakelig sammenheng med at det ble innført nye fraværsregler i den videregående skole fra skolestart høsten 2016.
+      Fra høsten 2016 ser vi en økning i antall konsultasjoner hos lege og legevakt for aldersgruppen <Link to="/ukentlig/Norge/Norge/gastro/15-19">15-19 år</Link>. Dette har antakelig sammenheng med at det ble innført nye fraværsregler i den videregående skole fra skolestart høsten 2016.
       </p>
       </CardText>
       </Card>
@@ -30,7 +46,7 @@ class App extends Component {
       />
       <CardText style = {muiTheme.text}>
       <p>
-      Antallet konsultasjoner med mage-tarminfeksjoner blant 0-4 åringer er lavere i årets og fjorårets sesong enn i de foregående årene. Det har antakelig en sammenheng med rotavirus vaksinasjonen som ble innført i denne aldersgruppen i 2014.
+      Antallet konsultasjoner med mage-tarminfeksjoner blant <Link to="/ukentlig/Norge/Norge/gastro/0-4">0-4 åringer</Link> er lavere i årets og fjorårets sesong enn i de foregående årene. Det har antakelig en sammenheng med rotavirus vaksinasjonen som ble innført i denne aldersgruppen i 2014.
       </p>
       </CardText>
       </Card>
@@ -75,7 +91,7 @@ class App extends Component {
       </FullWidthSelection>
     );
   }
-}
+})))
 
 export default App;
 
