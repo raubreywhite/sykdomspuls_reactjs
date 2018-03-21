@@ -23,8 +23,6 @@ var Lines = React.createClass({
       var titleMain = this.props.data['titleMain']
     }
 
-    var colourRange = [ '#91cf60', '#ffffbf', '#fc8d59' ]
-
     var mainMargin = { top:20, right: 0, bottom: 20, left: 50}
     var width = this.props.width - mainMargin.left - mainMargin.right
 
@@ -189,13 +187,6 @@ var Lines = React.createClass({
           .tickSizeOuter(0)
       );
 
-    var yearTicks = d3.set(labs.map(function(item) {
-      if(item.vlines === 1){
-        return item.xRaw;
-      } else {
-        return -1
-      }
-    })).values().map(Number).filter(function(x){return(x>=xMin & x<=xMax)});
     mainGraph.append('g')
       .attr("transform", "translate(0," + mainHeight + ")")
       .style('stroke-dasharray', '2 2')

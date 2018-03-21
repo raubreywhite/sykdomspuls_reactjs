@@ -1,11 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { inject, observer } from 'mobx-react';
-import Measure from 'react-measure';
-import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
+import {Card, CardText} from 'material-ui/Card';
 import FullWidthSelection from './FullWidthSelection.js';
-import FullWidthPanel from './FullWidthPanel.js';
 import {muiTheme} from './Styles'
-import {Link} from 'react-router-dom';
 
 var App = inject("store")(observer(React.createClass({
   goToNews(){

@@ -88,7 +88,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      namesType: [{'value':'respiratory','name':'Luftveisinfeksjoner'},{'value':'gastro','name':'Mage-tarminfeksjoner'}],
+      namesType: [{'value':'respiratoryexternal','name':'Luftveisinfeksjoner'},{'value':'gastro','name':'Mage-tarminfeksjoner'}],
       namesAge: [
         {'value':'Totalt','name':'Totalt'},
         {'value':'0-4','name':'0-4'},
@@ -100,7 +100,7 @@ class App extends Component {
       ],
       namesFylke: [1,2],
       namesKommune: [1,2],
-      selectedType: 'respiratory',
+      selectedType: 'respiratoryexternal',
       selectedAge: 'Totalt',
       selectedFylke: "Norge",
       selectedName: "Norge",

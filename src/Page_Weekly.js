@@ -1,26 +1,17 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { inject, observer } from 'mobx-react';
 import renderIf from 'render-if';
 import FullWidthSelection from './FullWidthSelection.js';
-import {Tabs, Tab} from 'material-ui/Tabs';
-import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
 import ActionInfo from 'material-ui/svg-icons/action/info';
-import {styles} from './Styles'
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import IconButton from 'material-ui/IconButton';
-import FontIcon from 'material-ui/FontIcon';
-
-import { FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
 import Measure from 'react-measure';
 import 'rc-slider/assets/index.css';
 import Slider from 'rc-slider';
 import MenuItem from 'material-ui/MenuItem';
 import SelectField from 'material-ui/SelectField';
-import DropDownMenu from 'material-ui/DropDownMenu';
-import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
 import Lines from './Lines.js'
-import Barometer from './Barometer.js'
 import {GridList, GridTile} from 'material-ui/GridList';
 import {muiTheme} from './Styles'
 
@@ -67,35 +58,35 @@ class Info extends React.Component {
       <p>
 Denne grafen viser antall konsultasjoner per uke for angitt sykdom/syndrom, sted, tid og aldersgruppe. En uke går fra mandag til søndag.
   </p>
-  
+
       <p>
   Sykdom/syndrom, aldersgruppe og sted velges ved å klikke på rullegardinmenyene øverst. I tidslinje nederst kan man skyve på rundingene i endene for å zoome inn på ønsket tidsperiode.
       </p>
-      
+
       <p>
       X-aksen viser uke/år, y-aksen viser antallet konsultasjoner. Den svarte streken viser antallet faktiske konsultasjoner.
       </p>
-      
+
       <p>
       Bakgrunnsfargen er laget ut fra beregninger fra de foregående 5 årene i samme geografiske område (for årene 2006-2010 er 5 fremtidige år brukt).
       </p>
-      
+
       <p>
       Når den svarte streken ligger i den grønne bakgrunnsfargen er antallet konsultasjoner som forventet og rundingen vises med svart.
       </p>
-      
+
       <p>
       Når den svarte streken ligger i det gule feltet er antall konsultasjoner høyere enn forventet og fyllet i rundingen blir gult.
       </p>
-      
+
       <p>
       Dersom den svarte streken ligger i det røde feltet er antall konsultasjoner betydelig høyere enn forventet og fyllet i rundingen blir rødt.
       </p>
-      
+
       <p>
       Antallet konsultasjoner er lavere i ferier og på helligdager. Dette er spesielt tydelig rundt jul/nyttår og påske, men også i sommerferieukene.
       </p>
-      
+
       <p>
       Kommunereformen: Kommuner som har blitt slått sammen og fått et nytt navn vil ikke finnes i oversiktene. Kommuner som har blitt slått sammen med en annen kommune men beholdt navnet vil vises i oversiktene, og beregningene tar hensyn til sammenslåingen. Det samme gjelder sammenslåtte kommuner som får nytt kommunenavn.
       </p>
@@ -103,7 +94,7 @@ Denne grafen viser antall konsultasjoner per uke for angitt sykdom/syndrom, sted
       <p>
 Små kommuner: Kommuner med under 500 innbyggere vil ikke kunne se grafer for aldersgrupperinger, men bare «totalt antall». Dette er av hensyn til personvern.
       </p>
-      
+
       <p>
       Interkommunalt samarbeid om legekontor/legevakt: I Sykdomspulsen er geografisk område basert på stedet for legekonsultasjon, ikke pasientens bosted. Derfor vil legekontorets/legevaktens postadresse si hvilken kommune som vises i Sykdomspulsen. De andre kommunene som er med på det interkommunale samarbeidet vil ikke vises i Sykdomspulsen.
       </p>
@@ -183,23 +174,13 @@ var LeftSelect = React.createClass ({
 var App = inject("store")(observer(React.createClass({
   getInitialState(){
   return {
-      namesType: [{'value':'respiratory','name':'Luftveisinfeksjoner'},{'value':'gastro','name':'Mage-tarminfeksjoner'}],
-      namesAge: [
-        {'value':'Totalt','name':'Totalt'},
-        {'value':'0-4','name':'0-4'},
-        {'value':'5-14','name':'5-14'},
-        {'value':'15-19','name':'15-19'},
-        {'value':'20-29','name':'20-29'},
-        {'value':'30-64','name':'30-64'},
-        {'value':'65+','name':'65+'}
-      ],
       namesFylke: [1,2],
       namesKommune: [1,2],
-      selectedType: 'respiratory',
+      selectedType: this.props.store.weekSelectedName,
       selectedAge: 'Totalt',
       selectedFylke: "Norge",
       selectedName: "Norge",
-      selectedPrettyType: 'Øvre-luftvei diagnose',
+      selectedPrettyType: 'xxx',
       selectedPrettyAge: 'Totalt',
       selectedPrettyName: "Norge",
       data : [],
@@ -226,7 +207,7 @@ var App = inject("store")(observer(React.createClass({
   }*/
 ,
   CalculateBrushMaxMin(){
-    if(this.state.data['data']!=null &&this.state.brushXMax==10000){
+    if(this.state.data['data']!=null &&this.state.brushXMax===10000){
       var xMin=d3.min(this.state.data.data.map(function(item){ return item.xRaw }))
       var xMax=d3.max(this.state.data.data.map(function(item){ return item.xRaw }))
 
@@ -288,8 +269,8 @@ var App = inject("store")(observer(React.createClass({
 
     this.setState({ data: [] })
     var request = new Request(sprintf(this.props.store.baseURL+this.props.store.urlWeeklyGetData+'?xtype=%s&xage=%s&xname=%s',this.props.store.weekSelectedType,this.props.store.weekSelectedAge, this.props.store.weekSelectedName), {
-      method: 'GET', 
-      mode: 'cors', 
+      method: 'GET',
+      mode: 'cors',
       redirect: 'follow',
       headers: new Headers({
         'Content-Type': 'text/plain'
@@ -309,8 +290,8 @@ var App = inject("store")(observer(React.createClass({
 
   GetNamesFylke(){
     var request = new Request(this.props.store.baseURL+this.props.store.urlWeeklyGetNamesFylke, {
-      method: 'GET', 
-      mode: 'cors', 
+      method: 'GET',
+      mode: 'cors',
       redirect: 'follow',
       headers: new Headers({
         'Content-Type': 'text/plain'
@@ -324,8 +305,8 @@ var App = inject("store")(observer(React.createClass({
 
   GetNamesKommune(){
     var request = new Request(sprintf(this.props.store.baseURL+this.props.store.urlWeeklyGetNamesKommune+'?xname=%s', this.props.store.weekSelectedFylke), {
-      method: 'GET', 
-      mode: 'cors', 
+      method: 'GET',
+      mode: 'cors',
       redirect: 'follow',
       headers: new Headers({
         'Content-Type': 'text/plain'
@@ -342,13 +323,13 @@ var App = inject("store")(observer(React.createClass({
   },
 
   onUpdateSelectType(val){
-    var selectedPrettyType = this.state.namesType.filter(function(el){
+    var selectedPrettyType = this.props.store.namesType.filter(function(el){
       return el['value']===val
     })[0]['name']
-    
+
     this.props.store.weekSelectedType = val
     this.props.history.push("/ukentlig/"+this.props.store.weekSelectedFylke+"/"+this.props.store.weekSelectedName+"/"+this.props.store.weekSelectedType+"/"+this.props.store.weekSelectedAge)
-    
+
     this.setState({
       selectedType: val,
       selectedPrettyType: selectedPrettyType
@@ -358,13 +339,13 @@ var App = inject("store")(observer(React.createClass({
   },
 
   onUpdateSelectAge(val){
-    var selectedPrettyAge = this.state.namesAge.filter(function(el){
+    var selectedPrettyAge = this.props.store.namesAge.filter(function(el){
       return el['value']===val
     })[0]['name']
-    
+
     this.props.store.weekSelectedAge = val
     this.props.history.push("/ukentlig/"+this.props.store.weekSelectedFylke+"/"+this.props.store.weekSelectedName+"/"+this.props.store.weekSelectedType+"/"+this.props.store.weekSelectedAge)
-    
+
     this.setState({
       selectedAge: val,
       selectedPrettyAge: selectedPrettyAge
@@ -376,11 +357,11 @@ var App = inject("store")(observer(React.createClass({
     var selectedPrettyName = this.state.namesFylke.filter(function(el) {
       return el['location']===val
     })[0]['locationName']
-    
+
     this.props.store.weekSelectedFylke = val
     this.props.store.weekSelectedName = val
     this.props.history.push("/ukentlig/"+this.props.store.weekSelectedFylke+"/"+this.props.store.weekSelectedName+"/"+this.props.store.weekSelectedType+"/"+this.props.store.weekSelectedAge)
-    
+
     this.setState(
       {
         selectedName: val,
@@ -397,11 +378,11 @@ var App = inject("store")(observer(React.createClass({
     var selectedPrettyName = this.state.namesKommune.filter(function(el) {
       return el['location']===val
     })[0]['locationName']
-    
-    
+
+
     this.props.store.weekSelectedName = val
     this.props.history.push("/ukentlig/"+this.props.store.weekSelectedFylke+"/"+this.props.store.weekSelectedName+"/"+this.props.store.weekSelectedType+"/"+this.props.store.weekSelectedAge)
-    
+
     this.setState(
       {
         selectedName: val,
@@ -439,14 +420,14 @@ var App = inject("store")(observer(React.createClass({
 
     return(
     <FullWidthSelection>
-      {renderIf(this.props.store.baseURL!="null")(
+      {renderIf(this.props.store.baseURL!=="null")(
       <div>
       <section id="usage">
       <div className="container">
       <div className="Dashboard-select">
       <LeftSelect info={<Info/>}
-      onUpdateType={this.onUpdateSelectType} onUpdateTypeVal={this.props.store.weekSelectedType} listType={this.state.namesType}
-      listAge={this.state.namesAge}
+      onUpdateType={this.onUpdateSelectType} onUpdateTypeVal={this.props.store.weekSelectedType} listType={this.props.store.namesType}
+      listAge={this.props.store.namesAge}
       onUpdateAge={this.onUpdateSelectAge} onUpdateAgeVal={this.props.store.weekSelectedAge}
       onUpdateFylke={this.onUpdateSelectFylke} onUpdateFylkeVal={this.props.store.weekSelectedFylke}
       listFylke={this.state.namesFylke}
@@ -476,7 +457,7 @@ var App = inject("store")(observer(React.createClass({
       }
       </Measure>
       <div className="Dashboard-brush">
-      {renderIf(this.state.brushXMax!=10000)(
+      {renderIf(this.state.brushXMax!==10000)(
         <Slider.Range
         min={this.state.brushXMin}
         max={this.state.brushXMax}

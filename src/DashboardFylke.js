@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
-import { FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
 import Measure from 'react-measure';
 import 'rc-slider/assets/index.css';
 import Slider from 'rc-slider';
 import MenuItem from 'material-ui/MenuItem';
 import SelectField from 'material-ui/SelectField';
-import DropDownMenu from 'material-ui/DropDownMenu';
-import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
 import Barometer from './Barometer.js'
 import Lines from './Lines.js'
 import renderIf from 'render-if'
@@ -72,23 +69,13 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      namesType: [{'value':'respiratory','name':'Luftveisinfeksjoner'},{'value':'gastro','name':'Mage-tarminfeksjoner'}],
-      namesAge: [
-        {'value':'Totalt','name':'Totalt'},
-        {'value':'0-4','name':'0-4'},
-        {'value':'5-14','name':'5-14'},
-        {'value':'15-19','name':'15-19'},
-        {'value':'20-29','name':'20-29'},
-        {'value':'30-64','name':'30-64'},
-        {'value':'65+','name':'65+'}
-        ],
       namesFylke: [1,2],
       selectedType: 'respiratory',
       selectedAge: 'Totalt',
       selectedName: "Norge",
-      selectedPrettyType: 'Øvre-luftvei diagnose',
-      selectedPrettyAge: 'Totalt',
-      selectedPrettyName: "Norge",
+      selectedPrettyType: 'xxx',
+      selectedPrettyAge: 'xxx',
+      selectedPrettyName: "xx",
       data : [],
       brushXMin : 1,
       brushXMax : 10000,
@@ -108,12 +95,12 @@ class App extends Component {
     this.tipFormatter = this.tipFormatter.bind(this)
     this.SetBrushValues = this.SetBrushValues.bind(this)
   }
-  
+
   CalculateBrushMaxMin(){
-    if(this.state.data['data']!=null &&this.state.brushXMax==10000){
+    if(this.state.data['data']!=null &&this.state.brushXMax===10000){
       var xMin=d3.min(this.state.data.data.map(function(item){ return item.xRaw }))
       var xMax=d3.max(this.state.data.data.map(function(item){ return item.xRaw }))
-    
+
     this.setState({
           brushXMin : xMin,
           brushXMax : xMax,
@@ -125,11 +112,11 @@ class App extends Component {
       this.CalculateBrushMarks()
     }
   }
-  
+
   CalculateBrushMarks(){
     if(this.state.data['data'] == null){
       } else {
-        
+
         var xMin= this.state.brushXMin
       var xMax= this.state.brushXMax
 
@@ -170,8 +157,8 @@ class App extends Component {
 
   GetData(){
     var request = new Request(sprintf(this.props.getData+'?xtype=%s&xage=%s&xname=%s',this.state.selectedType,this.state.selectedAge, this.state.selectedName), {
-      method: 'GET', 
-      mode: 'cors', 
+      method: 'GET',
+      mode: 'cors',
       redirect: 'follow',
       headers: new Headers({
         'Content-Type': 'text/plain'
@@ -188,53 +175,39 @@ class App extends Component {
       }));
   }
 
-  GetNamesFylke(){
-    var request = new Request(this.props.getNamesFylke, {
-     method: 'GET', 
-     mode: 'cors', 
-     redirect: 'follow',
-     headers: new Headers({
-       'Content-Type': 'text/plain'
-     })
-    });
-    // Now use it!
-    fetch(request)
-      .then((responseText) => responseText.json())
-      .then((response) => this.setState({ namesFylke: JSON.parse(response) }));
-  }
-
-  GetResults() {
-    this.setState({ namesFylke: [3,4] });
-  }
-
-  onUpdateSelectType(val){
-    var selectedPrettyType = this.state.namesType.filter(function(el){
+  onUpdateSelectType(val, getData = true){
+      console.log("onupdateselectype")
+      console.log(this.props.namesType)
+      console.log(val)
+    var selectedPrettyType = this.props.namesType.filter(function(el){
       return el['value']===val
     })[0]['name']
     this.setState({
       selectedType: val,
       selectedPrettyType: selectedPrettyType
     }, function(){
-      this.GetData()
+        if(getData){
+            this.GetData()
+        }
     })
   }
 
-  onUpdateSelectAge(val){
-    var selectedPrettyAge = this.state.namesAge.filter(function(el){
+  onUpdateSelectAge(val, getData = true){
+    var selectedPrettyAge = this.props.namesAge.filter(function(el){
       return el['value']===val
     })[0]['name']
     this.setState({
       selectedAge: val,
       selectedPrettyAge: selectedPrettyAge
     }, function(){
-      this.GetData()
+      if(getData) this.GetData()
     })
   }
 
-  onUpdateSelectFylke(val){
-  console.log(this.state.namesFylke)
+  onUpdateSelectFylke(val, getData = true){
+  console.log(this.props.namesFylke)
   console.log(val)
-    var selectedPrettyName = this.state.namesFylke.filter(function(el) {
+    var selectedPrettyName = this.props.namesFylke.filter(function(el) {
       return el['location']===val
     })[0]['locationName']
     this.setState(
@@ -244,14 +217,15 @@ class App extends Component {
         selectedPrettyName: selectedPrettyName
       },
       function(){
-        this.GetData()
+        if(getData) this.GetData()
       }
     )
   }
 
   componentDidMount(){
-    this.GetNamesFylke()
-    this.GetData()
+    this.onUpdateSelectAge(this.props.defaultSelectedAge, false)
+    this.onUpdateSelectFylke(this.props.defaultSelectedName, false)
+    this.onUpdateSelectType(this.props.defaultSelectedType, true)
   }
 
 tipFormatter(val){
@@ -274,11 +248,11 @@ SetBrushValues(val){
         <div className="container">
         <div className="Dashboard-select">
           <LeftSelect info={this.props.info}
-              onUpdateType={this.onUpdateSelectType} onUpdateTypeVal={this.state.selectedType} listType={this.state.namesType}
-              listAge={this.state.namesAge}
+              onUpdateType={this.onUpdateSelectType} onUpdateTypeVal={this.state.selectedType} listType={this.props.namesType}
+              listAge={this.props.namesAge}
               onUpdateAge={this.onUpdateSelectAge} onUpdateAgeVal={this.state.selectedAge}
               onUpdateFylke={this.onUpdateSelectFylke} onUpdateFylkeVal={this.state.selectedName}
-              listFylke={this.state.namesFylke}
+              listFylke={this.props.namesFylke}
               />
         </div>
         </div>
@@ -303,11 +277,11 @@ SetBrushValues(val){
               {renderIf(this.props.type==="Lines")(
                 <Lines data={this.state.data} brushValues={this.state.brushValues} width={this.state.dimensions.width} height={window.innerHeight}/>)}
             </div>
-           
+
         }
         </Measure>
         <div className="Dashboard-brush">
-        {renderIf(this.state.brushXMax!=10000)(
+        {renderIf(this.state.brushXMax!==10000)(
           <Slider.Range
             min={this.state.brushXMin}
             max={this.state.brushXMax}
@@ -324,7 +298,7 @@ SetBrushValues(val){
         </div>
         </section>
         </div>
-       
+
     );
   }
 }

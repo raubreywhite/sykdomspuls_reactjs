@@ -1,6 +1,5 @@
 import CircularProgress from 'material-ui/CircularProgress';
 import {muiTheme} from './Styles'
-import {legendColor}  from 'd3-svg-legend';
 var d3 = require('d3')
 var React = require('react')
 var ReactFauxDOM = require('react-faux-dom')

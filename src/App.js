@@ -10,18 +10,15 @@ import NavigationClose from 'material-ui/svg-icons/navigation/close';
 import NavigationMenu from 'material-ui/svg-icons/navigation/menu';
 import renderIf from 'render-if'
 
-import {blue500, blue400, blue300, blue200, blue100, grey900} from 'material-ui/styles/colors';
-import spacing from 'material-ui/styles/spacing';
-
 import {muiTheme} from './Styles'
 
 import injectTapEventPlugin from 'react-tap-event-plugin';
 
 import Home from './Page_Home.js';
 import News from './Page_News.js';
-import Kommune from './Page_Kommune.js';
 import Overview from './Page_Overview.js';
-import Signals from './Page_Signals.js';
+//import Overview from './Page_Overview.js';
+//import Signals from './Page_Signals.js';
 import Weekly from './Page_Weekly.js';
 import Daily from './Page_Daily.js';
 import DashboardHelp from './Page_Help.js';
@@ -44,10 +41,9 @@ handleToggle(){
 render(){
 
   const isIE = /*@cc_on!@*/false || !!document.documentMode;
-                                                     
   return(
   <div>
-  {renderIf(isIE==true)(
+  {renderIf(isIE===true)(
     <div>
     <h2>Sykdomspulsen til kommunehelsetjenesten</h2>
     <h2>Du har nå prøvd å logge inn på Sykdomspulsen til kommunehelsetjenesten ved å bruke Internet Explorer</h2>
@@ -56,15 +52,15 @@ render(){
     <h2>Ta kontakt med oss på e-post sykdomspulsen@fhi.no dersom du har problemer</h2>
     </div>
   )}
-  {renderIf(isIE==false)(
+  {renderIf(isIE===false)(
   <MuiThemeProvider muiTheme={muiTheme} >
   <div>
-  
-      
+
+
     <AppBar style={muiTheme.appBar} titleStyle={muiTheme.headerTitleInverse} title="Sykdomspulsen" onClick={this.handleToggle} iconElementLeft={this.state.open? <IconButton><NavigationClose /></IconButton> : <IconButton><NavigationMenu /></IconButton> } />
     <Drawer style={muiTheme.drawer} open={this.state.open}>
     <AppBar style={muiTheme.appBar} onClick={this.handleToggle} iconElementLeft={<IconButton><NavigationClose/></IconButton>}></AppBar>
-    
+
     <MenuItem style={muiTheme.menuItemTop} primaryText="Hjem" containerElement={<Link to="/" />} onClick={this.handleToggle} />
     <MenuItem style={muiTheme.menuItem} primaryText="Nyheter" containerElement={<Link to="/nyheter" />} onClick={this.handleToggle} />
     <MenuItem style={muiTheme.menuItem} primaryText="Oversikt" containerElement={<Link to={"/oversikt/"+this.props.store.kommuneSelectedName} />} onClick={this.handleToggle} />
@@ -73,25 +69,25 @@ render(){
     <MenuItem style={muiTheme.menuItem} primaryText="Hjelp" containerElement={<Link to="/hjelp" />}  onClick={this.handleToggle} />
     <MenuItem style={muiTheme.menuItem} primaryText="Om Sykdomspulsen" containerElement={<Link to="/om" />}  onClick={this.handleToggle} />
     </Drawer>
-    
-    {renderIf(this.props.store.baseURL!="null")(
+
+    {renderIf(this.props.store.baseURL!=="null")(
       <Switch>
         <Route exact path="/" component={Home}/>
         <Route exact path="/nyheter" component={News}/>
-        <Route path="/oversikt/:kommune" component={Kommune}/>
+        <Route path="/oversikt/:kommune" component={Overview}/>
         <Route path="/ukentlig/:selectedFylke/:selectedName/:selectedType/:selectedAge" component={Weekly}/>
         <Route exact path="/daglig" component={Daily}/>
         <Route exact path="/hjelp" component={DashboardHelp}/>
         <Route exact path="/om" component={About}/>
       </Switch>
     )}
-    
-    
+
+
     <footer style={muiTheme.footer}>
-    
-    
+
+
     <img src='https://www.fhi.no/Static/templates/build/gfx/logo.svg' width={"150"} alt={'presentation'}/>
-    
+
     </footer>
   </div>
   </MuiThemeProvider>

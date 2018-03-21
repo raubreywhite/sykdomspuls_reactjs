@@ -1,16 +1,13 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { inject, observer } from 'mobx-react';
 import DashboardFylke from './DashboardFylke.js';
 import renderIf from 'render-if';
 import FullWidthSelection from './FullWidthSelection.js';
-import {Tabs, Tab} from 'material-ui/Tabs';
-import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
 import ActionInfo from 'material-ui/svg-icons/action/info';
-import {styles} from './Styles'
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import IconButton from 'material-ui/IconButton';
-import FontIcon from 'material-ui/FontIcon';
+import { toJS } from 'mobx';
 
 class Info extends React.Component {
   state = {
@@ -90,12 +87,17 @@ var App = inject("store")(observer(React.createClass({
     console.log(this.props.store.baseURL)
     return(
       <FullWidthSelection>
-      {renderIf(this.props.store.baseURL!="null")(
+      {renderIf(this.props.store.baseURL!=="null")(
         <DashboardFylke
         info={<Info/>}
         type={"Lines"}
         getData={this.props.store.baseURL+"v1_0_DataDailyLine"}
-        getNamesFylke={this.props.store.baseURL+"namesFylke"}
+        namesFylke={toJS(this.props.store.namesFylke)}
+        namesType={toJS(this.props.store.namesType)}
+        namesAge={this.props.store.namesAge}
+        defaultSelectedType={this.props.store.weekSelectedType}
+        defaultSelectedAge={this.props.store.weekSelectedAge}
+        defaultSelectedName={this.props.store.weekSelectedFylke}
         />)}
       </FullWidthSelection>
 

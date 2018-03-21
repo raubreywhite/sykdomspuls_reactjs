@@ -1,21 +1,10 @@
 import React, { Component } from 'react';
-import { FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
 import Measure from 'react-measure';
 import 'rc-slider/assets/index.css';
-import Slider from 'rc-slider';
-import MenuItem from 'material-ui/MenuItem';
-import SelectField from 'material-ui/SelectField';
-import DropDownMenu from 'material-ui/DropDownMenu';
-import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
-import Lines from './Lines.js'
 import BarometerTop from './BarometerTop.js'
 import renderIf from 'render-if'
 import {GridList, GridTile} from 'material-ui/GridList';
-import {muiTheme} from './Styles'
 import AutoComplete from 'material-ui/AutoComplete';
-
-var d3=require('d3');
-var sprintf = require("sprintf-js").sprintf
 
 class App extends Component {
   constructor(props) {
@@ -44,7 +33,7 @@ class App extends Component {
   
   handleNewRequest = (searchText, searchIndex) => {
       console.log(searchIndex)
-      if(searchIndex!=-1){
+      if(searchIndex!==-1){
         console.log(searchText)
         this.props.SetSelectedName(searchText.location)
       } else {
@@ -99,7 +88,7 @@ class App extends Component {
       <Measure bounds onResize={(contentRect) => { this.setState({dimensions : contentRect.bounds}); console.log("HI"); console.log(this.state.dimensions.width)}}>
         {({ measureRef }) =>
             <div ref={measureRef} className="Dashboard-main">
-            {renderIf(this.props.selectedName!="")(
+            {renderIf(this.props.selectedName!=="")(
             <BarometerTop
               
               data={this.props.data}
